@@ -10,6 +10,7 @@ use think\App;
 use think\exception\ValidateException;
 use think\facade\Db;
 use think\facade\Log;
+use util\Token;
 
 /**
  * 系统管理员控制器
@@ -36,7 +37,17 @@ class Admin extends AdminBase
      */
     public function index()
     {
+       
+        $token=$this->request->header("token");
+        
         list($limit, $where, $sortArr) = $this->buildTableParames();
+        $is_superadmin=Token::is_superadmin($token);
+        if(!$is_superadmin){
+            $adminId=Token::userId($token);
+            $where[]=['admin_id','=',$adminId];
+            
+        }
+
         $list = $this->model
             ->where($where)
             ->order($sortArr)
@@ -76,11 +87,14 @@ class Admin extends AdminBase
      */
     public function add()
     {
+        $token=$this->request->header("token");
+        $adminId=Token::userId($token);
         $post = $this->request->post();
         Db::startTrans();
         try {
             validate(SystemAdmin::class)->check($post);
             $post['password'] = md5($post['password']);
+            $post['admin_id']=$adminId;
             $this->model->save($post);
             $row = $this->model->where('username', $post['username'])->find();
             // $group_ids=explode(',',$post['group_ids']);

@@ -13,7 +13,7 @@ return [
     ],
 
     'auth_on' => true, // 权限开关
-    'super_admin_ids' => [1, 2], // 超级管理员
+
     'super_admin_group_id' => 1, // 超级管理员权限组
     // 不需要验证登录的控制器
     'no_login_controller' => [

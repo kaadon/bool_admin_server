@@ -7,7 +7,9 @@ use app\admin\model\SystemGroupMenu;
 use app\admin\service\MenuService;
 use app\common\controller\AdminBase;
 use think\App;
+use think\exception\ValidateException;
 use think\facade\Log;
+use util\Token;
 
 /**
  * 角色组控制器
@@ -27,6 +29,32 @@ class Role extends AdminBase
 
     }
 
+      /**
+     * 列表
+     */
+    public function index()
+    {
+        $token=$this->request->header("token");
+        
+        list($limit, $where, $sortArr) = $this->buildTableParames();
+        $is_superadmin=Token::is_superadmin($token);
+        if(!$is_superadmin){
+            $adminId=Token::userId($token);
+            $where[]=['admin_id','=',$adminId];
+            
+        }
+        $list = $this->model
+            ->where($where)
+            ->order($sortArr)
+            ->paginate($limit);
+        $data = [
+            'code' => 1,
+            'msg' => '',
+            'count' => $list->total(),
+            'data' => $list->items(),
+        ];
+        return json($data);
+    }
     /**
      * 授权数据
      */
@@ -37,7 +65,9 @@ class Role extends AdminBase
         if (!$id) {
             return error('id不能为空');
         }
-        $menuService = new MenuService(0);
+        $token=$this->request->header('token');
+        $adminId=Token::userId($token);
+        $menuService = new MenuService($adminId);
         $menuList = $menuService->getAuthMenuData($id);
         return success('', $menuList);
     }
@@ -69,6 +99,32 @@ class Role extends AdminBase
             return error('error');
         }
         return success('ok');
+    }
+
+        /**
+     * 添加
+     */
+    public function add()
+    {
+        $token=$this->request->header("token");
+        $adminId=Token::userId($token);
+
+        $post = $this->request->post();
+        try {
+            $this->validate && validate($this->validate)->check($post);
+            $post['admin_id']=$adminId;
+            $result = $this->model->save($post);
+            if ($result) {
+                return success('添加成功！');
+            }
+            return error('添加失败');
+        } catch (ValidateException $e) {
+
+            return error($e->getError());
+        } catch (\Exception $e) {
+            return error('添加失败:' . $e->getMessage());
+        }
+
     }
 
     /**
@@ -125,13 +181,22 @@ class Role extends AdminBase
      */
     public function selectList()
     {
+        $token=$this->request->header("token");
+        $is_superadmin=Token::is_superadmin($token);
         try {
+            $where=[];
+            if(!$is_superadmin){
+                $adminId=Token::userId($token);
+                $where['admin_id']=$adminId;
+            }
+
             $fields = input('fields');
             if (empty($fields)) {
                 $fields = "id,name";
             }
             $data = $this->model
                 ->field($fields)
+                ->where($where)
                 ->where('status', 1)
                 ->limit(100)
                 ->select();

@@ -394,6 +394,18 @@ INSERT INTO `qu_system_menu` VALUES ('154', '3', '149', '删除', 'code', '', nu
 INSERT INTO `qu_system_menu` VALUES ('155', '3', '149', '导出', 'code', '', null, '2022-04-20 11:53:57', '2022-04-20 11:53:57', '0', '1', '/admin/example.orders/export', null, null);
 INSERT INTO `qu_system_menu` VALUES ('170', '1', '0', '常用案例', 'example', 'example', 'Layout', '2022-04-28 20:07:30', '2022-04-28 20:07:30', '0', '1', null, 'warning', 'example');
 INSERT INTO `qu_system_menu` VALUES ('171', '1', '0', '在线开发', 'form', 'online', 'Layout', '2022-04-28 20:08:25', '2022-04-28 20:08:25', '0', '1', null, 'danger', 'hot');
+INSERT INTO `qu_system_menu` VALUES ('172', '3', '8', '授权菜单', '', '', null, '2022-07-02 23:37:40', '2022-07-03 17:30:37', '0', '1', '/admin/system.menu/adminIndex', null, null);
+INSERT INTO `qu_system_menu` VALUES ('174', '3', '149', '操作', '', '', null, '2022-07-03 16:44:59', '2022-07-03 16:44:59', '0', '1', '/admin/example.orders/op', null, null);
+INSERT INTO `qu_system_menu` VALUES ('175', '3', '38', '获取数据表', '', '', null, '2022-07-03 16:48:46', '2022-07-03 16:48:46', '0', '1', '/admin/onlinecurd.index/getTables', null, null);
+INSERT INTO `qu_system_menu` VALUES ('176', '3', '38', '列表', '', '', null, '2022-07-03 16:49:20', '2022-07-03 16:49:20', '0', '1', '/admin/onlinecurd.index/index', null, null);
+INSERT INTO `qu_system_menu` VALUES ('177', '3', '38', '主表信息', '', '', null, '2022-07-03 16:51:28', '2022-07-03 16:51:50', '0', '1', '/admin/onlinecurd.index/getMainTableRow', null, null);
+INSERT INTO `qu_system_menu` VALUES ('178', '3', '38', '从表信息', '', '', null, '2022-07-03 16:52:02', '2022-07-03 16:52:02', '0', '1', '/admin/onlinecurd.index/getSubTableRow', null, null);
+INSERT INTO `qu_system_menu` VALUES ('179', '3', '38', '表单生成', '', '', null, '2022-07-03 16:54:12', '2022-07-03 16:54:12', '0', '1', '/admin/onlinecurd.index/save', null, null);
+INSERT INTO `qu_system_menu` VALUES ('180', '3', '71', '列表', '', '', null, '2022-07-03 17:27:54', '2022-07-03 17:27:54', '0', '1', '/admin/plugins/list', null, null);
+INSERT INTO `qu_system_menu` VALUES ('181', '3', '71', '安装', '', '', null, '2022-07-03 17:28:43', '2022-07-03 17:28:43', '0', '1', '/admin/plugins/install', null, null);
+INSERT INTO `qu_system_menu` VALUES ('182', '3', '71', '卸载', '', '', null, '2022-07-03 17:28:56', '2022-07-03 17:28:56', '0', '1', '/admin/plugins/uninstall', null, null);
+INSERT INTO `qu_system_menu` VALUES ('183', '3', '71', '配置', '', '', null, '2022-07-03 17:29:54', '2022-07-03 17:29:54', '0', '1', '/admin/plugins/config', null, null);
+
 
 -- ----------------------------
 -- Table structure for `qu_system_onlinecurd`

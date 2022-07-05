@@ -160,6 +160,21 @@ class MenuService
      */
     public function getAuthMenuData($group_id)
     {
+        /**
+         * 管理员对于菜单
+         */
+        $adminId=$this->adminId;
+        $admin_groups=Db::name("system_group_admin")
+                ->where('admin_id',$adminId)
+                ->column('group_id');
+        $group_menu = Db::name('system_group_menu')
+                ->where('group_id', 'in', $admin_groups)
+                ->column('menu_id');
+                
+        /**
+         * 
+         */
+
 
         $buildGroupMenuSql = Db::name('system_group_menu')
             ->where('group_id', $group_id)
@@ -174,6 +189,12 @@ class MenuService
 
         $nodeList = [];
         foreach ($menuList as $k => $v) {
+            if(!in_array("1",$admin_groups)){
+                if(!in_array($v['id'],$group_menu)){
+                    continue;
+                }
+            }
+            
             $node = $v;
             unset($node['gmid']);
             unset($node['menu_id']);

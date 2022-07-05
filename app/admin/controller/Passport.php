@@ -16,6 +16,7 @@ use app\admin\model\SystemGroupAdmin;
 use app\admin\service\AuthService;
 use app\common\controller\AdminBase;
 use think\App;
+use think\facade\Cache;
 use util\Token;
 
 /*
@@ -55,6 +56,7 @@ class Passport extends AdminBase
         $group_ids = SystemGroupAdmin::where('admin_id', $admin['id'])->column('group_id');
         $admin['group_ids'] = $group_ids;
         unset($admin['password']);
+        
         $token = Token::create($admin->toArray(), $is_keeplogin);
 
         return success('登录成功', ['admin' => $admin, 'token' => $token]);
@@ -92,7 +94,7 @@ class Passport extends AdminBase
         unset($admin['password']);
         $data['admin'] = $admin;
 
-        $auth_service = new AuthService($adminId, $group_ids);
+        $auth_service = new AuthService($admin['id'], $group_ids);
         $auths = $auth_service->getPermission();
         $data['permissions'] = $auths;
         return success('获取用户信息成功', $data);

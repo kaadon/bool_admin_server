@@ -61,7 +61,7 @@ class pluginsBase extends BaseController
 
         $config = config('auth');
         //鉴权
-        if (!in_array($action, $this->noNeedLogin) && !in_array($action, $this->noNeedAuth) && $adminId && !in_array($adminId, $config['super_admin_ids'])) {
+        if (!in_array($action, $this->noNeedLogin) && !in_array($action, $this->noNeedAuth) && $adminId && !in_array($config['super_admin_group_id'], $group_ids)) {
             $authservice = new AuthService($adminId);
             $check = $authservice->checkPermission($permission, $group_ids);
             if (!$check) {

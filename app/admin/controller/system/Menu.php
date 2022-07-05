@@ -4,7 +4,9 @@ namespace app\admin\controller\system;
 
 use app\common\controller\AdminBase;
 use think\App;
+use think\facade\Db;
 use think\facade\Log;
+use util\Token;
 
 /**
  * menu控制器
@@ -119,6 +121,53 @@ class Menu extends AdminBase
                 $where['type'] = $menu_type;
             }
         }
+        $count = $this->model->where($where)->count();
+        $list = $this->model->where($where)->order('weigh desc,id asc')->select();
+        $data = [
+            'code' => 1,
+            'msg' => 'ok',
+            'count' => $count,
+            'data' => $list,
+        ];
+        return json($data);
+    }
+
+     /**
+     * 获取所有菜单(无层级)
+     */
+
+    public function adminIndex()
+    {
+        $token=$this->request->header('token');
+        $status = $this->request->post('status');
+        $menu_type = $this->request->post('menu_type'); //1：目录 2：菜单 3：按钮权限  4：目录+菜单 不传取所有
+        $where = [];
+        if ($status) {
+            $where['status'] = $status;
+        }
+        if ($menu_type) {
+            if ($menu_type == 4) {
+                $where[] = ['type', '<', 3];
+            }
+            if ($menu_type < 4) {
+                $where['type'] = $menu_type;
+            }
+        }
+        
+         /**
+         * 管理员对于菜单
+         */
+        $adminId=Token::userId($token);
+        $admin_groups=Db::name("system_group_admin")
+                ->where('admin_id',$adminId)
+                ->column('group_id');
+        $group_menu = Db::name('system_group_menu')
+                ->where('group_id', 'in', $admin_groups)
+                ->column('menu_id');
+        if(!in_array("1",$admin_groups)){
+            $where[]=['id','in',$group_menu];
+        }
+
         $count = $this->model->where($where)->count();
         $list = $this->model->where($where)->order('weigh desc,id asc')->select();
         $data = [
