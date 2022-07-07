@@ -114,8 +114,8 @@ class Index extends AdminBase
         $fieldlist = isset($form['fieldlist']) ? $form['fieldlist'] : [];
         $relations = isset($form['relations']) ? $form['relations'] : [];
         $menu_pid = isset($form['menu_pid']) ? $form['menu_pid'] : 0;
-        $back_module = isset($form['model_path']) ? $form['model_path'] : "admin"; //后台是哪个项目
-        $model_path = isset($form['model_path']) ? $form['model_path'] : "common";
+        $back_module = isset($form['back_module']) && $form['back_module']  ? $form['back_module'] : "admin"; //后台是哪个项目
+        $model_path = $form['model_is_common'] ? "common" : $back_module; //model是否放到common下
         $relation_table = "";
         $i = 0;
         foreach ($relations as $k => $v) {
