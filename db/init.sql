@@ -129,6 +129,7 @@ CREATE TABLE `qu_system_admin` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `group_ids` varchar(255) DEFAULT NULL COMMENT '权限id(逗号隔开)',
   `nickname` varchar(100) DEFAULT NULL COMMENT '昵称',
+  `admin_id` int(10) DEFAULT NULL COMMENT '添加管理员id',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='管理员表';
@@ -136,7 +137,7 @@ CREATE TABLE `qu_system_admin` (
 -- ----------------------------
 -- Records of qu_system_admin
 -- ----------------------------
-INSERT INTO `qu_system_admin` VALUES ('1', 'admin', '', 'e10adc3949ba59abbe56e057f20f883e', 'http://yyc-1301620739.cos.ap-nanjing.myqcloud.com/202205056273755e06da7.png', '', '1', null, '2022-05-05 14:58:45', '1,4', 'admin');
+INSERT INTO `qu_system_admin` VALUES ('1', 'admin', '', 'e10adc3949ba59abbe56e057f20f883e', 'http://yyc-1301620739.cos.ap-nanjing.myqcloud.com/202205056273755e06da7.png', '', '1', null, '2022-05-05 14:58:45', '1,4', 'admin','0');
 
 -- ----------------------------
 -- Table structure for `qu_system_category`
@@ -257,14 +258,15 @@ CREATE TABLE `qu_system_group` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `status` int(10) NOT NULL DEFAULT '0' COMMENT '状态',
   `weigh` int(10) DEFAULT '0' COMMENT '排序',
+  `admin_id` int(10) DEFAULT '0' COMMENT '创建用户id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='用户组表';
 
 -- ----------------------------
 -- Records of qu_system_group
 -- ----------------------------
-INSERT INTO `qu_system_group` VALUES ('1', '超级管理员', null, null, '1', '0');
-INSERT INTO `qu_system_group` VALUES ('4', 'web管理员', null, '2022-05-10 16:54:55', '1', '3');
+INSERT INTO `qu_system_group` VALUES ('1', '超级管理员', null, null, '1', '0','0');
+INSERT INTO `qu_system_group` VALUES ('4', 'web管理员', null, '2022-05-10 16:54:55', '1', '3','0');
 
 -- ----------------------------
 -- Table structure for `qu_system_group_admin`
