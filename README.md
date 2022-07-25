@@ -122,7 +122,7 @@ npm run build:prod
 
 ## 微信交流
 
-[![kftx-wx.jpg]https://static.quickadmin.icu/quickadmin/kftx-wx.jpg)](https://static.quickadmin.icu/quickadmin/kftx-wx.jpg)
+[![kftx-wx.jpg](https://static.quickadmin.icu/quickadmin/kftx-wx.jpg)](https://static.quickadmin.icu/quickadmin/kftx-wx.jpg)
 
 ## 特别鸣谢
 
