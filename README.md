@@ -120,6 +120,10 @@ npm run build:prod
 > -   user: admin
 > -   pwd:123456
 
+## 微信交流
+
+[![kftx-wx.jpg]https://static.quickadmin.icu/quickadmin/kftx-wx.jpg)](https://static.quickadmin.icu/quickadmin/kftx-wx.jpg)
+
 ## 特别鸣谢
 
 建议在开发前先学一下以下内容，提前了解和学习这些知识，会对项目理解非常有帮助:
