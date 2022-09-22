@@ -160,7 +160,8 @@ trait Crud
             return success("", $data);
         } catch (\Exception $e) {
             Log::error("--------:" . $e);
-            $this->error('获取数据失败');
+            return error("获取数据失败");
+         
         }
 
     }
@@ -172,6 +173,8 @@ trait Crud
     {
 
         try {
+            list($limit, $where, $sortArr) = $this->buildTableParames();
+
             $page = $this->request->get('page', 1);
             $limit = $this->request->get('limit', 15);
             $show_id = $this->request->get('show_id', 'id'); //前端显示的value
@@ -180,13 +183,14 @@ trait Crud
             $keyword = $this->request->get('keyword', ''); //查询的参数值
 
             $query_value = $this->request->get('query_value', ''); //编辑查询检索的值
-            $where = [];
+       
             if ($query_value) {
                 $where[] = [$show_id, '=', $query_value];
             }
             if ($keyword) {
                 $where[] = [$query_field, 'LIKE', "%{$keyword}%"];
             }
+         
             $fields = $show_id . ',' . $show_field;
             $count = $this->model
                 ->where($where)
@@ -213,7 +217,8 @@ trait Crud
             return json($data);
         } catch (\Exception $e) {
             Log::error("--------:" . $e);
-            $this->error('获取数据失败');
+            return error("获取数据失败");
+           
         }
 
     }

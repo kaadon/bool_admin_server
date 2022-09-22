@@ -109,7 +109,7 @@ class AdminBase extends BaseController
                     $where[] = [$key, '<=', $val[1]];
                     break;
                 default:
-                    $where[] = [$key, $op, "%{$val}"];
+                    $where[] = [$key, $op, $val];
             }
         }
         return [$limit, $where, $sortArr];

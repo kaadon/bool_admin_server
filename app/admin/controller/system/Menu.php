@@ -107,8 +107,8 @@ class Menu extends AdminBase
 
     public function index()
     {
-        $status = $this->request->post('status');
-        $menu_type = $this->request->post('menu_type'); //1：目录 2：菜单 3：按钮权限  4：目录+菜单 不传取所有
+        $status = $this->request->request('status');
+        $menu_type = $this->request->request('menu_type'); //1：目录 2：菜单 3：按钮权限  4：目录+菜单 不传取所有
         $where = [];
         if ($status) {
             $where['status'] = $status;
