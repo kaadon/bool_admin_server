@@ -120,7 +120,7 @@ class Index extends AdminBase
         $relation_table = "";
         $i = 0;
         $oneToManyRelations= isset($form['oneToManyRelations']) ? $form['oneToManyRelations'] : [];
-        $allRelations=$relations;
+        $allRelations=array_merge($oneToManyRelations,$relations);
         foreach ($relations as $k => $v) {
             $relation_table = $i == 0 ? $v['table_name'] : $relation_table . "," . $v['table_name'];
             $i++;
