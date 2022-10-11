@@ -110,6 +110,7 @@ class Index extends AdminBase
         $table_name = $form['table_name'];
         $table_comment = $form['table_comment'];
         $is_force = isset($form['is_force']) ? $form['is_force'] : false;
+        $only_api = isset($form['only_api']) ? $form['only_api'] : false;
         $is_menu = isset($form['is_menu']) ? $form['is_menu'] : false;
         $fieldlist = isset($form['fieldlist']) ? $form['fieldlist'] : [];
         $relations = isset($form['relations']) ? $form['relations'] : [];
@@ -118,28 +119,44 @@ class Index extends AdminBase
         $model_path = $form['model_is_common'] ? "common" : $back_module; //model是否放到common下
         $relation_table = "";
         $i = 0;
+        $oneToManyRelations= isset($form['oneToManyRelations']) ? $form['oneToManyRelations'] : [];
+        $allRelations=$relations;
         foreach ($relations as $k => $v) {
             $relation_table = $i == 0 ? $v['table_name'] : $relation_table . "," . $v['table_name'];
             $i++;
         }
-
+        foreach ($oneToManyRelations as $k => $v) {
+            $relation_table = !$relation_table ? $v['table_name'] : $relation_table . "," . $v['table_name'];
+        }
+      
         try {
             $build = (new BuildOnlineCurd())
                 ->setBackModule($back_module)
                 ->setTable($table_name)
                 ->setTableComment($table_comment)
                 ->setFieldlist($fieldlist)
+                ->setAllRelations($allRelations)
                 ->setRelations($relations)
+                ->setOneToManyRelations($oneToManyRelations)
                 ->setModelPath($model_path)
+                ->setOnly_api($only_api)
                 ->setForce($is_force);
-
+                
+            $build=$build->checkPre();
             $build = $build->render();
             $result = $build->create();
 
             /**
              * 菜单生成start
              */
-            if ($is_menu) {
+            $index_menu_staus=1;
+            if (!$is_menu) {
+                $index_menu_staus=2;
+                $authRow = SystemMenu::where('component', 'apiauth')->find();
+                $menu_pid=$authRow ? $authRow['id'] : 0;
+            }
+            $auth_menu=true;
+            if($auth_menu){
                 $controllerUrl = $result['controllerUrl'];
                 $viewFilename = $result['viewFilename'];
                 $index_component = "{$viewFilename}/index";
@@ -153,6 +170,7 @@ class Index extends AdminBase
                     $indexRow->icon = "code";
                     $indexRow->path = $index_path;
                     $indexRow->component = $index_component;
+                    $indexRow->status=$index_menu_staus;
                     $indexRow->save();
                 }
                 $pid = $indexRow['id'];
