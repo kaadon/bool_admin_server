@@ -1,8 +1,8 @@
 <?php
 namespace app\admin\controller\onlinecurd;
 
-use app\admin\model\SystemMenu;
-use app\admin\model\SystemOnlinecurd;
+use app\admin\model\system\SystemMenu;
+use app\admin\model\system\SystemOnlinecurd;
 use app\common\controller\AdminBase;
 use onlinecurd\BuildOnlineCurd;
 use think\facade\Db;

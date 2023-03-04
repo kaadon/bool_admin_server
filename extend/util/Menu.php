@@ -2,7 +2,7 @@
 
 namespace util;
 
-use app\admin\model\SystemMenu;
+use app\admin\model\system\SystemMenu;
 
 class Menu
 {

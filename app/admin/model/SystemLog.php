@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\admin\model;
 
-use app\admin\model\BaseModel;
+use app\common\model\BaseModel;
 
 /*
  * @Autor: zs
@@ -25,7 +25,7 @@ class SystemLog extends BaseModel
 
     public function admin()
     {
-        return $this->belongsTo('app\admin\model\SystemAdmin', 'admin_id', 'id');
+        return $this->belongsTo('app\admin\model\system\SystemAdmin', 'admin_id', 'id');
     }
 
 }

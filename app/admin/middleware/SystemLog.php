@@ -12,7 +12,7 @@
 
 namespace app\admin\middleware;
 
-use app\admin\model\SystemLog as ModelSystemLog;
+use app\admin\model\system\SystemLog as ModelSystemLog;
 use util\Token;
 
 /*

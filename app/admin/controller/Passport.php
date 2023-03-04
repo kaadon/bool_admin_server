@@ -10,9 +10,9 @@
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 
-use app\admin\model\SystemAdmin;
-use app\admin\model\SystemGroup;
-use app\admin\model\SystemGroupAdmin;
+use app\admin\model\system\SystemAdmin;
+use app\admin\model\system\SystemGroup;
+use app\admin\model\system\SystemGroupAdmin;
 use app\admin\service\AuthService;
 use app\common\controller\AdminBase;
 use think\App;

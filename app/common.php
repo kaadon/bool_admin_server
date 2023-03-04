@@ -174,10 +174,10 @@ if (!function_exists('sysconfig')) {
         if (empty($value)) {
             if (!empty($name)) {
                 $where['name'] = $name;
-                $value = \app\admin\model\SystemConfig::where($where)->value('value');
+                $value = \app\common\model\system\SystemConfig::where($where)->value('value');
                 // Cache::tag('sysconfig')->set("sysconfig_{$group}_{$name}", $value, 3600);
             } else {
-                $value = \app\admin\model\SystemConfig::where($where)->column('value', 'name');
+                $value = \app\common\model\system\SystemConfig::where($where)->column('value', 'name');
                 // Cache::tag('sysconfig')->set("sysconfig_{$group}", $value, 3600);
             }
         }

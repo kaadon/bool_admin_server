@@ -3,7 +3,7 @@ declare (strict_types = 1);
 
 namespace app\admin\listener;
 
-use app\admin\model\SystemFiles;
+use app\common\model\system\SystemFiles;
 
 class Files
 {

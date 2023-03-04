@@ -1,12 +1,13 @@
 <?php
 
-namespace app\admin\model;
+namespace app\common\model\system;
 
-use app\admin\model\BaseModel;
+
+
+use app\common\model\BaseModel;
 
 class SystemConfig extends BaseModel
 {
-
     protected $name = "system_config";
 
     public function getGroupList()

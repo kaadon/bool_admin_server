@@ -2,8 +2,8 @@
 
 namespace app\admin\controller\system;
 
-use app\admin\model\SystemGroupAdmin;
-use app\admin\model\SystemGroupMenu;
+use app\admin\model\system\SystemGroupAdmin;
+use app\admin\model\system\SystemGroupMenu;
 use app\admin\service\MenuService;
 use app\common\controller\AdminBase;
 use think\App;
@@ -25,7 +25,7 @@ class Role extends AdminBase
     {
         parent::__construct($app);
 
-        $this->model = new \app\admin\model\SystemGroup();
+        $this->model = new \app\admin\model\system\SystemGroup();
 
     }
 

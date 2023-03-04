@@ -22,7 +22,7 @@ class Menu extends AdminBase
     {
         parent::__construct($app);
 
-        $this->model = new \app\admin\model\SystemMenu();
+        $this->model = new \app\admin\model\system\SystemMenu();
 
     }
 

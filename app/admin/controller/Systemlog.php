@@ -32,7 +32,7 @@ class Systemlog extends AdminBase
     public function __construct(App $app)
     {
         parent::__construct($app);
-        $this->model = new \app\admin\model\SystemLog();
+        $this->model = new \app\admin\model\system\SystemLog();
     }
     /**
      * 添加

@@ -11,7 +11,7 @@
 // +----------------------------------------------------------------------
 namespace app\admin\model;
 
-use app\admin\model\BaseModel;
+use app\common\model\BaseModel;
 
 /*
  * @Autor: zs

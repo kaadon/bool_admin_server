@@ -8,35 +8,24 @@
 // +----------------------------------------------------------------------
 // | Author: zs <909883663@qq.com>
 // +----------------------------------------------------------------------
+namespace app\admin\model\system;
 
-namespace app\admin\model;
-
-use think\Model;
+use app\common\model\BaseModel;
 
 /*
- * @Description: 模型基类
  * @Autor: zs
- * @Date: 2021-05-25 16:12:33
+ * @Date: 2021-05-25 16:21:16
  * @LastEditors: zs
- * @LastEditTime: 2021-05-25 16:14:10
+ * @LastEditTime: 2021-05-25 16:21:18
  */
-class BaseModel extends Model
+class SystemLog extends BaseModel
 {
-    /**
-     * 自动时间戳类型
-     *
-     */
-    //protected $autoWriteTimestamp = true;
-    protected $autoWriteTimestamp = 'datetime';
-    /**
-     * 添加时间
-     *
-     */
-    protected $createTime = 'create_time';
+    // 关闭自动写入update_time字段
+    protected $updateTime = false;
 
-    /**
-     * 更新时间
-     *
-     */
-    protected $updateTime = 'update_time';
+    public function admin()
+    {
+        return $this->belongsTo('app\admin\model\system\SystemAdmin', 'admin_id', 'id');
+    }
+
 }

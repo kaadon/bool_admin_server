@@ -9,9 +9,9 @@
 // +----------------------------------------------------------------------
 // | Author: zs <909883663@qq.com>
 // +----------------------------------------------------------------------
-namespace app\admin\model;
+namespace app\admin\model\system;
 
-use app\admin\model\BaseModel;
+use app\common\model\BaseModel;
 
 /*
  * @Autor: zs
@@ -19,7 +19,7 @@ use app\admin\model\BaseModel;
  * @LastEditors: zs
  * @LastEditTime: 2021-05-25 16:21:18
  */
-class SystemFiles extends BaseModel
+class SystemOnlinecurd extends BaseModel
 {
 
 }

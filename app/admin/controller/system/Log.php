@@ -19,7 +19,7 @@ class Log extends AdminBase
     {
         parent::__construct($app);
 
-        $this->model = new \app\admin\model\SystemLog();
+        $this->model = new \app\admin\model\system\SystemLog();
 
     }
 

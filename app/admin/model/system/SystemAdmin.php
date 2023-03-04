@@ -9,7 +9,7 @@
 // +----------------------------------------------------------------------
 // | Author: zs <909883663@qq.com>
 // +----------------------------------------------------------------------
-namespace app\admin\model;
+namespace app\admin\model\system;
 
 use app\common\model\BaseModel;
 
@@ -19,7 +19,7 @@ use app\common\model\BaseModel;
  * @LastEditors: zs
  * @LastEditTime: 2021-05-25 16:21:18
  */
-class SystemOnlinecurd extends BaseModel
+class SystemAdmin extends BaseModel
 {
 
 }

@@ -2,8 +2,8 @@
 
 namespace app\admin\controller\system;
 
-use app\admin\model\SystemGroup;
-use app\admin\model\SystemGroupAdmin;
+use app\admin\model\system\SystemGroup;
+use app\admin\model\system\SystemGroupAdmin;
 use app\admin\validate\SystemAdmin;
 use app\common\controller\AdminBase;
 use think\App;
@@ -28,7 +28,7 @@ class Admin extends AdminBase
     {
         parent::__construct($app);
 
-        $this->model = new \app\admin\model\SystemAdmin();
+        $this->model = new \app\admin\model\system\SystemAdmin();
         $this->prefix = env('database.prefix');
     }
 
