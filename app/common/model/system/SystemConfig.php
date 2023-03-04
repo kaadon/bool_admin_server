@@ -20,9 +20,8 @@ class SystemConfig extends BaseModel
         $configs = redisCacheGet("config:groups:{$group}s");
         if ( empty($configs) ) {
             $where = ['group' => $group];
-            $configs  = self::where($where)->column('value', 'name');
-            var_dump($configs);
-//            $config = redisCacheSet("config:groups:{$group}s",$configs);
+            $value  = self::where($where)->column('value', 'name');
+            redisCacheSet("config:groups:{$group}s",$value);
         }
         return $value;
     }
