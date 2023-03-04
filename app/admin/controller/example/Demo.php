@@ -11,6 +11,7 @@
 namespace app\admin\controller\example;
 
 use app\common\controller\AdminBase;
+use app\common\model\system\SystemConfig;
 use think\App;
 use think\exception\ValidateException;
 use think\facade\Log;
@@ -38,7 +39,7 @@ class Demo extends AdminBase
      */
     public function index()
     {
-
+        var_dump(SystemConfig::get_config_group("site"));
         list($limit, $where, $sortArr) = $this->buildTableParames();
 
         $list = $this->model

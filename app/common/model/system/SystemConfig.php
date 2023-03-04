@@ -14,6 +14,19 @@ class SystemConfig extends BaseModel
         return [['tab' => '基础配置', 'value' => 'site'], ['tab' => '上传配置', 'value' => 'upload']];
     }
 
+    public static function get_config_group(string $group):array
+    {
+        $value  = null;
+        $configs = redisCacheGet("config:groups:{$group}s");
+        if ( empty($configs) ) {
+            $where = ['group' => $group];
+            $configs  = self::where($where)->column('value', 'name');
+            var_dump($configs);
+//            $config = redisCacheSet("config:groups:{$group}s",$configs);
+        }
+        return $value;
+    }
+
     /**
      * @param string $group
      * @param string $sign
