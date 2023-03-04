@@ -64,8 +64,9 @@ class Menu extends AdminBase
      * 修改
      *
      */
-    public function edit($id)
+    public function edit()
     {
+        $id= input('id');
         $row = $this->model->find($id);
         if (empty($row)) {
             return error('数据不存在');
@@ -181,9 +182,10 @@ class Menu extends AdminBase
     /**
      * 数据删除
      */
-    public function delete($id)
+    public function delete()
     {
 
+        $id= $this->request->get('id');
         $row = $this->model->find($id);
         if ($row->isEmpty()) {
             return error('数据不存在');
@@ -205,8 +207,9 @@ class Menu extends AdminBase
     /**
      * 查找
      */
-    public function find($id)
+    public function find()
     {
+        $id= $this->request->get('id');
         $row = $this->model->find($id);
         unset($row['create_time']);
         unset($row['update_time']);

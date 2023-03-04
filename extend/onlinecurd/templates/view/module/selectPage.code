@@ -1,0 +1,4 @@
+<el-form-item label="{{{comment}}}:" prop="{{{field}}}{{{suffix}}}">
+                    <!--show_field，为select 展示的label值----->
+                    {{{space}}}<SelectPage v-model="{{{prefix}}}.{{{field}}}{{{suffix}}}" :url="'/admin/{{{relation}}}/selectPage'" show_field="{{{showField}}}" :multiple="false" />
+                {{{space}}}</el-form-item>

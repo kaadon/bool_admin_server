@@ -121,8 +121,9 @@ class Admin extends AdminBase
     /**
      * 查找
      */
-    public function find($id)
+    public function find()
     {
+        $id= $this->request->get('id');
         $row = $this->model->find($id);
         if (empty($row)) {
             return error('数据不存在');
@@ -136,8 +137,9 @@ class Admin extends AdminBase
      * 修改
      *
      */
-    public function edit($id)
+    public function edit()
     {
+        $id= input('id');
         $row = $this->model->find($id);
         if (empty($row)) {
             return error('数据不存在');
@@ -179,9 +181,10 @@ class Admin extends AdminBase
     /**
      * 数据删除
      */
-    public function delete($id)
+    public function delete()
     {
 
+        $id= $this->request->get('id');
         $ids = is_array($id) ? $id : explode(',', $id);
         $row = $this->model->where("id", "in", $ids)->select();
         if ($row->isEmpty()) {

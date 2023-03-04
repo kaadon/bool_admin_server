@@ -1,0 +1,47 @@
+
+    /**
+     * 列表
+     */
+    public function index()
+    {
+       
+        list($limit, $where,$sortArr) = $this->buildTableParames();
+    
+        $list = $this->model
+            {{{relationIndexMethod}}}
+            ->where($where)
+            ->order($sortArr)
+             ->paginate($limit);
+        $data = [
+            'code'  => 1,
+            'msg'   => '',
+            'count' => $list->total(),
+            'data' => $list->items(),
+        ];
+        return json($data);
+    }
+
+    /**
+     * 导出
+     */
+    public function export()
+    {
+        list($limit, $where, $sortArr) = $this->buildTableParames();
+        $fields = $this->request->get('fields');
+        $fields = json_decode($fields, true);
+
+        $header = [];
+        foreach ($fields as $vo) {
+            $header[] = [$vo['comment'], $vo['field']];
+        }
+        
+        $list = $this->model
+            {{{relationIndexMethod}}}
+            ->where($where)
+            ->limit(100000)
+            ->order($sortArr)
+            ->select()
+            ->toArray();
+        $fileName = "export_" . $this->model->getName() . "_" . time();
+        return Excel::exportData($list, $header, $fileName, 'xlsx');
+    }

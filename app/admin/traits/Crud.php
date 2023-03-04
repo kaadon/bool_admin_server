@@ -67,9 +67,9 @@ trait Crud
      * 修改
      *
      */
-    public function edit($id)
+    public function edit()
     {
-        
+        $id= input('id');
         $row = $this->model->find($id);
         if (empty($row)) {
             return error('数据不存在');
@@ -96,8 +96,9 @@ trait Crud
     /**
      * 查找
      */
-    public function find($id)
+    public function find()
     {
+        $id = input('id');
         $row = $this->model->find($id);
         if (empty($row)) {
             return error('数据不存在');
@@ -107,8 +108,10 @@ trait Crud
     /**
      * 状态启用、禁用
      */
-    public function status($id, $status)
+    public function status()
     {
+        $id=input('id');
+        $status=input('status');
         $row = $this->model->find($id);
         if (empty($row)) {
             return error('数据不存在');
@@ -125,11 +128,11 @@ trait Crud
     /**
      * 数据删除
      */
-    public function delete($id)
+    public function delete()
     {
-
+        $id= $this->request->get('id');
         $ids = is_array($id) ? $id : explode(',', $id);
-        $row = $this->model->where("id", "in", $ids)->select();
+        $row = $this->model->select($ids);
         if ($row->isEmpty()) {
             return error('数据不存在');
         }

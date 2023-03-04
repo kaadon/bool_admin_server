@@ -35,6 +35,7 @@ class Index extends AdminBase
         $list = $this->model
             ->where($where)
             ->order($sortArr)
+            ->order(['id'=>'desc'])
             ->paginate($limit);
 
         $data = [
@@ -109,6 +110,9 @@ class Index extends AdminBase
         }
         $table_name = $form['table_name'];
         $table_comment = $form['table_comment'];
+        if(!$table_comment){
+            return error("表描述不能为空!");
+        }
         $is_force = isset($form['is_force']) ? $form['is_force'] : false;
         $only_api = isset($form['only_api']) ? $form['only_api'] : false;
         $is_menu = isset($form['is_menu']) ? $form['is_menu'] : false;
@@ -117,6 +121,7 @@ class Index extends AdminBase
         $menu_pid = isset($form['menu_pid']) ? $form['menu_pid'] : 0;
         $back_module = isset($form['back_module']) && $form['back_module']  ? $form['back_module'] : "admin"; //后台是哪个项目
         $model_path = $form['model_is_common'] ? "common" : $back_module; //model是否放到common下
+        $primaryKey= isset($form['primaryKey']) ? $form['primaryKey'] :'id';
         $relation_table = "";
         $i = 0;
         $oneToManyRelations= isset($form['oneToManyRelations']) ? $form['oneToManyRelations'] : [];
@@ -134,6 +139,7 @@ class Index extends AdminBase
                 ->setBackModule($back_module)
                 ->setTable($table_name)
                 ->setTableComment($table_comment)
+                ->setPrimaryKey($primaryKey)
                 ->setFieldlist($fieldlist)
                 ->setAllRelations($allRelations)
                 ->setRelations($relations)

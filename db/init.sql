@@ -1,13 +1,13 @@
 /*
 将初始化数据导入建好的数据库中
 
-Date: 2022-05-13 11:04:28
+Date: 2023-03-03 23:00:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for `qu_example_category`
+-- Table structure for qu_example_category
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_example_category`;
 CREATE TABLE `qu_example_category` (
@@ -50,7 +50,7 @@ INSERT INTO `qu_example_category` VALUES ('24', '分类9', '16', '0', '0', '测�
 INSERT INTO `qu_example_category` VALUES ('25', '分类10', '17', '0', '0', '测试标题250');
 
 -- ----------------------------
--- Table structure for `qu_example_demo`
+-- Table structure for qu_example_demo
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_example_demo`;
 CREATE TABLE `qu_example_demo` (
@@ -90,7 +90,7 @@ INSERT INTO `qu_example_demo` VALUES ('53', '5', null, '3', null, '完整表单�
 INSERT INTO `qu_example_demo` VALUES ('54', '3', null, '3', null, '234234324', '<p>234234234234234234234</p>', '111233', '', '', '', '', '山西省,阳泉市,城区', '0.00', null, '2022-04-12 11:10:10', '2022-04-29 10:18:57', '0', '0', '1', '6', '111');
 
 -- ----------------------------
--- Table structure for `qu_example_orders`
+-- Table structure for qu_example_orders
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_example_orders`;
 CREATE TABLE `qu_example_orders` (
@@ -114,7 +114,7 @@ INSERT INTO `qu_example_orders` VALUES ('3', 'DD20220422', '366.00', '送到物�
 INSERT INTO `qu_example_orders` VALUES ('4', 'DD998888', '58.00', '尽快发货', 'ST0098787', '2022-04-20 12:03:46', '2022-05-13 10:03:01', '3');
 
 -- ----------------------------
--- Table structure for `qu_system_admin`
+-- Table structure for qu_system_admin
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_system_admin`;
 CREATE TABLE `qu_system_admin` (
@@ -137,10 +137,10 @@ CREATE TABLE `qu_system_admin` (
 -- ----------------------------
 -- Records of qu_system_admin
 -- ----------------------------
-INSERT INTO `qu_system_admin` VALUES ('1', 'admin', '', 'e10adc3949ba59abbe56e057f20f883e', 'http://yyc-1301620739.cos.ap-nanjing.myqcloud.com/202205056273755e06da7.png', '', '1', null, '2022-05-05 14:58:45', '1,4', 'admin','0');
+INSERT INTO `qu_system_admin` VALUES ('1', 'admin', '', 'e10adc3949ba59abbe56e057f20f883e', 'http://yyc-1301620739.cos.ap-nanjing.myqcloud.com/202205056273755e06da7.png', '', '1', null, '2022-05-05 14:58:45', '1,4', 'admin', '0');
 
 -- ----------------------------
--- Table structure for `qu_system_category`
+-- Table structure for qu_system_category
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_system_category`;
 CREATE TABLE `qu_system_category` (
@@ -183,7 +183,7 @@ INSERT INTO `qu_system_category` VALUES ('24', '分类9', '16', '0', '0', '测�
 INSERT INTO `qu_system_category` VALUES ('25', '分类10', '17', '0', '0', '测试标题250');
 
 -- ----------------------------
--- Table structure for `qu_system_config`
+-- Table structure for qu_system_config
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_system_config`;
 CREATE TABLE `qu_system_config` (
@@ -210,7 +210,7 @@ INSERT INTO `qu_system_config` VALUES ('2', 'site_title', '网站标题', 'site'
 INSERT INTO `qu_system_config` VALUES ('3', 'site_copyright', '版权信息', 'site', 'input', '©版权所有 2020-2021 xxx版权所有', '网站的版权', '0', null, null);
 INSERT INTO `qu_system_config` VALUES ('4', 'site_beian', '备案信息', 'site', 'input', '苏ICP备xxxxx号', '网站备案信息', '0', null, null);
 INSERT INTO `qu_system_config` VALUES ('5', 'upload_ext', '允许后缀', 'upload', '', 'doc,gif,ico,icon,jpg,mp3,mp4,p12,pem,png,rar,jpeg', '上传允许的后缀', '0', null, null);
-INSERT INTO `qu_system_config` VALUES ('6', 'upload_url', '图片路径', 'upload', '', '', '上传文件访问地址', '0', null, null);
+INSERT INTO `qu_system_config` VALUES ('6', 'upload_url', '图片路径', 'upload', '', 'http://qa-prod.demo.com', '上传文件访问地址', '0', null, null);
 INSERT INTO `qu_system_config` VALUES ('7', 'site_switch', '网站开关', 'site', '', '1', '网站是否关闭', '0', null, null);
 INSERT INTO `qu_system_config` VALUES ('8', 'site_ip_blacklist', 'ip黑名单', 'site', '', '2223.8.9,127.0.0.1,211.234.98.112', 'ip黑名单用逗号隔开', '0', null, null);
 INSERT INTO `qu_system_config` VALUES ('9', 'site_open_time', '网站维护时间', 'site', '', '6,7,5', '网站维护时间', '0', null, null);
@@ -220,7 +220,7 @@ INSERT INTO `qu_system_config` VALUES ('12', 'site_back_image', '登录页背景
 INSERT INTO `qu_system_config` VALUES ('13', 'site_icon', 'icon', 'site', 'image', '', '网站小icon', '0', null, null);
 
 -- ----------------------------
--- Table structure for `qu_system_files`
+-- Table structure for qu_system_files
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_system_files`;
 CREATE TABLE `qu_system_files` (
@@ -241,14 +241,15 @@ CREATE TABLE `qu_system_files` (
   PRIMARY KEY (`id`),
   KEY `upload_type` (`upload_type`),
   KEY `original_name` (`original_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='上传文件表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='上传文件表';
 
 -- ----------------------------
 -- Records of qu_system_files
 -- ----------------------------
+INSERT INTO `qu_system_files` VALUES ('1', 'local', 'logo.png', 'http://qa-prod.demo.com/storage/system/20221009/d519b7d8db50c426d1d7ca598eed0149.png', '', '', '0', 'image/png', '34091', 'png', '988e7e1504fb32f10505eb95681b1699f0554ca9', '2022-10-09 16:31:09', '2022-10-09 16:31:09', null);
 
 -- ----------------------------
--- Table structure for `qu_system_group`
+-- Table structure for qu_system_group
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_system_group`;
 CREATE TABLE `qu_system_group` (
@@ -265,11 +266,11 @@ CREATE TABLE `qu_system_group` (
 -- ----------------------------
 -- Records of qu_system_group
 -- ----------------------------
-INSERT INTO `qu_system_group` VALUES ('1', '超级管理员', null, null, '1', '0','0');
-INSERT INTO `qu_system_group` VALUES ('4', 'web管理员', null, '2022-05-10 16:54:55', '1', '3','0');
+INSERT INTO `qu_system_group` VALUES ('1', '超级管理员', null, null, '1', '0', '0');
+INSERT INTO `qu_system_group` VALUES ('4', 'web管理员', null, '2022-05-10 16:54:55', '1', '3', '0');
 
 -- ----------------------------
--- Table structure for `qu_system_group_admin`
+-- Table structure for qu_system_group_admin
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_system_group_admin`;
 CREATE TABLE `qu_system_group_admin` (
@@ -285,7 +286,7 @@ CREATE TABLE `qu_system_group_admin` (
 INSERT INTO `qu_system_group_admin` VALUES ('27', '1', '1');
 
 -- ----------------------------
--- Table structure for `qu_system_group_menu`
+-- Table structure for qu_system_group_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_system_group_menu`;
 CREATE TABLE `qu_system_group_menu` (
@@ -300,7 +301,7 @@ CREATE TABLE `qu_system_group_menu` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `qu_system_log`
+-- Table structure for qu_system_log
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_system_log`;
 CREATE TABLE `qu_system_log` (
@@ -314,15 +315,14 @@ CREATE TABLE `qu_system_log` (
   `useragent` varchar(255) DEFAULT '' COMMENT 'User-Agent',
   `create_time` datetime DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='后台操作日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='后台操作日志表';
 
 -- ----------------------------
 -- Records of qu_system_log
 -- ----------------------------
 
-
 -- ----------------------------
--- Table structure for `qu_system_menu`
+-- Table structure for qu_system_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_system_menu`;
 CREATE TABLE `qu_system_menu` (
@@ -342,7 +342,7 @@ CREATE TABLE `qu_system_menu` (
   `tag_value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=172 DEFAULT CHARSET=utf8 COMMENT='菜单节点表';
+) ENGINE=InnoDB AUTO_INCREMENT=351 DEFAULT CHARSET=utf8 COMMENT='菜单节点表';
 
 -- ----------------------------
 -- Records of qu_system_menu
@@ -407,10 +407,17 @@ INSERT INTO `qu_system_menu` VALUES ('180', '3', '71', '列表', '', '', null, '
 INSERT INTO `qu_system_menu` VALUES ('181', '3', '71', '安装', '', '', null, '2022-07-03 17:28:43', '2022-07-03 17:28:43', '0', '1', '/admin/plugins/install', null, null);
 INSERT INTO `qu_system_menu` VALUES ('182', '3', '71', '卸载', '', '', null, '2022-07-03 17:28:56', '2022-07-03 17:28:56', '0', '1', '/admin/plugins/uninstall', null, null);
 INSERT INTO `qu_system_menu` VALUES ('183', '3', '71', '配置', '', '', null, '2022-07-03 17:29:54', '2022-07-03 17:29:54', '0', '1', '/admin/plugins/config', null, null);
-
+INSERT INTO `qu_system_menu` VALUES ('238', '1', '0', '接口权限', '', 'apiauth', 'apiauth', '2022-10-10 22:06:51', '2022-10-10 22:06:51', '0', '0', null, null, null);
+INSERT INTO `qu_system_menu` VALUES ('344', '2', '170', 'per管理', 'code', 'per_index', 'per/index', '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', null, null, null);
+INSERT INTO `qu_system_menu` VALUES ('345', '3', '344', '列表', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/index', null, null);
+INSERT INTO `qu_system_menu` VALUES ('346', '3', '344', '添加', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/add', null, null);
+INSERT INTO `qu_system_menu` VALUES ('347', '3', '344', '查看', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/find', null, null);
+INSERT INTO `qu_system_menu` VALUES ('348', '3', '344', '编辑', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/edit', null, null);
+INSERT INTO `qu_system_menu` VALUES ('349', '3', '344', '删除', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/delete', null, null);
+INSERT INTO `qu_system_menu` VALUES ('350', '3', '344', '导出', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/export', null, null);
 
 -- ----------------------------
--- Table structure for `qu_system_onlinecurd`
+-- Table structure for qu_system_onlinecurd
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_system_onlinecurd`;
 CREATE TABLE `qu_system_onlinecurd` (
@@ -432,7 +439,7 @@ CREATE TABLE `qu_system_onlinecurd` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `qu_test`
+-- Table structure for qu_test
 -- ----------------------------
 DROP TABLE IF EXISTS `qu_test`;
 CREATE TABLE `qu_test` (

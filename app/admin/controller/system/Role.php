@@ -130,8 +130,10 @@ class Role extends AdminBase
     /**
      * 状态启用、禁用
      */
-    public function status($id, $status)
+    public function status()
     {
+        $id= $this->request->get('id');
+        $status= $this->request->get('status');
         if ($id == 1) {
             return error('超级管理员不可以修改！');
         }
@@ -151,8 +153,9 @@ class Role extends AdminBase
     /**
      * 数据删除
      */
-    public function delete($id)
+    public function delete()
     {
+        $id= $this->request->get('id');
         $ids = is_array($id) ? $id : explode(',', $id);
         $row = $this->model->where("id", "in", $ids)->select();
         if ($row->isEmpty()) {

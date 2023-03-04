@@ -29,6 +29,7 @@ class Log extends AdminBase
     public function index()
     {
         list($limit, $where, $sortArr) = $this->buildTableParames();
+        $sortArr[]="id desc";
         $list = $this->model
             ->with(['admin'])
             ->where($where)

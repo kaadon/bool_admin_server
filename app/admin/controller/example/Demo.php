@@ -92,8 +92,9 @@ class Demo extends AdminBase
     /**
      * 查找
      */
-    public function find($id)
+    public function find()
     {
+        $id= $this->request->get('id');
         $row = $this->model->find($id);
         if ($row['flag']) {
             $arr = explode(",", $row['flag']);
@@ -128,8 +129,9 @@ class Demo extends AdminBase
      * 修改
      *
      */
-    public function edit($id)
+    public function edit()
     {
+        $id= input('id');
         $row = $this->model->find($id);
         if (empty($row)) {
             return error('数据不存在');

@@ -64,9 +64,9 @@ class AdminBase extends BaseController
         $ops = json_decode($ops, true);
         $where = [];
         //排序
-        $sortArr = ['id' => 'DESC'];
+        $sortArr=[];
         if ($sort && $order) {
-            $sortArr = [$sort => $order, 'id' => 'DESC'];
+            $sortArr = [$sort => $order];
         }
         $this->request->get(['page' => $page]);
         // 表名称
