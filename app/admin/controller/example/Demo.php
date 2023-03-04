@@ -39,6 +39,7 @@ class Demo extends AdminBase
      */
     public function index()
     {
+        var_dump(SystemConfig::get_config_group("site"));
         list($limit, $where, $sortArr) = $this->buildTableParames();
 
         $list = $this->model
