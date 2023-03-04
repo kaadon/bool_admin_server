@@ -14,12 +14,12 @@ git pull
 
 git branch
 
-rm -rf $ROOT_PATH/composer.lock
+#rm -rf $ROOT_PATH/composer.lock
 
-rm -rf $ROOT_PATH/vendor
+#rm -rf $ROOT_PATH/vendor
 
-rm -rf $ROOT_PATH/runtime/*
+#rm -rf $ROOT_PATH/runtime/*
 
-composer install
+#composer install
 
 echo "执行完毕!"
