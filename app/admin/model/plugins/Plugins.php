@@ -1,6 +1,6 @@
 <?php
 
-namespace app\admin\model;
+namespace app\admin\model\plugins;
 
 use app\common\model\BaseModel;
 
@@ -15,7 +15,7 @@ class Plugins extends BaseModel
     
     public function pluginsCategory()
     {
-        return $this->belongsTo('\app\admin\model\PluginsCategory', 'cate', 'id');
+        return $this->belongsTo('\app\admin\model\plugins\PluginsCategory', 'cate', 'id');
     }
 
     

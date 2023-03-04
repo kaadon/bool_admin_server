@@ -25,7 +25,7 @@ class Plugins extends AdminBase
     {
         parent::__construct($app);
 
-        $this->model = new \app\admin\model\Plugins();
+        $this->model = new \app\admin\model\plugins\Plugins();
 
         $this->validate = \app\admin\validate\Plugins::class;
     }
