@@ -408,13 +408,7 @@ INSERT INTO `qu_system_menu` VALUES ('181', '3', '71', '安装', '', '', null, '
 INSERT INTO `qu_system_menu` VALUES ('182', '3', '71', '卸载', '', '', null, '2022-07-03 17:28:56', '2022-07-03 17:28:56', '0', '1', '/admin/plugins/uninstall', null, null);
 INSERT INTO `qu_system_menu` VALUES ('183', '3', '71', '配置', '', '', null, '2022-07-03 17:29:54', '2022-07-03 17:29:54', '0', '1', '/admin/plugins/config', null, null);
 INSERT INTO `qu_system_menu` VALUES ('238', '1', '0', '接口权限', '', 'apiauth', 'apiauth', '2022-10-10 22:06:51', '2022-10-10 22:06:51', '0', '0', null, null, null);
-INSERT INTO `qu_system_menu` VALUES ('344', '2', '170', 'per管理', 'code', 'per_index', 'per/index', '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', null, null, null);
-INSERT INTO `qu_system_menu` VALUES ('345', '3', '344', '列表', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/index', null, null);
-INSERT INTO `qu_system_menu` VALUES ('346', '3', '344', '添加', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/add', null, null);
-INSERT INTO `qu_system_menu` VALUES ('347', '3', '344', '查看', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/find', null, null);
-INSERT INTO `qu_system_menu` VALUES ('348', '3', '344', '编辑', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/edit', null, null);
-INSERT INTO `qu_system_menu` VALUES ('349', '3', '344', '删除', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/delete', null, null);
-INSERT INTO `qu_system_menu` VALUES ('350', '3', '344', '导出', 'code', '', null, '2023-03-04 22:55:16', '2023-03-04 22:55:16', '0', '1', '/admin/per/export', null, null);
+
 
 -- ----------------------------
 -- Table structure for qu_system_onlinecurd
