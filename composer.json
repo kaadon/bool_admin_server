@@ -38,7 +38,9 @@
     },
     "autoload": {
         "psr-4": {
-            "app\\": "app"
+            "app\\": "app",
+            "Kaadon\\KaadonBase\\": "extend/kaadon/kaadonbase/src",
+            "Kaadon\\TelgramBot\\": "extend/telgramBot/src"
         },
         "psr-0": {
             "": "extend/"
