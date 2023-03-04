@@ -209,6 +209,17 @@ if (!function_exists('get_config')) {
         return \app\common\model\system\SystemConfig::get_config($group, $name);
     }
 }
+if (!function_exists('get_config_group')) {
+    /**
+     * 获取缓存组
+     * @param string $group
+     * @return array|null
+     */
+    function get_config_group(string $group)
+    {
+        return \app\common\model\system\SystemConfig::get_config_group($group);
+    }
+}
 if (!function_exists('del_config')) {
     /**
      * 删除配置缓存
@@ -234,6 +245,7 @@ if (!function_exists('set_config')) {
     }
 }
 
+/** addons_config **/
 if (!function_exists('get_addons_all_config')) {
     /**
      * 获取插件所有的配置

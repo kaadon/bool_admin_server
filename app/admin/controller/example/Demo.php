@@ -53,6 +53,7 @@ class Demo extends AdminBase
             'msg' => '',
             'count' => $list->total(),
             'data' => $list->items(),
+            "config" => get_config_group("site")
         ];
 
         return json($data);
