@@ -37,6 +37,7 @@ class Config extends AdminBase
                         ->update([
                             'value' => $val,
                         ]);
+                    redisCacheDel("config:{$key}");
                 }
             } catch (\Exception $e) {
                 Log::write("post config index error:" . $e);
