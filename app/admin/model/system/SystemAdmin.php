@@ -13,12 +13,7 @@ namespace app\admin\model\system;
 
 use app\common\model\BaseModel;
 
-/*
- * @Autor: zs
- * @Date: 2021-05-25 16:21:16
- * @LastEditors: zs
- * @LastEditTime: 2021-05-25 16:21:18
- */
+
 class SystemAdmin extends BaseModel
 {
 
