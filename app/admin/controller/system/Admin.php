@@ -45,9 +45,7 @@ class Admin extends AdminBase
         if(!$is_superadmin){
             $adminId=Token::userId($token);
             $where[]=['admin_id','=',$adminId];
-            
         }
-
         $list = $this->model
             ->where($where)
             ->order($sortArr)
@@ -124,7 +122,7 @@ class Admin extends AdminBase
     public function find()
     {
         $id= $this->request->get('id');
-        $row = $this->model->find($id);
+        $row = $this->model->where("id",$id)->find();
         if (empty($row)) {
             return error('数据不存在');
         }
