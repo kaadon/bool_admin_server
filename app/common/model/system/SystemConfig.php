@@ -14,7 +14,10 @@ class SystemConfig extends BaseModel
     public static function onAfterUpdate(Model $model): void
     {
         $data = json_encode($model->toArray());
+        Log::info("更新后事件:{$data}");
         Log::error("更新后事件:{$data}");
+        Log::warning("更新后事件:{$data}");
+        Log::write("更新后事件:{$data}");
     }
 
     public function getGroupList()
