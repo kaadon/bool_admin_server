@@ -23,6 +23,7 @@ return [
         ],
         'redis'    => [
             'type'       => 'redis',
+            // 默认队列
             'queue'      => 'default',
             // 服务器地址
             'host'       => env('redis.hostname', '127.0.0.1'),
@@ -34,7 +35,8 @@ return [
             'select'     => 16,
             // 缓存标签前缀
             'timeout'    => 10,
-            'persistent' => false,
+            // 持久化
+            'persistent' => true,
         ],
     ],
     'failed'      => [

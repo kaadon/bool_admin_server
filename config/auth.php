@@ -5,21 +5,20 @@
 // +----------------------------------------------------------------------
 
 return [
-    //jwt配置
+    // jwt配置
     'jwt' => [
         'key' => '7zikSjhM',
         'expire' => 3600,
         'keeplogin_expire' => 86400,
     ],
-
-    'auth_on' => true, // 权限开关
-
-    'super_admin_group_id' => 1, // 超级管理员权限组
+    // 权限开关
+    'auth_on' => true,
+    // 超级管理员权限组
+    'super_admin_group_id' => 1,
     // 不需要验证登录的控制器
     'no_login_controller' => [
         'ajax',
     ],
-
     // 不需要验证登录的方法
     'no_login_node' => [
         '/admin/passport/userinfo',

@@ -18,7 +18,8 @@ return [
             'host'       => env('redis.hostname', '127.0.0.1'),
             //  端口号
             'port'       => env('redis.port', '6379'),
-            'password'   => env('redis.password', null),//如果没有设置密码为空
+            // 如果没有设置密码为空
+            'password'   => env('redis.password', null),
             // 缓存前缀¬
             'prefix'     => env('redis.password', "bool_admin"),
             // 缓存有效期 0表示永久缓存
