@@ -123,7 +123,6 @@ class Admin extends AdminBase
     {
         $id= $this->request->get('id');
         $row = $this->model->where("id",$id)->find();
-
         if (empty($row)) {
             return error('数据不存在');
         }
