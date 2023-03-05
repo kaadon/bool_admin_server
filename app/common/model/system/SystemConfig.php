@@ -20,6 +20,15 @@ class SystemConfig extends BaseModel
         Log::write("更新后事件:{$data}");
     }
 
+    public static function onAfterWrite(Model $model): void
+    {
+        $data = json_encode($model->toArray());
+        Log::info("更新后事件:{$data}");
+        Log::error("更新后事件:{$data}");
+        Log::warning("更新后事件:{$data}");
+        Log::write("更新后事件:{$data}");
+    }
+
     public function getGroupList()
     {
         return [['tab' => '基础配置', 'value' => 'site'], ['tab' => '上传配置', 'value' => 'upload']];
