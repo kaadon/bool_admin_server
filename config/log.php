@@ -29,13 +29,13 @@ return [
             // 日志保存目录
             'path' => '',
             // 单文件日志写入
-            'single' => false,
+            'single' => true,
             // 独立日志级别
             'apart_level' => [],
             // 最大日志文件数量
-            'max_files' => 0,
+            'max_files' => 500,
             // 使用JSON格式记录
-            'json' => false,
+            'json' => true,
             // 日志处理
             'processor' => null,
             // 关闭通道日志写入

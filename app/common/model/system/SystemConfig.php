@@ -14,9 +14,7 @@ class SystemConfig extends BaseModel
     public static function onAfterUpdate(Model $model): void
     {
         $data = json_encode($model->toArray());
-        Log::info("更新后事件onAfterUpdate:{$data}");
-        Log::error("更新后事件onAfterUpdate:{$data}");
-        Log::warning("更新后事件onAfterUpdate:{$data}");
+        Log::record("更新后事件onAfterUpdate:{$data}");
         Log::write("更新后事件onAfterUpdate:{$data}");
     }
 
