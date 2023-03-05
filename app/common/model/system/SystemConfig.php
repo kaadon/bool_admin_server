@@ -14,19 +14,19 @@ class SystemConfig extends BaseModel
     public static function onAfterUpdate(Model $model): void
     {
         $data = json_encode($model->toArray());
-        Log::info("更新后事件:{$data}");
-        Log::error("更新后事件:{$data}");
-        Log::warning("更新后事件:{$data}");
-        Log::write("更新后事件:{$data}");
+        Log::info("更新后事件onAfterUpdate:{$data}");
+        Log::error("更新后事件onAfterUpdate:{$data}");
+        Log::warning("更新后事件onAfterUpdate:{$data}");
+        Log::write("更新后事件onAfterUpdate:{$data}");
     }
 
     public static function onAfterWrite(Model $model): void
     {
         $data = json_encode($model->toArray());
-        Log::info("更新后事件:{$data}");
-        Log::error("更新后事件:{$data}");
-        Log::warning("更新后事件:{$data}");
-        Log::write("更新后事件:{$data}");
+        Log::info("更新后事件onAfterWrite:{$data}");
+        Log::error("更新后事件onAfterWrite:{$data}");
+        Log::warning("更新后事件onAfterWrite:{$data}");
+        Log::write("更新后事件onAfterWrite:{$data}");
     }
 
     public function getGroupList()
