@@ -124,7 +124,7 @@ class Admin extends AdminBase
         $id= $this->request->param('id');
         $row = $this->model->where("id",$id)->find();
         if (empty($row)) {
-            return error("数据不存在{$id}".json_encode($this->model->where('id',$id)->select()->toArray()));
+            return error("数据不存在");
         }
         $groups = SystemGroupAdmin::where('admin_id', $row['id'])->column('group_id');
         $row['group_ids'] = $groups;
