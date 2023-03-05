@@ -11,7 +11,7 @@ class SystemConfig extends BaseModel
 {
     protected $name = "system_config";
 
-    public function onAfterUpdate(Model $model): void
+    public static function onAfterUpdate(Model $model): void
     {
         $data = json_encode($model->toArray());
         var_dump("更新后事件onAfterUpdate:{$data}");
