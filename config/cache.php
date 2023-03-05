@@ -27,7 +27,7 @@ return [
             // 缓存标签前缀
             'tag_prefix' => env('redis.tagprefix', "tag:bool_admin"),
             // 缓存储存库
-            'select'     => 16,
+            'select'     => env('redis.select', 0),
             // 缓存标签前缀
             'timeout'    => 10,
             // 序列化机制 例如 ['serialize', 'unserialize']
