@@ -121,7 +121,7 @@ class Admin extends AdminBase
      */
     public function find()
     {
-        $id= $this->request->get('id');
+        $id= $this->request->param('id');
         $row = $this->model->where("id",$id)->find();
         if (empty($row)) {
             return error("数据不存在{$id}".json_encode($this->model->where('id',$id)->select()->toArray()));
