@@ -5,11 +5,11 @@ namespace app\common\model\system;
 
 use app\common\model\BaseModel;
 use think\facade\Log;
-use think\Model;
+
 
 class SystemConfig extends BaseModel
 {
-public static function onAfterWrite(Model $model): void
+public static function onAfterWrite(BaseModel $model): void
 {
     $data = json_encode($model->toArray());
     Log::write("更新后事件onAfterUpdate:{$data}");
