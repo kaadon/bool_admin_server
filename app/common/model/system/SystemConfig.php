@@ -9,8 +9,6 @@ use think\Model;
 
 class SystemConfig extends BaseModel
 {
-    protected $name = "system_config";
-
     public static function onAfterUpdate(Model $model): void
     {
         $data = json_encode($model->toArray());
