@@ -11,13 +11,13 @@ class SystemConfig extends BaseModel
 {
     protected $name = "system_config";
 
-    public static function onAfterUpdate(Model $model): void
+    public function onAfterUpdate(Model $model): void
     {
         $data = json_encode($model->toArray());
         Log::write("更新后事件onAfterUpdate:{$data}");
     }
 
-    public static function onAfterWrite(Model $model): void
+    public function onAfterWrite(Model $model): void
     {
         $data = json_encode($model->toArray());
         Log::record("更新后事件onAfterWrite:{$data}");
