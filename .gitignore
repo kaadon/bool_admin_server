@@ -8,3 +8,4 @@ nginx.htaccess
 /public/storage
 /vendor/
 composer.lock
+/public/admin/
