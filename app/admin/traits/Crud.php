@@ -34,7 +34,7 @@ trait Crud
             ->order($sortArr)
             ->paginate($limit);
         $data = [
-            'code' => 1,
+            'code' => 200,
             'msg' => '',
             'count' => $list->total(),
             'data' => $list->items(),
@@ -212,8 +212,8 @@ trait Crud
                 $list[] = $result;
             }
             $data = [
-                'code' => 1,
-                'msg' => '',
+                'code' => 200,
+                'message' => '',
                 'count' => $count,
                 'data' => $list,
             ];
