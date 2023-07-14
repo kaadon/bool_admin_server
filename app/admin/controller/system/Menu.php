@@ -125,7 +125,7 @@ class Menu extends AdminBase
         $count = $this->model->where($where)->count();
         $list = $this->model->where($where)->order('weigh desc,id asc')->select();
         $data = [
-            'code' => 1,
+            'code' => 200,
             'msg' => 'ok',
             'count' => $count,
             'data' => $list,
@@ -172,7 +172,7 @@ class Menu extends AdminBase
         $count = $this->model->where($where)->count();
         $list = $this->model->where($where)->order('weigh desc,id asc')->select();
         $data = [
-            'code' => 1,
+            'code' => 200,
             'msg' => 'ok',
             'count' => $count,
             'data' => $list,
@@ -191,19 +191,22 @@ class Menu extends AdminBase
             return error('数据不存在');
         }
         $count = $this->model->where('pid', $id)->count();
-        if ($count > 0) {
-            return error('请先删除子菜单/字权限');
-        }
         try {
-            $save = $row->delete();
-
+            $save = $this->model->whereIn('id',$this->getDown([$id]))->delete();
         } catch (\Exception $e) {
             return error('删除失败');
         }
         return $save ? successes('删除成功！') : error('删除失败');
-
     }
-
+    private function getDown(array $ids, bool $merge = true): array
+    {
+        $arr = $this->model->whereIn('pid', $ids)->column('id');
+        if (!empty($arr)) {
+            $arr1 = $this->getDown($arr);
+            if (!empty($arr1)) $arr = array_merge($arr, $arr1);
+        }
+        return array_merge($ids, $arr);
+    }
     /**
      * 查找
      */

@@ -39,7 +39,7 @@ class Index extends AdminBase
             ->paginate($limit);
 
         $data = [
-            'code' => 1,
+            'code' => 200,
             'msg' => '',
             'count' => $list->total(),
             'data' => $list->items(),
@@ -57,7 +57,7 @@ class Index extends AdminBase
         foreach ($list as $row) {
             $tableList[reset($row)] = reset($row);
         }
-        return json(['code' => 1, 'msg' => 'ok', 'data' => $tableList]);
+        return json(['code' => 200, 'msg' => 'ok', 'data' => $tableList]);
     }
     /**
      * 获取主表字段信息
@@ -71,7 +71,7 @@ class Index extends AdminBase
         try {
             $build = new BuildOnlineCurd();
             $data = $build->getMainTableRow($table);
-            return json(['code' => 1, 'msg' => 'ok', 'data' => $data]);
+            return json(['code' => 200, 'msg' => 'ok', 'data' => $data]);
         } catch (\Exception $e) {
             Log::error('获取主表信息失败:' . $e);
             return error($e->getMessage());
@@ -92,7 +92,7 @@ class Index extends AdminBase
         try {
             $build = new BuildOnlineCurd();
             $data = $build->getSubTableRow($sub_table);
-            return json(['code' => 1, 'msg' => 'ok', 'data' => $data]);
+            return json(['code' => 200, 'msg' => 'ok', 'data' => $data]);
         } catch (\Exception $e) {
             Log::error('获取从表信息失败:' . $e);
             return error($e->getMessage());
@@ -226,7 +226,7 @@ class Index extends AdminBase
             $onlineModel->status = 1;
             $onlineModel->version = $versionnum;
             $onlineModel->save();
-            return json(['code' => 1, 'msg' => '代码生成成功！', 'data' => []]);
+            return json(['code' => 200, 'msg' => '代码生成成功！', 'data' => []]);
         } catch (\Exception $e) {
             Log::write("++++++++++++++++++++" . $e);
             $versionnum = 1;

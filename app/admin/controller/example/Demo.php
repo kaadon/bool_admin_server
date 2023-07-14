@@ -48,7 +48,7 @@ class Demo extends AdminBase
             ->paginate($limit);
 
         $data = [
-            'code' => 1,
+            'code' => 200,
             'msg' => '',
             'count' => $list->total(),
             'data' => $list->items(),

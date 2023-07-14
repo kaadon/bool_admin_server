@@ -73,7 +73,7 @@ class Admin extends AdminBase
             unset($v['password']);
         }
         $data = [
-            'code' => 1,
+            'code' => 200,
             'msg' => '',
             'count' => $list->total(),
             'data' => $list->items(),
