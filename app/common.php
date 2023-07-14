@@ -387,7 +387,7 @@ if (!function_exists('line_array')) {
 if (!function_exists('paginate')) {
 
 
-    function paginate($data)
+    function paginate(array $data): array
     {
         list(
             "current_page" => $current_page,
@@ -396,7 +396,7 @@ if (!function_exists('paginate')) {
             "last_page" => $last_page,
             "total" => $total
             )
-            = $data->toArray();
+            = $data;
         return [
             "page"  => $current_page,
             "pages" => $last_page,

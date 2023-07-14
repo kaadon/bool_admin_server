@@ -29,32 +29,29 @@ class Role extends AdminBase
 
     }
 
-      /**
+    /**
      * 列表
      */
     public function index()
     {
-        $token=$this->request->header("token");
-        
+        $token = $this->request->header("token");
+
         list($limit, $where, $sortArr) = $this->buildTableParames();
-        $is_superadmin=Token::is_superadmin($token);
-        if(!$is_superadmin){
-            $adminId=Token::userId($token);
-            $where[]=['admin_id','=',$adminId];
-            
+        $is_superadmin = Token::is_superadmin($token);
+        if (!$is_superadmin) {
+            $adminId = Token::userId($token);
+            $where[] = ['admin_id', '=', $adminId];
         }
         $list = $this->model
             ->where($where)
             ->order($sortArr)
             ->paginate($limit);
-        $data = [
-            'code' => 1,
-            'msg' => '',
+        return success([
             'count' => $list->total(),
-            'data' => $list->items(),
-        ];
-        return json($data);
+            'list' => $list->items()
+        ]);
     }
+
     /**
      * 授权数据
      */
@@ -65,8 +62,8 @@ class Role extends AdminBase
         if (!$id) {
             return error('id不能为空');
         }
-        $token=$this->request->header('token');
-        $adminId=Token::userId($token);
+        $token = $this->request->header('token');
+        $adminId = Token::userId($token);
         $menuService = new MenuService($adminId);
         $menuList = $menuService->getAuthMenuData($id);
         return successes("success", $menuList);
@@ -101,18 +98,18 @@ class Role extends AdminBase
         return successes('ok');
     }
 
-        /**
+    /**
      * 添加
      */
     public function add()
     {
-        $token=$this->request->header("token");
-        $adminId=Token::userId($token);
+        $token = $this->request->header("token");
+        $adminId = Token::userId($token);
 
         $post = $this->request->post();
         try {
             $this->validate && validate($this->validate)->check($post);
-            $post['admin_id']=$adminId;
+            $post['admin_id'] = $adminId;
             $result = $this->model->save($post);
             if ($result) {
                 return successes('添加成功！');
@@ -132,8 +129,8 @@ class Role extends AdminBase
      */
     public function status()
     {
-        $id= $this->request->post('id');
-        $status= $this->request->post('status');
+        $id = $this->request->post('id');
+        $status = $this->request->post('status');
         if ($id == 1) {
             return error('超级管理员不可以修改！');
         }
@@ -150,12 +147,13 @@ class Role extends AdminBase
             return error("状态{$msg}失败");
         }
     }
+
     /**
      * 数据删除
      */
     public function delete()
     {
-        $id= $this->request->post('id');
+        $id = $this->request->post('id');
         $ids = is_array($id) ? $id : explode(',', $id);
         $row = $this->model->where("id", "in", $ids)->select();
         if ($row->isEmpty()) {
@@ -184,13 +182,13 @@ class Role extends AdminBase
      */
     public function selectList()
     {
-        $token=$this->request->header("token");
-        $is_superadmin=Token::is_superadmin($token);
+        $token = $this->request->header("token");
+        $is_superadmin = Token::is_superadmin($token);
         try {
-            $where=[];
-            if(!$is_superadmin){
-                $adminId=Token::userId($token);
-                $where['admin_id']=$adminId;
+            $where = [];
+            if (!$is_superadmin) {
+                $adminId = Token::userId($token);
+                $where['admin_id'] = $adminId;
             }
 
             $fields = input('fields');
