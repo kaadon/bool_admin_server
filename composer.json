@@ -20,20 +20,19 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=8.1.0",
         "topthink/framework": "^6.1",
         "topthink/think-orm": "^2.0",
         "topthink/think-multi-app": "^1.0",
-        "firebase/php-jwt": "^5.2",
-        "topthink/think-captcha": "^3.0",
         "topthink/think-view": "^1.0",
+        "topthink/think-filesystem": "^2.0",
+        "topthink/think-queue": "^3.0",
         "phpoffice/phpspreadsheet": "^1.20",
         "zzstudio/think-addons": "^2.0",
         "symfony/var-exporter": "^5.4",
-        "zhusai/captcha-img": "^1.0",
         "kaadon/uploadfile": "^0.0.1",
-        "topthink/think-filesystem": "^2.0",
-        "topthink/think-queue": "^3.0"
+        "kaadon/thinkbase": "dev-master",
+        "kaadon/capcha": "^2.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",

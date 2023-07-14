@@ -54,12 +54,12 @@ class AdminBase extends BaseController
     protected function buildTableParames()
     {
 
-        $page = $this->request->get('page', 1);
-        $limit = $this->request->get('limit', 15);
-        $filters = $this->request->get('filter', '{}');
-        $ops = $this->request->get('op', '{}');
-        $sort = $this->request->get("sort", "");
-        $order = $this->request->get("order", "");
+        $page = $this->request->post('page', 1);
+        $limit = $this->request->post('limit', 15);
+        $filters = $this->request->post('filter', '{}');
+        $ops = $this->request->post('op', '{}');
+        $sort = $this->request->post("sort", "");
+        $order = $this->request->post("order", "");
         $filters = json_decode($filters, true);
         $ops = json_decode($ops, true);
         $where = [];
@@ -68,7 +68,7 @@ class AdminBase extends BaseController
         if ($sort && $order) {
             $sortArr = [$sort => $order];
         }
-        $this->request->get(['page' => $page]);
+        $this->request->post(['page' => $page]);
         // 表名称
         $tableName = humpToLine(lcfirst($this->model->getName()));
 

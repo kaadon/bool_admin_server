@@ -38,7 +38,7 @@ class Orders extends AdminBase
         try {
             $result = $row->save($post);
             if ($result) {
-                return success('更新成功！');
+                return successes('更新成功！');
             }
             return error('更新失败');
         } catch (\Exception $e) {
@@ -46,7 +46,7 @@ class Orders extends AdminBase
             return error('更新失败');
         }
 
-        return success('ok', $row);
+        return successes('ok', $row);
     }
 
 }

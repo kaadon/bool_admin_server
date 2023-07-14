@@ -23,29 +23,12 @@ class Config extends AdminBase
         $this->model = new \app\common\model\system\SystemConfig();
 
     }
+
     /**
      *
      */
     public function index()
     {
-        if ($this->request->isPost()) {
-            $post = $this->request->post();
-            try {
-                foreach ($post as $key => $val) {
-                    $this->model
-                        ->where('name', $key)
-                        ->update([
-                            'value' => $val,
-                        ]);
-                    redisCacheDel("config:{$key}");
-                }
-                Log::write("post config index error:" . json_encode($post));
-            } catch (\Exception $e) {
-                Log::write("post config index error:" . $e);
-                return error('保存失败');
-            }
-            return success('保存成功！');
-        }
         try {
             $groupList = $this->model->getGroupList();
             foreach ($groupList as $k => $v) {
@@ -62,18 +45,39 @@ class Config extends AdminBase
                 }
                 $groupList[$k]['detail'] = $detail;
             }
-            return success('', $groupList);
+            return successes("success", $groupList);
         } catch (\Exception $e) {
             Log::write("get config index error:" . $e);
             return error('系统异常');
         }
     }
 
+    public function update()
+    {
+        try {
+            $post = $this->request->post();
+            foreach ($post as $key => $val) {
+                $this->model
+                    ->where('name', $key)
+                    ->update([
+                        'value' => $val,
+                    ]);
+                redisCacheDel("config:{$key}");
+            }
+            Log::write("post config index error:" . json_encode($post));
+        } catch (\Exception $e) {
+            Log::write("post config index error:" . $e);
+            return error('保存失败');
+        }
+        return successes('保存成功！');
+    }
+
     public function getGroupList()
     {
 
-        return success('', $this->model->getGroupList());
+        return successes("success", $this->model->getGroupList());
     }
+
     /**
      * oss有哪些方式
      */

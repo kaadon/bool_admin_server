@@ -108,7 +108,7 @@ class Plugins extends AdminBase
             Log::error("uninstall error:" . $e);
             return error("卸载成功！");
         }
-        return success("卸载成功！");
+        return successes("卸载成功！");
     }
     /**
      * 下载
@@ -206,7 +206,7 @@ class Plugins extends AdminBase
             return error($e->getMessage());
         }
 
-        return success("安装插件成功！");
+        return successes("安装插件成功！");
     }
 
     /**
@@ -233,13 +233,13 @@ class Plugins extends AdminBase
             try {
 
                 set_addons_config($name, $config);
-                return success('更新插件配置成功！');
+                return successes('更新插件配置成功！');
             } catch (\Exception $e) {
                 Log::error("更新插件配置失败！" . $e);
                 return error($e->getMessage());
             }
         }
-        return success('获取插件配置成功！', $config);
+        return successes('获取插件配置成功！', $config);
     }
 
 }

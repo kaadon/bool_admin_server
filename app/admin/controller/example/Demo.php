@@ -78,7 +78,7 @@ class Demo extends AdminBase
             }
             $result = $this->model->save($post);
             if ($result) {
-                return success('添加成功！');
+                return successes('添加成功！');
             }
             return error('添加失败');
         } catch (ValidateException $e) {
@@ -95,7 +95,7 @@ class Demo extends AdminBase
      */
     public function find()
     {
-        $id= $this->request->get('id');
+        $id= $this->request->post('id');
         $row = $this->model->find($id);
         if ($row['flag']) {
             $arr = explode(",", $row['flag']);
@@ -124,7 +124,7 @@ class Demo extends AdminBase
         if (empty($row)) {
             return error('数据不存在');
         }
-        return success('ok', $row);
+        return successes('ok', $row);
     }
     /**
      * 修改
@@ -153,7 +153,7 @@ class Demo extends AdminBase
                 }
                 $result = $row->save($post);
                 if ($result) {
-                    return success('保存成功！');
+                    return successes('保存成功！');
                 }
                 return error('保存失败');
             } catch (ValidateException $e) {
@@ -191,7 +191,7 @@ class Demo extends AdminBase
         if (empty($row)) {
             return error('数据不存在');
         }
-        return success('ok', $row);
+        return successes('ok', $row);
     }
 
     /**
@@ -200,7 +200,7 @@ class Demo extends AdminBase
     public function export()
     {
         list($limit, $where, $sortArr) = $this->buildTableParames();
-        $fields = $this->request->get('fields');
+        $fields = $this->request->post('fields');
         $fields = json_decode($fields, true);
 
         $header = [];

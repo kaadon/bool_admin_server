@@ -120,7 +120,7 @@ class MenuService
                 if ($menu['tag_type'] && $menu['tag_value']) {
                     $meta['tag'] = ['value' => $menu['tag_value'], 'type' => $menu['tag_type']];
                 }
-                $menu['name'] = $this->upperString($menu['path']);
+                $menu['name'] = isset($menu['path'])? $this->upperString($menu['path']):$menu['path'];
                 $menu['meta'] = $meta;
                 unset($meta);
                 unset($menu['title']);

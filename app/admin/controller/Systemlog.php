@@ -43,7 +43,7 @@ class Systemlog extends AdminBase
         try {
             $result = $this->model->save($post);
             if ($result) {
-                return success('添加成功！');
+                return successes('添加成功！');
             }
 
             return error('添加失败');

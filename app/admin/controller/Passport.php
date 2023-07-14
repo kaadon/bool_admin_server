@@ -36,7 +36,7 @@ class Passport extends AdminBase
         $key = isset($post['key']) ? $post['key'] : '';
         $code = isset($post['code']) ? $post['code'] : '';
         if ($key && $code) {
-            if (!captchaimg_check($code, $key)) {
+            if (!capcha_check($key,$code)) {
                 return error('验证码不正确');
             }
         } else {
@@ -59,12 +59,12 @@ class Passport extends AdminBase
         
         $token = Token::create($admin->toArray(), $is_keeplogin);
 
-        return success('登录成功', ['admin' => $admin, 'token' => $token]);
+        return successes('登录成功', ['admin' => $admin, 'token' => $token]);
     }
 
     public function logout()
     {
-        return success('退出登录成功');
+        return successes('退出登录成功');
     }
 
     public function userinfo()
@@ -97,7 +97,7 @@ class Passport extends AdminBase
         $auth_service = new AuthService($admin['id'], $group_ids);
         $auths = $auth_service->getPermission();
         $data['permissions'] = $auths;
-        return success('获取用户信息成功', $data);
+        return successes('获取用户信息成功', $data);
     }
     /**
      * 更新用户信息
@@ -131,6 +131,6 @@ class Passport extends AdminBase
         }
         isset($post['password']) && $admin->password = md5($post['password']);
         $admin->save();
-        return success('更新用户信息成功！');
+        return successes('更新用户信息成功！');
     }
 }

@@ -51,7 +51,7 @@ class Menu extends AdminBase
             }
             $result = $this->model->save($post);
             if ($result) {
-                return success('添加成功！');
+                return successes('添加成功！');
             }
             return error('添加失败');
         } catch (\Exception $e) {
@@ -91,7 +91,7 @@ class Menu extends AdminBase
             }
             $result = $row->save($post);
             if ($result) {
-                return success('保存成功！');
+                return successes('保存成功！');
             }
             return error('保存失败');
         } catch (\Exception $e) {
@@ -99,7 +99,7 @@ class Menu extends AdminBase
             return error('保存失败');
         }
 
-        return success('ok', $row);
+        return successes('ok', $row);
     }
 
     /**
@@ -185,7 +185,7 @@ class Menu extends AdminBase
     public function delete()
     {
 
-        $id= $this->request->get('id');
+        $id= $this->request->post('id');
         $row = $this->model->find($id);
         if ($row->isEmpty()) {
             return error('数据不存在');
@@ -200,7 +200,7 @@ class Menu extends AdminBase
         } catch (\Exception $e) {
             return error('删除失败');
         }
-        return $save ? success('删除成功！') : error('删除失败');
+        return $save ? successes('删除成功！') : error('删除失败');
 
     }
 
@@ -209,13 +209,13 @@ class Menu extends AdminBase
      */
     public function find()
     {
-        $id= $this->request->get('id');
+        $id= $this->request->post('id');
         $row = $this->model->find($id);
         unset($row['create_time']);
         unset($row['update_time']);
         if (empty($row)) {
             return error('数据不存在');
         }
-        return success('ok', $row);
+        return successes('ok', $row);
     }
 }

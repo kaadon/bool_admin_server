@@ -21,7 +21,7 @@ class Index extends BaseController
 
     public function index()
     {
-        return success('quickadmin api is ok!');
+        return successes('quickadmin api is ok!');
     }
 
 }

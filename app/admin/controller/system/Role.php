@@ -69,7 +69,7 @@ class Role extends AdminBase
         $adminId=Token::userId($token);
         $menuService = new MenuService($adminId);
         $menuList = $menuService->getAuthMenuData($id);
-        return success('', $menuList);
+        return successes("success", $menuList);
     }
 
     /**
@@ -98,7 +98,7 @@ class Role extends AdminBase
             Log::error("--group authGroup error:---" . $e);
             return error('error');
         }
-        return success('ok');
+        return successes('ok');
     }
 
         /**
@@ -115,7 +115,7 @@ class Role extends AdminBase
             $post['admin_id']=$adminId;
             $result = $this->model->save($post);
             if ($result) {
-                return success('添加成功！');
+                return successes('添加成功！');
             }
             return error('添加失败');
         } catch (ValidateException $e) {
@@ -132,8 +132,8 @@ class Role extends AdminBase
      */
     public function status()
     {
-        $id= $this->request->get('id');
-        $status= $this->request->get('status');
+        $id= $this->request->post('id');
+        $status= $this->request->post('status');
         if ($id == 1) {
             return error('超级管理员不可以修改！');
         }
@@ -145,7 +145,7 @@ class Role extends AdminBase
         try {
             $row->status = $status;
             $row->save();
-            return success("状态{$msg}成功！");
+            return successes("状态{$msg}成功！");
         } catch (\Exception $e) {
             return error("状态{$msg}失败");
         }
@@ -155,7 +155,7 @@ class Role extends AdminBase
      */
     public function delete()
     {
-        $id= $this->request->get('id');
+        $id= $this->request->post('id');
         $ids = is_array($id) ? $id : explode(',', $id);
         $row = $this->model->where("id", "in", $ids)->select();
         if ($row->isEmpty()) {
@@ -174,7 +174,7 @@ class Role extends AdminBase
         } catch (\Exception $e) {
             return error('删除失败');
         }
-        return $save ? success('删除成功！') : error('删除失败');
+        return $save ? successes('删除成功！') : error('删除失败');
 
     }
 
@@ -203,7 +203,7 @@ class Role extends AdminBase
                 ->where('status', 1)
                 ->limit(100)
                 ->select();
-            return success("", $data);
+            return successes("success", $data);
         } catch (\Exception $e) {
             Log::error("--------:" . $e);
             return error('获取数据失败');

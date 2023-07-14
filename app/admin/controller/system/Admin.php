@@ -104,7 +104,7 @@ class Admin extends AdminBase
             $groupadminModel = new SystemGroupAdmin();
             $groupadminModel->saveAll($groupadmin);
             Db::commit();
-            return success('添加成功！');
+            return successes('添加成功！');
         } catch (ValidateException $e) {
             return error($e->getError());
 
@@ -128,7 +128,7 @@ class Admin extends AdminBase
         }
         $groups = SystemGroupAdmin::where('admin_id', $row['id'])->column('group_id');
         $row['group_ids'] = $groups;
-        return success('ok', $row);
+        return successes('ok', $row);
     }
 
     /**
@@ -163,7 +163,7 @@ class Admin extends AdminBase
             }
             $groupadminModel->saveAll($groupadmin);
             Db::commit();
-            return success('添加成功！');
+            return successes('添加成功！');
         } catch (ValidateException $e) {
             return error($e->getError());
         } catch (\Exception $e) {
@@ -172,7 +172,7 @@ class Admin extends AdminBase
             return error('保存失败');
         }
 
-        return success('ok', $row);
+        return successes('ok', $row);
 
     }
 
@@ -182,7 +182,7 @@ class Admin extends AdminBase
     public function delete()
     {
 
-        $id= $this->request->get('id');
+        $id= $this->request->post('id');
         $ids = is_array($id) ? $id : explode(',', $id);
         $row = $this->model->where("id", "in", $ids)->select();
         if ($row->isEmpty()) {
@@ -197,7 +197,7 @@ class Admin extends AdminBase
         } catch (\Exception $e) {
             return error('删除失败');
         }
-        return $save ? success('删除成功！') : error('删除失败');
+        return $save ? successes('删除成功！') : error('删除失败');
 
     }
 

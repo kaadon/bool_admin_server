@@ -39,14 +39,14 @@ class Ajax extends AdminBase
             'menuInfo' => $menuService->getMenuTree(),
         ];
         //Cache::tag('initIndex')->set('initIndex_' . $this->adminId, $data);
-        return success('success', $data);
+        return successes('success', $data);
     }
     /**
      * 获取网站配置项
      */
     public function getConfig()
     {
-        return success('success', sysconfig('site'));
+        return successes('success', sysconfig('site'));
     }
     /**
      * 上传文件
@@ -59,7 +59,7 @@ class Ajax extends AdminBase
             $upload = new Upload();
             $res = $upload->upload($file);
             if ($res['url']) {
-                return success('ok', ['url' => $res['url']]);
+                return successes('ok', ['url' => $res['url']]);
             } else {
                 return error($res['msg']);
             }
@@ -75,7 +75,6 @@ class Ajax extends AdminBase
 
     public function getCaptcha()
     {
-        return captchaimg();
+        return success(capcha_create() );
     }
-
 }

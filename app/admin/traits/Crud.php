@@ -52,7 +52,7 @@ trait Crud
             $this->validate && validate($this->validate)->check($post);
             $result = $this->model->save($post);
             if ($result) {
-                return success('添加成功！');
+                return successes('添加成功！');
             }
             return error('添加失败');
         } catch (ValidateException $e) {
@@ -80,7 +80,7 @@ trait Crud
                 $this->validate && validate($this->validate)->scene('edit')->check($post);
                 $result = $row->save($post);
                 if ($result) {
-                    return success('保存成功！');
+                    return successes('保存成功！');
                 }
                 return error('保存失败');
             } catch (ValidateException $e) {
@@ -90,7 +90,7 @@ trait Crud
                 return error('保存失败');
             }
         }
-        return success('ok', $row);
+        return successes('ok', $row);
     }
 
     /**
@@ -103,7 +103,7 @@ trait Crud
         if (empty($row)) {
             return error('数据不存在');
         }
-        return success('ok', $row);
+        return successes('ok', $row);
     }
     /**
      * 状态启用、禁用
@@ -120,7 +120,7 @@ trait Crud
         try {
             $row->status = $status;
             $row->save();
-            return success("状态{$msg}成功！");
+            return successes("状态{$msg}成功！");
         } catch (\Exception $e) {
             return error("状态{$msg}失败");
         }
@@ -130,7 +130,7 @@ trait Crud
      */
     public function delete()
     {
-        $id= $this->request->get('id');
+        $id= $this->request->post('id');
         $ids = is_array($id) ? $id : explode(',', $id);
         $row = $this->model->select($ids);
         if ($row->isEmpty()) {
@@ -141,7 +141,7 @@ trait Crud
         } catch (\Exception $e) {
             return error('删除失败');
         }
-        return $save ? success('删除成功！') : error('删除失败');
+        return $save ? successes('删除成功！') : error('删除失败');
 
     }
 
@@ -160,7 +160,7 @@ trait Crud
                 ->field($fields)
                 ->limit(100)
                 ->select();
-            return success("", $data);
+            return successes("success", $data);
         } catch (\Exception $e) {
             Log::error("--------:" . $e);
             return error("获取数据失败");
@@ -178,14 +178,14 @@ trait Crud
         try {
             list($limit, $where, $sortArr) = $this->buildTableParames();
 
-            $page = $this->request->get('page', 1);
-            $limit = $this->request->get('limit', 15);
-            $show_id = $this->request->get('show_id', 'id'); //前端显示的value
-            $query_field = $this->request->get('query_field', 'name'); //查询的参数名称
-            $show_field = $this->request->get('show_field', 'name'); //前端显示的label
-            $keyword = $this->request->get('keyword', ''); //查询的参数值
+            $page = $this->request->post('page', 1);
+            $limit = $this->request->post('limit', 15);
+            $show_id = $this->request->post('show_id', 'id'); //前端显示的value
+            $query_field = $this->request->post('query_field', 'name'); //查询的参数名称
+            $show_field = $this->request->post('show_field', 'name'); //前端显示的label
+            $keyword = $this->request->post('keyword', ''); //查询的参数值
 
-            $query_value = $this->request->get('query_value', ''); //编辑查询检索的值
+            $query_value = $this->request->post('query_value', ''); //编辑查询检索的值
        
             if ($query_value) {
                 $where[] = [$show_id, '=', $query_value];
@@ -231,7 +231,7 @@ trait Crud
     public function export()
     {
         list($limit, $where, $sortArr) = $this->buildTableParames();
-        $fields = $this->request->get('fields');
+        $fields = $this->request->post('fields');
         $fields = json_decode($fields, true);
 
         $header = [];
