@@ -384,28 +384,7 @@ if (!function_exists('line_array')) {
         return $strArray;
     }
 }
-if (!function_exists('paginate')) {
 
-
-    function paginate(array $data): array
-    {
-        list(
-            "current_page" => $current_page,
-            "data" => $data,
-            "per_page" => $per_page,
-            "last_page" => $last_page,
-            "total" => $total
-            )
-            = $data;
-        return [
-            "page"  => $current_page,
-            "pages" => $last_page,
-            "list"  => $data,
-            "limit" => $per_page,
-            "count" => $total
-        ];
-    }
-}
 /**
  * @description: 其他状态
  * @param {*} $msg

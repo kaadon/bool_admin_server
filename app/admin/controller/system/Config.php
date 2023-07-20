@@ -64,17 +64,14 @@ class Config extends AdminBase
                     ]);
                 redisCacheDel("config:{$key}");
             }
-            Log::write("post config index error:" . json_encode($post));
         } catch (\Exception $e) {
-            Log::write("post config index error:" . $e);
             return error('保存失败');
         }
-        return successes('保存成功！');
+        return successes('保存成功');
     }
 
     public function getGroupList()
     {
-
         return successes("success", $this->model->getGroupList());
     }
 

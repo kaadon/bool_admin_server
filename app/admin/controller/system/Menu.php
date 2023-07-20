@@ -184,7 +184,6 @@ class Menu extends AdminBase
      */
     public function delete()
     {
-
         $id= $this->request->post('id');
         $row = $this->model->find($id);
         if ($row->isEmpty()) {

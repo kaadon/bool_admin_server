@@ -46,10 +46,7 @@ class Role extends AdminBase
             ->where($where)
             ->order($sortArr)
             ->paginate($limit);
-        return success([
-            'count' => $list->total(),
-            'list' => $list->items()
-        ]);
+        return paginate($list);
     }
 
     /**

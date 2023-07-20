@@ -33,13 +33,8 @@ trait Crud
             ->where($where)
             ->order($sortArr)
             ->paginate($limit);
-        $data = [
-            'code' => 200,
-            'msg' => '',
-            'count' => $list->total(),
-            'data' => $list->items(),
-        ];
-        return json($data);
+        return paginate($list);
+
     }
 
     /**
@@ -63,34 +58,29 @@ trait Crud
         }
 
     }
+
     /**
      * 修改
      *
      */
     public function edit()
     {
-        $id= input('id');
+        $id = input('id');
         $row = $this->model->find($id);
         if (empty($row)) {
             return error('数据不存在');
         }
-        if ($this->request->isPost()) {
-            $post = $this->request->post();
-            try {
-                $this->validate && validate($this->validate)->scene('edit')->check($post);
-                $result = $row->save($post);
-                if ($result) {
-                    return successes('保存成功！');
-                }
-                return error('保存失败');
-            } catch (ValidateException $e) {
-                return error($e->getError());
-            } catch (\Exception $e) {
-                Log::error("--------:" . $e);
-                return error('保存失败');
-            }
+        $post = $this->request->post();
+        try {
+            $this->validate && validate($this->validate)->scene('edit')->check($post);
+            $result = $row->save($post);
+            if (empty($result)) throw new \Exception('保存失败');
+        } catch (ValidateException $e) {
+            return error("", 201, $e->getError());
+        } catch (\Exception $e) {
+            return error('保存失败');
         }
-        return successes('ok', $row);
+        return success($row);
     }
 
     /**
@@ -103,15 +93,16 @@ trait Crud
         if (empty($row)) {
             return error('数据不存在');
         }
-        return successes('ok', $row);
+        return success($row);
     }
+
     /**
      * 状态启用、禁用
      */
     public function status()
     {
-        $id=input('id');
-        $status=input('status');
+        $id = input('id');
+        $status = input('status');
         $row = $this->model->find($id);
         if (empty($row)) {
             return error('数据不存在');
@@ -125,12 +116,13 @@ trait Crud
             return error("状态{$msg}失败");
         }
     }
+
     /**
      * 数据删除
      */
     public function delete()
     {
-        $id= $this->request->post('id');
+        $id = $this->request->post('id');
         $ids = is_array($id) ? $id : explode(',', $id);
         $row = $this->model->select($ids);
         if ($row->isEmpty()) {
@@ -142,7 +134,6 @@ trait Crud
             return error('删除失败');
         }
         return $save ? successes('删除成功！') : error('删除失败');
-
     }
 
     /**
@@ -162,11 +153,8 @@ trait Crud
                 ->select();
             return successes("success", $data);
         } catch (\Exception $e) {
-            Log::error("--------:" . $e);
-            return error("获取数据失败");
-         
+            return error($e->getMessage());
         }
-
     }
 
     /**
@@ -174,7 +162,6 @@ trait Crud
      */
     public function selectPage()
     {
-
         try {
             list($limit, $where, $sortArr) = $this->buildTableParames();
 
@@ -186,14 +173,14 @@ trait Crud
             $keyword = $this->request->post('keyword', ''); //查询的参数值
 
             $query_value = $this->request->post('query_value', ''); //编辑查询检索的值
-       
+
             if ($query_value) {
                 $where[] = [$show_id, '=', $query_value];
             }
             if ($keyword) {
                 $where[] = [$query_field, 'LIKE', "%{$keyword}%"];
             }
-         
+
             $fields = $show_id . ',' . $show_field;
             $count = $this->model
                 ->where($where)
@@ -211,20 +198,16 @@ trait Crud
                 ];
                 $list[] = $result;
             }
-            $data = [
-                'code' => 200,
-                'message' => '',
-                'count' => $count,
-                'data' => $list,
-            ];
-            return json($data);
         } catch (\Exception $e) {
-            Log::error("--------:" . $e);
-            return error("获取数据失败");
-           
+            return error($e->getMessage());
         }
+        return success([
+            'count' => $count,
+            'data' => $list
+        ]);
 
     }
+
     /**
      * 导出
      */

@@ -11,7 +11,7 @@ return [
     // 是否启用路由
     'with_route' => true,
     // 默认应用
-    'default_app' => 'admin',
+    'default_app' => 'home',
     // 默认时区
     'default_timezone' => 'Asia/Shanghai',
     // 应用映射（自动多应用模式有效）
@@ -27,7 +27,7 @@ return [
     // 显示错误信息
     'show_error_msg' => false,
     // quickadmin插件市场请求地址
-    'api' => 'http://api.quickadmin.icu',
+    'api' => 'https://demo.booladmin.icu',
     //前端项目路径名称
-    'front' => env('front.project_name', 'quickadmin-front'),
+    'front' => env('front.project_name', 'booladmin-front'),
 ];

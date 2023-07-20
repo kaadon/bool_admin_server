@@ -31,7 +31,7 @@
         "zzstudio/think-addons": "^2.0",
         "symfony/var-exporter": "^5.4",
         "kaadon/uploadfile": "^0.0.1",
-        "kaadon/thinkbase": "dev-master",
+        "kaadon/thinkbase": "^0.0.9",
         "kaadon/capcha": "^2.0"
     },
     "require-dev": {
@@ -41,8 +41,6 @@
     "autoload": {
         "psr-4": {
             "app\\": "app",
-            "Kaadon\\KaadonBase\\": "extend/kaadon/kaadonbase/src",
-            "Kaadon\\TelgramBot\\": "extend/telgramBot/src"
         },
         "psr-0": {
             "": "extend/"
