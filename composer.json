@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=8.1.0",
-        "topthink/framework": "^8.0",
+        "topthink/framework": "*",
         "topthink/think-orm": "^3.0",
         "topthink/think-multi-app": "^1.0",
         "topthink/think-view": "^2.0",
@@ -31,7 +31,8 @@
         "symfony/var-exporter": "^6.3",
         "kaadon/uploadfile": "^0.0.1",
         "kaadon/thinkbase": "^1.0",
-        "kaadon/capcha": "^2.0"
+        "kaadon/capcha": "^2.0",
+        "kaadon/think-addons": "^3.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",
