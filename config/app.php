@@ -27,7 +27,7 @@ return [
     // 显示错误信息
     'show_error_msg' => false,
     // quickadmin插件市场请求地址
-    'api' => 'https://demo.booladmin.icu',
+    'api' => 'http://api.quickadmin.icu',
     //前端项目路径名称
     'front' => env('front.project_name', 'booladmin-front'),
 ];

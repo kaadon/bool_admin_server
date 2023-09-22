@@ -58,7 +58,7 @@ class Plugins extends AdminBase
             }
             $newData['data'] = $newList;
             $newData['count'] = $data['count'];
-            $newData['code'] = $data['code'];
+            $newData['code'] = 200;
             $newData['msg'] = $data['msg'];
             return json($newData);
         } catch (\Exception $e) {
@@ -73,7 +73,8 @@ class Plugins extends AdminBase
      */
     public function categoryList()
     {
-        return json(api_post("/qaapi/plugins/categoryList", $this->request->post()));
+        $data = api_post("/qaapi/plugins/categoryList", $this->request->post());
+        return successes('登录成功', $data["data"]);
     }
 
     /**
