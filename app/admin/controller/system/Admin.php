@@ -169,11 +169,8 @@ class Admin extends AdminBase
         } catch (\Exception $e) {
             Db::rollback();
             Log::error("--------:" . $e);
-            return error('保存失败');
+            return error('保存失败',201,["message"=>$e->getMessage(),"trace"=>$e->getTrace()]);
         }
-
-        return successes('ok', $row);
-
     }
 
     /**

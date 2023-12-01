@@ -43,7 +43,7 @@ class SystemLog
                     'ip' => $ip,
                     'content' => json_encode($params, JSON_UNESCAPED_UNICODE),
                     'useragent' => $_SERVER['HTTP_USER_AGENT'],
-                    'create_time' => date("Y-m-d H:i:s",time()),
+                    'create_time' => time(),
                 ];
                 $modelSystemLog = new ModelSystemLog();
                 $modelSystemLog->save($data);
