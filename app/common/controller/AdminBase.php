@@ -54,12 +54,12 @@ class AdminBase extends BaseController
     protected function buildTableParames()
     {
 
-        $page = $this->request->post('page', 1);
-        $limit = $this->request->post('limit', 15);
-        $filters = $this->request->post('filter', '{}');
-        $ops = $this->request->post('op', '{}');
-        $sort = $this->request->post("sort", "");
-        $order = $this->request->post("order", "");
+        $page = $this->request->param('page', 1);
+        $limit = $this->request->param('limit', 15);
+        $filters = $this->request->param('filter', '{}');
+        $ops = $this->request->param('op', '{}');
+        $sort = $this->request->param("sort", "");
+        $order = $this->request->param("order", "");
         $filters = json_decode($filters, true);
         $ops = json_decode($ops, true);
         $where = [];
