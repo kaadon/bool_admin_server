@@ -21,11 +21,11 @@ return [
             // 如果没有设置密码为空
             'password'   => env('redis.password', null),
             // 缓存前缀¬
-            'prefix'     => env('redis.password', "bool_admin"),
+            'prefix'     => env('redis.prefix', "bool_admin:"),
             // 缓存有效期 0表示永久缓存
             'expire'     => 0,
             // 缓存标签前缀
-            'tag_prefix' => env('redis.tagprefix', "tag:bool_admin"),
+            'tag_prefix' => env('redis.tagprefix', "tag:bool_admin:"),
             // 缓存储存库
             'select'     => env('redis.select', 0),
             // 缓存标签前缀

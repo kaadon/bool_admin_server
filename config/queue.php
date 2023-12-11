@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 return [
-    'default'     => 'async',
+    'default'     => 'redis',
     'connections' => [
         'sync'     => [
             'type' => 'sync',
@@ -31,9 +31,13 @@ return [
             'port'       => env('redis.port', '6379'),
             //  密码
             'password'   => env('redis.password', null),//如果没有设置密码为空
+            // 缓存前缀
+            'prefix'     => env('redis.prefix', "bool_admin:"),
+            // 缓存标签前缀
+            'tag_prefix' => env('redis.tagprefix', "tag:bool_admin:"),
             // 缓存储存库
             'select'     => 16,
-            // 缓存标签前缀
+            //超时
             'timeout'    => 10,
             // 持久化
             'persistent' => true,
