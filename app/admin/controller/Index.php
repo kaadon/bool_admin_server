@@ -11,6 +11,7 @@
 namespace app\admin\controller;
 
 use app\BaseController;
+use think\response\Json;
 
 /*
  * @Description: index
@@ -19,7 +20,7 @@ use app\BaseController;
 class Index extends BaseController
 {
 
-    public function index()
+    public function index(): Json
     {
         return successes('quickadmin api is ok!');
     }

@@ -17,6 +17,7 @@ use app\admin\service\AuthService;
 use app\common\controller\AdminBase;
 use think\App;
 use think\facade\Cache;
+use think\response\Json;
 use util\Token;
 
 /*
@@ -30,7 +31,7 @@ class Passport extends AdminBase
         echo 0;
     }
 
-    public function index()
+    public function index(): Json
     {
         $post = $this->request->post();
         $key = isset($post['key']) ? $post['key'] : '';

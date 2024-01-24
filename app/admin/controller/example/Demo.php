@@ -15,6 +15,7 @@ use app\common\model\system\SystemConfig;
 use think\App;
 use think\exception\ValidateException;
 use think\facade\Log;
+use think\response\Json;
 use util\Excel;
 
 /*
@@ -26,7 +27,7 @@ class Demo extends AdminBase
     protected $model = null;
     protected $validate = null;
 
-    protected $relationSearch = true;
+    protected bool $relationSearch = true;
 
     public function __construct(App $app)
     {
@@ -37,7 +38,7 @@ class Demo extends AdminBase
     /**
      * 列表
      */
-    public function index()
+    public function index(): Json
     {
         list($limit, $where, $sortArr) = $this->buildTableParames();
 
@@ -61,7 +62,7 @@ class Demo extends AdminBase
     /**
      * 添加
      */
-    public function add()
+    public function add(): Json
     {
         $post = $this->request->post();
         try {
@@ -93,7 +94,7 @@ class Demo extends AdminBase
     /**
      * 查找
      */
-    public function find()
+    public function find(): Json
     {
         $id= $this->request->post('id');
         $row = $this->model->find($id);
@@ -130,7 +131,7 @@ class Demo extends AdminBase
      * 修改
      *
      */
-    public function edit()
+    public function edit(): Json
     {
         $id= input('id');
         $row = $this->model->find($id);
@@ -197,7 +198,7 @@ class Demo extends AdminBase
     /**
      * 导出
      */
-    public function export()
+    public function export(): bool
     {
         list($limit, $where, $sortArr) = $this->buildTableParames();
         $fields = $this->request->post('fields');

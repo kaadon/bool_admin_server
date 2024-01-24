@@ -6,6 +6,7 @@ use app\common\controller\AdminBase;
 use think\App;
 use think\facade\Db;
 use think\facade\Log;
+use think\response\Json;
 use util\Token;
 
 /**
@@ -16,7 +17,7 @@ class Menu extends AdminBase
 
     protected $model = null;
 
-    protected $relationSearch = false;
+    protected bool $relationSearch = false;
 
     public function __construct(App $app)
     {
@@ -29,7 +30,7 @@ class Menu extends AdminBase
     /**
      * 添加
      */
-    public function add()
+    public function add(): Json
     {
         $post = $this->request->post();
         try {
@@ -64,7 +65,7 @@ class Menu extends AdminBase
      * 修改
      *
      */
-    public function edit()
+    public function edit(): Json
     {
         $id= input('id');
         $row = $this->model->find($id);
@@ -106,7 +107,7 @@ class Menu extends AdminBase
      * 获取所有菜单(无层级)
      */
 
-    public function index()
+    public function index(): Json
     {
         $status = $this->request->request('status');
         $menu_type = $this->request->request('menu_type'); //1：目录 2：菜单 3：按钮权限  4：目录+菜单 不传取所有
@@ -137,7 +138,7 @@ class Menu extends AdminBase
      * 获取所有菜单(无层级)
      */
 
-    public function adminIndex()
+    public function adminIndex(): Json
     {
         $token=$this->request->header('token');
         $status = $this->request->post('status');
@@ -182,7 +183,7 @@ class Menu extends AdminBase
     /**
      * 数据删除
      */
-    public function delete()
+    public function delete(): Json
     {
         $id= $this->request->post('id');
         $row = $this->model->find($id);
@@ -209,7 +210,7 @@ class Menu extends AdminBase
     /**
      * 查找
      */
-    public function find()
+    public function find(): Json
     {
         $id= $this->request->post('id');
         $row = $this->model->find($id);

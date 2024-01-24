@@ -15,6 +15,7 @@ namespace app\admin\controller;
 use app\admin\service\MenuService;
 use app\common\controller\AdminBase;
 use think\facade\Log;
+use think\response\Json;
 use util\Upload;
 
 class Ajax extends AdminBase
@@ -22,12 +23,12 @@ class Ajax extends AdminBase
 
     /**
      * 初始化后台接口地址
-     * @return \think\response\Json
+     * @return Json
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function initIndex()
+    public function initIndex(): Json
     {
         // $cacheData = Cache::get('initIndex_' . $this->adminId);
         // if (!empty($cacheData)) {

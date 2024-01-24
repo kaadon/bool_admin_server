@@ -19,7 +19,7 @@ class Plugins extends AdminBase
 
     protected $validate = null;
 
-    protected $relationSearch = false;
+    protected bool $relationSearch = false;
 
     public function __construct(App $app)
     {

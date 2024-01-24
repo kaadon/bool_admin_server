@@ -18,6 +18,7 @@ namespace app\admin\controller;
 
 use app\common\controller\AdminBase;
 use think\App;
+use think\response\Json;
 
 /*
  * @Description: Do not edit
@@ -27,7 +28,7 @@ class Systemlog extends AdminBase
 {
     protected $model = null;
 
-    protected $relationSearch = false;
+    protected bool $relationSearch = false;
 
     public function __construct(App $app)
     {
@@ -37,7 +38,7 @@ class Systemlog extends AdminBase
     /**
      * 添加
      */
-    public function add()
+    public function add(): Json
     {
         $post = $this->request->post();
         try {
@@ -56,7 +57,7 @@ class Systemlog extends AdminBase
     /**
      * 列表
      */
-    public function index()
+    public function index(): Json
     {
        
         list($limit, $where, $sortArr) = $this->buildTableParames();

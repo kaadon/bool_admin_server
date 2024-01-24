@@ -11,7 +11,7 @@
 namespace app\admin\traits;
 
 use think\exception\ValidateException;
-use think\facade\Log;
+use think\response\Json;
 use util\Excel;
 
 /**
@@ -26,24 +26,28 @@ trait Crud
     /**
      * 列表
      */
-    public function index()
+    public function index(): Json
     {
-        list($limit, $where, $sortArr) = $this->buildTableParames();
-        $list = $this->model
-            ->where($where)
-            ->order($sortArr)
-            ->paginate($limit);
-        return paginate($list);
-
+        try {
+            //逻辑代码
+            list($limit, $where, $sortArr) = $this->buildTableParames();
+            $list = $this->model
+                ->where($where)
+                ->order($sortArr)
+                ->paginate($limit);
+            return paginate($list);
+        } catch (\Exception $exception) {
+            return error($exception->getMessage());
+        }
     }
 
     /**
      * 添加
      */
-    public function add()
+    public function add(): Json
     {
-        $post = $this->request->post();
         try {
+            $post = $this->request->param();
             $this->validate && validate($this->validate)->check($post);
             $result = $this->model->save($post);
             if ($result) {
@@ -51,7 +55,6 @@ trait Crud
             }
             return error('添加失败');
         } catch (ValidateException $e) {
-
             return error($e->getError());
         } catch (\Exception $e) {
             return error('添加失败:' . $e->getMessage());
@@ -63,52 +66,62 @@ trait Crud
      * 修改
      *
      */
-    public function edit()
+    public function edit(): Json
     {
-        $id = input('id');
-        $row = $this->model->find($id);
-        if (empty($row)) {
-            return error('数据不存在');
-        }
-        $post = $this->request->post();
         try {
-            $this->validate && validate($this->validate)->scene('edit')->check($post);
-            $result = $row->save($post);
-            if (empty($result)) throw new \Exception('保存失败');
-        } catch (ValidateException $e) {
-            return error("", 201, $e->getError());
-        } catch (\Exception $e) {
-            return error('保存失败');
+            //逻辑代码
+            $id = input('id');
+            $row = $this->model->find($id);
+            if (empty($row)) {
+                return error('数据不存在');
+            }
+            $post = $this->request->post();
+            try {
+                $this->validate && validate($this->validate)->scene('edit')->check($post);
+                $result = $row->save($post);
+                if (empty($result)) throw new \Exception('保存失败');
+            } catch (ValidateException $e) {
+                return error("", 201, $e->getError());
+            } catch (\Exception $e) {
+                return error('保存失败');
+            }
+            return success($row);
+        } catch (\Exception $exception) {
+            return error($exception->getMessage());
         }
-        return success($row);
     }
 
     /**
      * 查找
      */
-    public function find()
+    public function find(): Json
     {
-        $id = input('id');
-        $row = $this->model->find($id);
-        if (empty($row)) {
-            return error('数据不存在');
+        try {
+            //逻辑代码
+            $id = input('id');
+            $row = $this->model->find($id);
+            if (empty($row)) {
+                return error('数据不存在');
+            }
+            return success($row);
+        } catch (\Exception $exception) {
+            return error($exception->getMessage());
         }
-        return success($row);
     }
 
     /**
      * 状态启用、禁用
      */
-    public function status()
+    public function status(): Json
     {
-        $id = input('id');
-        $status = input('status');
-        $row = $this->model->find($id);
-        if (empty($row)) {
-            return error('数据不存在');
-        }
-        $msg = $status == 0 ? "禁用" : "启用";
         try {
+            $id = input('id');
+            $status = input('status');
+            $row = $this->model->find($id);
+            if (empty($row)) {
+                return error('数据不存在');
+            }
+            $msg = $status == 0 ? "禁用" : "启用";
             $row->status = $status;
             $row->save();
             return successes("状态{$msg}成功！");
@@ -120,27 +133,27 @@ trait Crud
     /**
      * 数据删除
      */
-    public function delete()
+    public function delete(): Json
     {
-        $id = $this->request->post('id');
-        $ids = is_array($id) ? $id : explode(',', $id);
-        $row = $this->model->select($ids);
-        if ($row->isEmpty()) {
-            return error('数据不存在');
-        }
         try {
+            $id = $this->request->post('id');
+            $ids = is_array($id) ? $id : explode(',', $id);
+            $row = $this->model->select($ids);
+            if ($row->isEmpty()) {
+                return error('数据不存在');
+            }
             $save = $row->delete();
+            return $save ? successes('删除成功！') : error('删除失败');
         } catch (\Exception $e) {
             return error('删除失败');
         }
-        return $save ? successes('删除成功！') : error('删除失败');
     }
 
     /**
      * 下拉选择列表
      *
      */
-    public function selectList()
+    public function selectList(): Json
     {
         try {
             $fields = input('fields');
@@ -160,7 +173,7 @@ trait Crud
     /**
      * 下拉列表分页
      */
-    public function selectPage()
+    public function selectPage(): Json
     {
         try {
             list($limit, $where, $sortArr) = $this->buildTableParames();
@@ -211,24 +224,28 @@ trait Crud
     /**
      * 导出
      */
-    public function export()
+    public function export(): bool
     {
-        list($limit, $where, $sortArr) = $this->buildTableParames();
-        $fields = $this->request->post('fields');
-        $fields = json_decode($fields, true);
+        try {
+            list($limit, $where, $sortArr) = $this->buildTableParames();
+            $fields = $this->request->post('fields');
+            $fields = json_decode($fields, true);
 
-        $header = [];
-        foreach ($fields as $vo) {
-            $header[] = [$vo['comment'], $vo['field']];
+            $header = [];
+            foreach ($fields as $vo) {
+                $header[] = [$vo['comment'], $vo['field']];
+            }
+            $tableName = $this->model->getName();
+            $list = $this->model
+                ->where($where)
+                ->limit(100000)
+                ->order($sortArr)
+                ->select()
+                ->toArray();
+            $fileName = "export_" . $tableName . "_" . time();
+            return Excel::exportData($list, $header, $fileName, 'xlsx');
+        } catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage());
         }
-        $tableName = $this->model->getName();
-        $list = $this->model
-            ->where($where)
-            ->limit(100000)
-            ->order($sortArr)
-            ->select()
-            ->toArray();
-        $fileName = "export_" . $tableName . "_" . time();
-        return Excel::exportData($list, $header, $fileName, 'xlsx');
     }
 }

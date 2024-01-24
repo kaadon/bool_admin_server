@@ -7,6 +7,7 @@ use app\common\controller\AdminBase;
 use onlinecurd\BuildOnlineCurd;
 use think\facade\Db;
 use think\facade\Log;
+use think\response\Json;
 
 /**
  * 在线生成代码
@@ -28,7 +29,7 @@ class Index extends AdminBase
     /**
      * 列表
      */
-    public function index()
+    public function index(): Json
     {
         list($limit, $where, $sortArr) = $this->buildTableParames();
 

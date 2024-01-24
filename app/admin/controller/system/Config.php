@@ -5,6 +5,7 @@ namespace app\admin\controller\system;
 use app\common\controller\AdminBase;
 use think\App;
 use think\facade\Log;
+use think\response\Json;
 
 /**
  * config控制器
@@ -14,7 +15,7 @@ class Config extends AdminBase
 
     protected $model = null;
 
-    protected $relationSearch = false;
+    protected bool $relationSearch = false;
 
     public function __construct(App $app)
     {
@@ -27,7 +28,7 @@ class Config extends AdminBase
     /**
      *
      */
-    public function index()
+    public function index(): Json
     {
         try {
             $groupList = $this->model->getGroupList();
