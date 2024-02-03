@@ -15,7 +15,7 @@ use util\Token;
 class Menu extends AdminBase
 {
 
-    protected $model = null;
+    protected ?\think\Model $model = null;
 
     protected bool $relationSearch = false;
 
