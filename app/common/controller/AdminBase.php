@@ -1,13 +1,13 @@
 <?php
 
 // +----------------------------------------------------------------------
-// | quickadmin框架 [ quickadmin框架 ]
+// | kaadonadmin框架 [ kaadonadmin框架 ]
 // +----------------------------------------------------------------------
-// | 版权所有 2020~2022 南京新思汇网络科技有限公司
+// | 版权所有 2020~2024 kaadon.com
 // +----------------------------------------------------------------------
-// | 官方网站: https://www.quickadmin.top
+// | 官方网站: https://kaadon.kaadon.com
 // +----------------------------------------------------------------------
-// | Author: zs <909883663@qq.com>
+// | Author: kaadon <kaadon.com@gmail.com>
 // +----------------------------------------------------------------------
 namespace app\common\controller;
 
@@ -15,6 +15,7 @@ use app\admin\traits\Crud;
 use app\BaseController;
 use app\Request;
 use think\Model;
+use think\Validate;
 
 /*
  * @Autor: zs
@@ -28,7 +29,7 @@ class AdminBase extends BaseController
 
     protected int|string|null $adminId;
     protected bool $relationSearch = false;
-    protected array $validate = [];
+    public Validate|array|string $validate;
     protected string $prefix = "qu_";
     /**
      * 不导出的字段信息

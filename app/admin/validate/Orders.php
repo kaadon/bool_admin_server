@@ -8,7 +8,6 @@ class Orders extends Validate
 {
 
     protected $rule = [
-
         'total' => 'require',
         'remark' => 'require',
         'status' => 'require',

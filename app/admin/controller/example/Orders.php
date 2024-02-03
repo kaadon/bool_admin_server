@@ -3,20 +3,23 @@
 namespace app\admin\controller\example;
 
 use app\common\controller\AdminBase;
+use app\common\model\ExampleOrders;
 use think\App;
 use think\facade\Log;
 use think\response\Json;
+use think\Validate;
 
 /**
  * Orders控制器
  */
 class Orders extends AdminBase
 {
+
     public function __construct(App $app)
     {
         parent::__construct($app);
 
-        $this->model = new \app\common\model\ExampleOrders();
+        $this->model = new ExampleOrders();
 
         $this->validate = \app\admin\validate\Orders::class;
     }

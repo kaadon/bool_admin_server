@@ -5,6 +5,7 @@ namespace app;
 
 use think\App;
 use think\exception\ValidateException;
+use think\Middleware;
 use think\Validate;
 
 /**
@@ -16,11 +17,11 @@ abstract class BaseController
      * Request实例
      * @var \think\Request
      */
-    protected $request;
+    protected \think\Request $request;
 
     /**
      * 应用实例
-     * @var \think\App
+     * @var App
      */
     protected $app;
 
@@ -28,13 +29,13 @@ abstract class BaseController
      * 是否批量验证
      * @var bool
      */
-    protected $batchValidate = false;
+    protected bool $batchValidate = false;
+
 
     /**
-     * 控制器中间件
-     * @var array
+     * @var Middleware|array
      */
-    protected $middleware = [];
+    protected Middleware|array $middleware = [];
 
     /**
      * 构造方法
@@ -51,6 +52,10 @@ abstract class BaseController
     }
 
     // 初始化
+
+    /**
+     * @return void
+     */
     protected function initialize()
     {}
 
@@ -64,7 +69,7 @@ abstract class BaseController
      * @return array|string|true
      * @throws ValidateException
      */
-    protected function validate(array $data, $validate, array $message = [], bool $batch = false)
+    protected function validate(array $data, $validate, array $message = [], bool $batch = false): bool|array|string
     {
         if (is_array($validate)) {
             $v = new Validate();
@@ -80,14 +85,11 @@ abstract class BaseController
                 $v->scene($scene);
             }
         }
-
         $v->message($message);
-
         // 是否批量验证
         if ($batch || $this->batchValidate) {
             $v->batch(true);
         }
-
         return $v->failException(true)->check($data);
     }
 

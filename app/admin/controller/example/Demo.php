@@ -1,15 +1,16 @@
 <?php
 // +----------------------------------------------------------------------
-// | quickadmin框架 [ quickadmin框架 ]
+// | kaadonadmin框架 [ kaadonadmin框架 ]
 // +----------------------------------------------------------------------
-// | 版权所有 2020~2022 南京新思汇网络科技有限公司
+// | 版权所有 2020~2024 kaadon.com
 // +----------------------------------------------------------------------
-// | 官方网站: https://www.quickadmin.top
+// | 官方网站: https://kaadon.kaadon.com
 // +----------------------------------------------------------------------
-// | Author: zs <909883663@qq.com>
+// | Author: kaadon <kaadon.com@gmail.com>
 // +----------------------------------------------------------------------
 namespace app\admin\controller\example;
 
+use app\admin\model\ExampleDemo;
 use app\common\controller\AdminBase;
 use app\common\model\system\SystemConfig;
 use think\App;
@@ -22,13 +23,14 @@ use util\Excel;
  * @Description: Do not edit
  * @Date: 2021-05-25 14:57:43
  */
+
 class Demo extends AdminBase
 {
     public function __construct(App $app)
     {
         parent::__construct($app);
-        $this->model = new \app\admin\model\ExampleDemo();
-        //$this->validate = \app\admin\validate\Demo::class;
+        $this->model = new ExampleDemo();
+        $this->validate = \app\admin\validate\Demo::class;
     }
     /**
      * 列表
@@ -53,7 +55,6 @@ class Demo extends AdminBase
 
         return json($data);
     }
-
     /**
      * 添加
      */
@@ -62,7 +63,6 @@ class Demo extends AdminBase
         $post = $this->request->post();
         try {
             $this->validate && validate($this->validate)->check($post);
-
             if ($post['flag'] && is_array($post['flag'])) {
                 $post['flag'] = implode(',', $post['flag']);
             }
@@ -85,13 +85,12 @@ class Demo extends AdminBase
         }
 
     }
-
     /**
      * 查找
      */
     public function find(): Json
     {
-        $id= $this->request->post('id');
+        $id = $this->request->post('id');
         $row = $this->model->find($id);
         if ($row['flag']) {
             $arr = explode(",", $row['flag']);
@@ -128,7 +127,7 @@ class Demo extends AdminBase
      */
     public function edit(): Json
     {
-        $id= input('id');
+        $id = input('id');
         $row = $this->model->find($id);
         if (empty($row)) {
             return error('数据不存在');
@@ -189,29 +188,33 @@ class Demo extends AdminBase
         }
         return successes('ok', $row);
     }
-
     /**
      * 导出
      */
     public function export(): Json|bool
     {
-        list($limit, $where, $sortArr) = $this->buildTableParames();
-        $fields = $this->request->post('fields');
-        $fields = json_decode($fields, true);
+        try {
+            //逻辑代码
+            list($limit, $where, $sortArr) = $this->buildTableParames();
+            $fields = $this->request->post('fields');
+            $fields = json_decode($fields, true);
 
-        $header = [];
-        foreach ($fields as $vo) {
-            $header[] = [$vo['comment'], $vo['field']];
+            $header = [];
+            foreach ($fields as $vo) {
+                $header[] = [$vo['comment'], $vo['field']];
+            }
+            $tableName = $this->model->getName();
+            $list = $this->model
+                ->withJoin('category', 'LEFT')
+                ->where($where)
+                ->limit(100000)
+                ->order($sortArr)
+                ->select()
+                ->toArray();
+            $fileName = "export_" . $tableName . "_" . time();
+            return Excel::exportData($list, $header, $fileName, 'xlsx');
+        } catch (\Exception $exception) {
+            return error($exception->getMessage());
         }
-        $tableName = $this->model->getName();
-        $list = $this->model
-            ->withJoin('category', 'LEFT')
-            ->where($where)
-            ->limit(100000)
-            ->order($sortArr)
-            ->select()
-            ->toArray();
-        $fileName = "export_" . $tableName . "_" . time();
-        return Excel::exportData($list, $header, $fileName, 'xlsx');
     }
 }
