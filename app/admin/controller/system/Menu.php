@@ -6,6 +6,7 @@ use app\common\controller\AdminBase;
 use think\App;
 use think\facade\Db;
 use think\facade\Log;
+use think\response\Json;
 use util\Token;
 
 /**
@@ -29,7 +30,7 @@ class Menu extends AdminBase
     /**
      * 添加
      */
-    public function add()
+    public function add(): Json
     {
         $post = $this->request->post();
         try {

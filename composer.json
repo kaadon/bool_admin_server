@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=8.1.0",
-        "topthink/framework": "*",
+        "topthink/framework": "^v8.0",
         "topthink/think-orm": "^3.0",
         "topthink/think-multi-app": "^1.0",
         "topthink/think-view": "^2.0",

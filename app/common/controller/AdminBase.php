@@ -11,6 +11,7 @@
 // +----------------------------------------------------------------------
 namespace app\common\controller;
 
+use app\admin\traits\Crud;
 use app\BaseController;
 use app\Request;
 
@@ -33,13 +34,13 @@ class AdminBase extends BaseController
      * 不导出的字段信息
      * @var array
      */
-    protected $noExportFields = ['delete_time', 'update_time'];
+    protected array $noExportFields = ['delete_time', 'update_time'];
 
-    use \app\admin\traits\Crud;
+    use Crud;
     /**
      * 初始化方法
      */
-    protected function initialize()
+    protected function initialize(): void
     {
         parent::initialize();
         $this->adminId = request()->adminId;
@@ -48,10 +49,9 @@ class AdminBase extends BaseController
 
     /**
      * 构建请求参数
-     * @param array $excludeFields 忽略构建搜索的字段
      * @return array
      */
-    protected function buildTableParames()
+    protected function buildTableParames(): array
     {
 
         $page = $this->request->param('page', 1);
