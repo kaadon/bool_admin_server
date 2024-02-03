@@ -14,6 +14,7 @@ namespace app\common\controller;
 use app\admin\traits\Crud;
 use app\BaseController;
 use app\Request;
+use think\Model;
 
 /*
  * @Autor: zs
@@ -24,11 +25,12 @@ use app\Request;
 class AdminBase extends BaseController
 {
 
-    protected $model = null;
+    protected Model|null $model = null;
 
-    protected $adminId;
+    protected int|string|null $adminId;
 
-    protected $relationSearch = false;
+    protected bool $relationSearch = false;
+    protected array $validate = [];
 
     /**
      * 不导出的字段信息

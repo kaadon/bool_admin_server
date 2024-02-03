@@ -21,7 +21,7 @@ class Admin extends AdminBase
 
     protected $model = null;
 
-    protected $relationSearch = false;
+    protected bool $relationSearch = false;
 
     protected $prefix = "qu_";
 

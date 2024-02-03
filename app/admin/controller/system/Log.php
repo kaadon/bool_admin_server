@@ -14,7 +14,7 @@ class Log extends AdminBase
 
     protected $model = null;
 
-    protected $relationSearch = true;
+    protected bool $relationSearch = true;
 
     public function __construct(App $app)
     {

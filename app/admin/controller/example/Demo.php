@@ -27,7 +27,7 @@ class Demo extends AdminBase
     protected $model = null;
     protected $validate = null;
 
-    protected $relationSearch = true;
+    protected  $relationSearch = true;
 
     public function __construct(App $app)
     {

@@ -11,7 +11,6 @@
 namespace app\admin\traits;
 
 use think\exception\ValidateException;
-use think\facade\Log;
 use think\response\Json;
 use util\Excel;
 
@@ -29,14 +28,19 @@ trait Crud
      */
     public function index(): Json
     {
-        list($limit, $where, $sortArr) = $this->buildTableParames();
-        $list = $this->model
-            ->where($where)
-            ->order($sortArr)
-            ->paginate($limit);
-        return paginate($list);
-
+        try {
+            //逻辑代码
+            list($limit, $where, $sortArr) = $this->buildTableParames();
+            $list = $this->model
+                ->where($where)
+                ->order($sortArr)
+                ->paginate($limit);
+            return paginate($list);
+        } catch (\Exception $exception) {
+            return error($exception->getMessage());
+        }
     }
+
     /**
      * 添加
      */
@@ -64,35 +68,47 @@ trait Crud
      */
     public function edit(): Json
     {
-        $id = input('id');
-        $row = $this->model->find($id);
-        if (empty($row)) {
-            return error('数据不存在');
-        }
-        $post = $this->request->post();
         try {
-            $this->validate && validate($this->validate)->scene('edit')->check($post);
-            $result = $row->save($post);
-            if (empty($result)) throw new \Exception('保存失败');
-        } catch (ValidateException $e) {
-            return error("", 201, $e->getError());
-        } catch (\Exception $e) {
-            return error('保存失败');
+            //逻辑代码
+            $id = input('id');
+            $row = $this->model->find($id);
+            if (empty($row)) {
+                return error('数据不存在');
+            }
+            $post = $this->request->post();
+            try {
+                $this->validate && validate($this->validate)->scene('edit')->check($post);
+                $result = $row->save($post);
+                if (empty($result)) throw new \Exception('保存失败');
+            } catch (ValidateException $e) {
+                return error("", 201, $e->getError());
+            } catch (\Exception $e) {
+                return error('保存失败');
+            }
+            return success($row);
+        } catch (\Exception $exception) {
+            return error($exception->getMessage());
         }
-        return success($row);
     }
+
     /**
      * 查找
      */
-    public function find(): Json
+    public function find()
     {
-        $id = input('id');
-        $row = $this->model->find($id);
-        if (empty($row)) {
-            return error('数据不存在');
+        try {
+            //逻辑代码
+            $id = input('id');
+            $row = $this->model->find($id);
+            if (empty($row)) {
+                return error('数据不存在');
+            }
+            return success($row);
+        } catch (\Exception $exception) {
+            return error($exception->getMessage());
         }
-        return success($row);
     }
+
     /**
      * 状态启用、禁用
      */
@@ -113,24 +129,27 @@ trait Crud
             return error("状态{$msg}失败");
         }
     }
+
     /**
      * 数据删除
      */
     public function delete(): Json
     {
-        $id = $this->request->post('id');
-        $ids = is_array($id) ? $id : explode(',', $id);
-        $row = $this->model->select($ids);
-        if ($row->isEmpty()) {
-            return error('数据不存在');
-        }
         try {
+            $id = $this->request->post('id');
+            $ids = is_array($id) ? $id : explode(',', $id);
+            $row = $this->model->select($ids);
+            if ($row->isEmpty()) {
+                return error('数据不存在');
+            }
             $save = $row->delete();
+            return $save ? successes('删除成功！') : error('删除失败');
         } catch (\Exception $e) {
             return error('删除失败');
         }
         return $save ? successes('删除成功！') : error('删除失败');
     }
+
     /**
      * 下拉选择列表
      *
@@ -151,6 +170,7 @@ trait Crud
             return error($e->getMessage());
         }
     }
+
     /**
      * 下拉列表分页
      */
@@ -201,10 +221,11 @@ trait Crud
         ]);
 
     }
+
     /**
      * 导出
      */
-    public function export()
+    public function export(): bool
     {
         try {
             //逻辑代码

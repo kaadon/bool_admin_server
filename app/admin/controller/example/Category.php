@@ -13,7 +13,7 @@ class Category extends AdminBase
 
     protected $model = null;
 
-    protected $relationSearch = false;
+    protected bool $relationSearch = false;
 
     public function __construct(App $app)
     {
