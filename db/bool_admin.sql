@@ -11,7 +11,7 @@
  Target Server Version : 50744
  File Encoding         : 65001
 
- Date: 03/02/2024 10:46:59
+ Date: 03/02/2024 11:28:30
 */
 
 SET NAMES utf8mb4;
@@ -355,7 +355,7 @@ CREATE TABLE `qu_system_log` (
   `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
   `update_time` int(11) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=598 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='后台操作日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=604 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='后台操作日志表';
 
 -- ----------------------------
 -- Records of qu_system_log
@@ -484,6 +484,12 @@ INSERT INTO `qu_system_log` (`id`, `admin_id`, `url`, `method`, `title`, `conten
 INSERT INTO `qu_system_log` (`id`, `admin_id`, `url`, `method`, `title`, `content`, `ip`, `useragent`, `create_time`, `update_time`) VALUES (595, 1, '/admin/system.menu/index', 'post', '', '{\"s\":\"\\/admin\\/system.menu\\/index\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36', 1706927695, NULL);
 INSERT INTO `qu_system_log` (`id`, `admin_id`, `url`, `method`, `title`, `content`, `ip`, `useragent`, `create_time`, `update_time`) VALUES (596, 1, '/admin/system.config/index', 'post', '', '{\"s\":\"\\/admin\\/system.config\\/index\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36', 1706927697, NULL);
 INSERT INTO `qu_system_log` (`id`, `admin_id`, `url`, `method`, `title`, `content`, `ip`, `useragent`, `create_time`, `update_time`) VALUES (597, 1, '/admin/system.log/index?page=1&limit=10&filter=%7B%7D&op=%7B%7D', 'post', '', '{\"s\":\"\\/admin\\/system.log\\/index\",\"page\":\"1\",\"limit\":\"10\",\"filter\":\"{}\",\"op\":\"{}\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36', 1706927699, NULL);
+INSERT INTO `qu_system_log` (`id`, `admin_id`, `url`, `method`, `title`, `content`, `ip`, `useragent`, `create_time`, `update_time`) VALUES (598, 1, '/admin/passport/userinfo', 'post', '', '{\"s\":\"\\/admin\\/passport\\/userinfo\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36', 1706928868, NULL);
+INSERT INTO `qu_system_log` (`id`, `admin_id`, `url`, `method`, `title`, `content`, `ip`, `useragent`, `create_time`, `update_time`) VALUES (599, 1, '/admin/ajax/initIndex', 'post', '', '{\"s\":\"\\/admin\\/ajax\\/initIndex\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36', 1706928868, NULL);
+INSERT INTO `qu_system_log` (`id`, `admin_id`, `url`, `method`, `title`, `content`, `ip`, `useragent`, `create_time`, `update_time`) VALUES (600, 1, '/admin/system.log/index?page=1&limit=10&filter=%7B%7D&op=%7B%7D', 'post', '', '{\"s\":\"\\/admin\\/system.log\\/index\",\"page\":\"1\",\"limit\":\"10\",\"filter\":\"{}\",\"op\":\"{}\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36', 1706928869, NULL);
+INSERT INTO `qu_system_log` (`id`, `admin_id`, `url`, `method`, `title`, `content`, `ip`, `useragent`, `create_time`, `update_time`) VALUES (601, 1, '/admin/passport/userinfo', 'post', '', '{\"s\":\"\\/admin\\/passport\\/userinfo\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36', 1706928894, NULL);
+INSERT INTO `qu_system_log` (`id`, `admin_id`, `url`, `method`, `title`, `content`, `ip`, `useragent`, `create_time`, `update_time`) VALUES (602, 1, '/admin/ajax/initIndex', 'post', '', '{\"s\":\"\\/admin\\/ajax\\/initIndex\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36', 1706928894, NULL);
+INSERT INTO `qu_system_log` (`id`, `admin_id`, `url`, `method`, `title`, `content`, `ip`, `useragent`, `create_time`, `update_time`) VALUES (603, 1, '/admin/system.log/index?page=1&limit=10&filter=%7B%7D&op=%7B%7D', 'post', '', '{\"s\":\"\\/admin\\/system.log\\/index\",\"page\":\"1\",\"limit\":\"10\",\"filter\":\"{}\",\"op\":\"{}\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36', 1706928895, NULL);
 COMMIT;
 
 -- ----------------------------
