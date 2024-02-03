@@ -11,9 +11,6 @@ use think\response\Json;
  */
 class Log extends AdminBase
 {
-
-    protected $model = null;
-
     protected bool $relationSearch = true;
 
     public function __construct(App $app)

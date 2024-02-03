@@ -12,17 +12,11 @@ use think\response\Json;
  */
 class Config extends AdminBase
 {
-
-    protected $model = null;
-
-    protected bool $relationSearch = false;
-
     public function __construct(App $app)
     {
         parent::__construct($app);
 
         $this->model = new \app\common\model\system\SystemConfig();
-
     }
 
     /**

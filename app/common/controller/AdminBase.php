@@ -24,14 +24,12 @@ use think\Model;
  */
 class AdminBase extends BaseController
 {
-
     protected Model|null $model = null;
 
     protected int|string|null $adminId;
-
     protected bool $relationSearch = false;
     protected array $validate = [];
-
+    protected string $prefix = "qu_";
     /**
      * 不导出的字段信息
      * @var array

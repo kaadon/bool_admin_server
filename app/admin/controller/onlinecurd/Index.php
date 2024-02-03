@@ -15,8 +15,6 @@ use think\response\Json;
  */
 class Index extends AdminBase
 {
-
-    public $model;
     protected array $menuList = ['index' => '列表', 'add' => '添加', 'find' => '查看', 'edit' => '编辑', 'delete' => '删除', 'export' => '导出'];
     /**
      * 初始化方法

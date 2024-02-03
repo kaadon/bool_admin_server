@@ -10,9 +10,6 @@ use think\App;
  */
 class Files extends AdminBase
 {
-
-    protected $model = null;
-
     public function __construct(App $app)
     {
         parent::__construct($app);

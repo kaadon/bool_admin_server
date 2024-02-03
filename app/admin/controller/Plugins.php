@@ -15,13 +15,6 @@ use util\File;
  */
 class Plugins extends AdminBase
 {
-
-    protected $model = null;
-
-    protected $validate = null;
-
-    protected bool $relationSearch = false;
-
     public function __construct(App $app)
     {
         parent::__construct($app);

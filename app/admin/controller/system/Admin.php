@@ -18,13 +18,6 @@ use util\Token;
  */
 class Admin extends AdminBase
 {
-
-    protected $model = null;
-
-    protected bool $relationSearch = false;
-
-    protected $prefix = "qu_";
-
     public function __construct(App $app)
     {
         parent::__construct($app);

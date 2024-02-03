@@ -23,7 +23,6 @@ use util\Upload;
 
 class Ajax extends AdminBase
 {
-
     /**
      * 初始化后台接口地址
      * @return Json
