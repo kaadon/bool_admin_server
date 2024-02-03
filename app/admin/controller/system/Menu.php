@@ -22,9 +22,7 @@ class Menu extends AdminBase
     public function __construct(App $app)
     {
         parent::__construct($app);
-
         $this->model = new \app\admin\model\system\SystemMenu();
-
     }
 
     /**
@@ -33,39 +31,75 @@ class Menu extends AdminBase
     public function add(): Json
     {
         $post = $this->request->post();
+        // 启动事务
+        Db::startTrans();
         try {
+            //逻辑代码
             if ($post['type'] == 1) {
                 if ($post['pid'] == 0) {
                     $post['component'] = "Layout";
                 } else {
                     $post['component'] = "ParentView";
                 }
-
             }
             //path 如果不是外链 判断是否唯一
-            $path = isset($post['path']) ? $post['path'] : "";
+            $path = $post['path'] ?? "";
             if ($path && stripos($path, 'http') === false) {
-                $count = $this->model->where('path', $path)->count();
+                $count = $this->model->where([
+                    'path' => $path,
+                    'pid' => $post['pid'] ?? 0
+                ])->count();
                 if ($count > 0) {
                     return error('路由地址已存在,换个试试！');
                 }
             }
-            $result = $this->model->save($post);
+            $routes = $post['routes'] ?? '';
+            unset($post['routes']);
+            $result = $this->model->insertGetId($post);
             if ($result) {
-                return successes('添加成功！');
+                if ($post['type'] === 2 && isset($routes)) {
+                    $routePath = [
+                        "index" => "列表",
+                        "add" => "添加",
+                        "edit" => "编辑",
+                        "find" => "查找",
+                        "status" => "状态",
+                        "delete" => "删除",
+                        "selectList" => "列表",
+                        "selectPage" => "选择列表",
+                        "export" => "导出",
+                    ];
+                    $menuAll = [];
+                    foreach ($routePath as $key => $item) {
+                        $menuAll[] = [
+                            'type' => 3,
+                            'pid' => $result,
+                            'title' => $item,
+                            'weigh' => 1,
+                            'status' => 1,
+                            'permission' => "{$routes}/{$key}",
+                        ];
+                    }
+                    $this->model->saveAll($menuAll);
+                }
+            } else {
+                throw new \Exception('添加失败');
             }
-            return error('添加失败');
-        } catch (\Exception $e) {
-            return error('添加失败:' . $e->getMessage());
+            Db::commit();
+            return successes('添加成功');
+            // 提交事务
+        } catch (\Exception $exception) {
+            Db::rollback();
+            // 回滚事务
+            return error('添加失败:' . $exception->getMessage());
         }
-
     }
 
     /**
      * 修改
      *
      */
-    public function edit()
+    public function edit(): Json
     {
         $id= input('id');
         $row = $this->model->find($id);
@@ -107,7 +141,7 @@ class Menu extends AdminBase
      * 获取所有菜单(无层级)
      */
 
-    public function index()
+    public function index(): Json
     {
         $status = $this->request->request('status');
         $menu_type = $this->request->request('menu_type'); //1：目录 2：菜单 3：按钮权限  4：目录+菜单 不传取所有
@@ -138,7 +172,7 @@ class Menu extends AdminBase
      * 获取所有菜单(无层级)
      */
 
-    public function adminIndex()
+    public function adminIndex(): Json
     {
         $token=$this->request->header('token');
         $status = $this->request->post('status');
@@ -183,7 +217,7 @@ class Menu extends AdminBase
     /**
      * 数据删除
      */
-    public function delete()
+    public function delete(): Json
     {
         $id= $this->request->post('id');
         $row = $this->model->find($id);
@@ -210,7 +244,7 @@ class Menu extends AdminBase
     /**
      * 查找
      */
-    public function find()
+    public function find(): Json
     {
         $id= $this->request->post('id');
         $row = $this->model->find($id);

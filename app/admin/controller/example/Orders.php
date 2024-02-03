@@ -5,6 +5,7 @@ namespace app\admin\controller\example;
 use app\common\controller\AdminBase;
 use think\App;
 use think\facade\Log;
+use think\response\Json;
 
 /**
  * Orders控制器
@@ -27,7 +28,7 @@ class Orders extends AdminBase
         $this->validate = \app\admin\validate\Orders::class;
     }
 
-    public function op()
+    public function op(): Json
     {
         $post = $this->request->post();
         $id = $post['id'];

@@ -7,6 +7,7 @@ use app\common\controller\AdminBase;
 use onlinecurd\BuildOnlineCurd;
 use think\facade\Db;
 use think\facade\Log;
+use think\response\Json;
 
 /**
  * 在线生成代码
@@ -16,11 +17,11 @@ class Index extends AdminBase
 {
 
     public $model;
-    protected $menuList = ['index' => '列表', 'add' => '添加', 'find' => '查看', 'edit' => '编辑', 'delete' => '删除', 'export' => '导出'];
+    protected array $menuList = ['index' => '列表', 'add' => '添加', 'find' => '查看', 'edit' => '编辑', 'delete' => '删除', 'export' => '导出'];
     /**
      * 初始化方法
      */
-    protected function initialize()
+    protected function initialize(): void
     {
         parent::initialize();
         $this->model = new SystemOnlinecurd();
@@ -28,7 +29,7 @@ class Index extends AdminBase
     /**
      * 列表
      */
-    public function index()
+    public function index(): Json
     {
         list($limit, $where, $sortArr) = $this->buildTableParames();
 
@@ -50,7 +51,7 @@ class Index extends AdminBase
     /**
      * 获取所有表
      */
-    public function getTables()
+    public function getTables(): Json
     {
         $tableList = [];
         $list = Db::query("SHOW TABLES");
@@ -62,7 +63,7 @@ class Index extends AdminBase
     /**
      * 获取主表字段信息
      */
-    public function getMainTableRow()
+    public function getMainTableRow(): Json
     {
         $table = input('table');
         if (!$table) {
@@ -82,7 +83,7 @@ class Index extends AdminBase
     /**
      * 获取表
      */
-    public function getSubTableRow()
+    public function getSubTableRow(): Json
     {
 
         $sub_table = input('table');
@@ -101,7 +102,7 @@ class Index extends AdminBase
     /**
      * 提交自动生成
      */
-    public function save()
+    public function save(): Json
     {
         $id = input('id');
         $form = input('form');

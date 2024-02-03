@@ -5,6 +5,7 @@ namespace app\admin\controller\system;
 use app\common\controller\AdminBase;
 use think\App;
 use think\facade\Log;
+use think\response\Json;
 
 /**
  * config控制器
@@ -27,7 +28,7 @@ class Config extends AdminBase
     /**
      *
      */
-    public function index()
+    public function index(): Json
     {
         try {
             $groupList = $this->model->getGroupList();
@@ -52,7 +53,7 @@ class Config extends AdminBase
         }
     }
 
-    public function update()
+    public function update(): Json
     {
         try {
             $post = $this->request->post();
@@ -70,7 +71,7 @@ class Config extends AdminBase
         return successes('保存成功');
     }
 
-    public function getGroupList()
+    public function getGroupList(): Json
     {
         return successes("success", $this->model->getGroupList());
     }
@@ -78,7 +79,7 @@ class Config extends AdminBase
     /**
      * oss有哪些方式
      */
-    public function ossArry()
+    public function ossArry(): array
     {
         $addons = ['qiniu', 'alioss', 'cos'];
         foreach ($addons as $k => $v) {

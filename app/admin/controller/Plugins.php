@@ -7,6 +7,7 @@ use Exception;
 use PDO;
 use think\App;
 use think\facade\Log;
+use think\response\Json;
 use util\File;
 
 /**
@@ -33,7 +34,8 @@ class Plugins extends AdminBase
     /**
      * 列表
      */
-    function list() {
+    function list(): Json
+    {
         try {
             $header[] = "apitoken:" . input("apitoken");
             $data = api_post("/qaapi/plugins/index", input(), $header);
@@ -71,7 +73,7 @@ class Plugins extends AdminBase
     /**
      * 分类
      */
-    public function categoryList()
+    public function categoryList(): Json
     {
         $data = api_post("/qaapi/plugins/categoryList", $this->request->post());
         return successes('登录成功', $data["data"]);
@@ -80,7 +82,7 @@ class Plugins extends AdminBase
     /**
      * 卸载
      */
-    public function uninstall()
+    public function uninstall(): Json
     {
         try {
             $name = input('name', '');
@@ -114,7 +116,7 @@ class Plugins extends AdminBase
     /**
      * 下载
      */
-    public function install()
+    public function install(): Json
     {
 
         $header[] = "apitoken:" . input("apitoken");
@@ -213,7 +215,7 @@ class Plugins extends AdminBase
     /**
      * 修改插件配置
      */
-    public function config()
+    public function config(): Json
     {
         $name = input("name");
         $config = get_addons_all_config($name);

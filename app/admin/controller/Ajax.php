@@ -14,7 +14,11 @@ namespace app\admin\controller;
 
 use app\admin\service\MenuService;
 use app\common\controller\AdminBase;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\facade\Log;
+use think\response\Json;
 use util\Upload;
 
 class Ajax extends AdminBase
@@ -22,12 +26,12 @@ class Ajax extends AdminBase
 
     /**
      * 初始化后台接口地址
-     * @return \think\response\Json
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @return Json
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
-    public function initIndex()
+    public function initIndex(): Json
     {
         // $cacheData = Cache::get('initIndex_' . $this->adminId);
         // if (!empty($cacheData)) {
@@ -44,14 +48,14 @@ class Ajax extends AdminBase
     /**
      * 获取网站配置项
      */
-    public function getConfig()
+    public function getConfig(): Json
     {
         return successes('success', sysconfig('site'));
     }
     /**
      * 上传文件
      */
-    public function upload()
+    public function upload(): Json
     {
 
         $file = $this->request->file('file');
@@ -73,7 +77,7 @@ class Ajax extends AdminBase
      * 获取验证码
      */
 
-    public function getCaptcha()
+    public function getCaptcha(): Json
     {
         return success(capcha_create() );
     }

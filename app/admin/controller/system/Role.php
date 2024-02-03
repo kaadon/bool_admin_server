@@ -9,6 +9,7 @@ use app\common\controller\AdminBase;
 use think\App;
 use think\exception\ValidateException;
 use think\facade\Log;
+use think\response\Json;
 use util\Token;
 
 /**
@@ -32,7 +33,7 @@ class Role extends AdminBase
     /**
      * 列表
      */
-    public function index()
+    public function index(): Json
     {
         $token = $this->request->header("token");
 
@@ -53,7 +54,7 @@ class Role extends AdminBase
      * 授权数据
      */
 
-    public function authData()
+    public function authData(): Json
     {
         $id = $this->request->post('id');
         if (!$id) {
@@ -69,7 +70,7 @@ class Role extends AdminBase
     /**
      * 授权角色组数据
      */
-    public function authGroup()
+    public function authGroup(): Json
     {
         $id = $this->request->post('id');
         $menu_ids = $this->request->post('menu_ids');
@@ -98,7 +99,7 @@ class Role extends AdminBase
     /**
      * 添加
      */
-    public function add()
+    public function add(): Json
     {
         $token = $this->request->header("token");
         $adminId = Token::userId($token);
@@ -124,7 +125,7 @@ class Role extends AdminBase
     /**
      * 状态启用、禁用
      */
-    public function status()
+    public function status(): Json
     {
         $id = $this->request->post('id');
         $status = $this->request->post('status');
@@ -148,7 +149,7 @@ class Role extends AdminBase
     /**
      * 数据删除
      */
-    public function delete()
+    public function delete(): Json
     {
         $id = $this->request->post('id');
         $ids = is_array($id) ? $id : explode(',', $id);
@@ -177,7 +178,7 @@ class Role extends AdminBase
      * 下拉选择列表
      *
      */
-    public function selectList()
+    public function selectList(): Json
     {
         $token = $this->request->header("token");
         $is_superadmin = Token::is_superadmin($token);

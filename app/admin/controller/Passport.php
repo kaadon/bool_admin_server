@@ -17,6 +17,7 @@ use app\admin\service\AuthService;
 use app\common\controller\AdminBase;
 use think\App;
 use think\facade\Cache;
+use think\response\Json;
 use util\Token;
 
 /*
@@ -25,12 +26,12 @@ use util\Token;
  */
 class Passport extends AdminBase
 {
-    public function test()
+    public function test(): void
     {
         echo 0;
     }
 
-    public function index()
+    public function index(): Json
     {
         $post = $this->request->post();
         $key = isset($post['key']) ? $post['key'] : '';
@@ -62,12 +63,12 @@ class Passport extends AdminBase
         return successes('登录成功', ['admin' => $admin, 'token' => $token]);
     }
 
-    public function logout()
+    public function logout(): Json
     {
         return successes('退出登录成功');
     }
 
-    public function userinfo()
+    public function userinfo(): Json
     {
         $token = $this->request->header('token');
         $adminId = Token::userId($token);
@@ -102,7 +103,7 @@ class Passport extends AdminBase
     /**
      * 更新用户信息
      */
-    public function update()
+    public function update(): Json
     {
         $token = $this->request->header('token');
         $adminId = Token::userId($token);

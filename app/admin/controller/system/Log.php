@@ -4,6 +4,7 @@ namespace app\admin\controller\system;
 
 use app\common\controller\AdminBase;
 use think\App;
+use think\response\Json;
 
 /**
  * 日志控制器
@@ -26,7 +27,7 @@ class Log extends AdminBase
     /**
      * 列表
      */
-    public function index()
+    public function index(): Json
     {
         list($limit, $where, $sortArr) = $this->buildTableParames();
         $sortArr[]="id desc";

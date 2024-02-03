@@ -10,6 +10,7 @@ use think\App;
 use think\exception\ValidateException;
 use think\facade\Db;
 use think\facade\Log;
+use think\response\Json;
 use util\Token;
 
 /**
@@ -35,7 +36,7 @@ class Admin extends AdminBase
     /**
      * 列表
      */
-    public function index()
+    public function index(): Json
     {
        
         $token=$this->request->header("token");
@@ -83,7 +84,7 @@ class Admin extends AdminBase
     /**
      * 添加
      */
-    public function add()
+    public function add(): Json
     {
         $token=$this->request->header("token");
         $adminId=Token::userId($token);
@@ -119,7 +120,7 @@ class Admin extends AdminBase
     /**
      * 查找
      */
-    public function find()
+    public function find(): Json
     {
         $id= $this->request->param('id');
         $row = $this->model->where("id",$id)->find();
@@ -135,7 +136,7 @@ class Admin extends AdminBase
      * 修改
      *
      */
-    public function edit()
+    public function edit(): Json
     {
         $id= input('id');
         $row = $this->model->find($id);
@@ -176,7 +177,7 @@ class Admin extends AdminBase
     /**
      * 数据删除
      */
-    public function delete()
+    public function delete(): Json
     {
 
         $id= $this->request->post('id');
