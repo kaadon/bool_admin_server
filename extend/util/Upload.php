@@ -12,67 +12,74 @@ use think\facade\Filesystem;
  */
 class Upload
 {
-    public $config = [];
-    public function __construct()
-    {
-        $this->config = config('upload');
-    }
     /**
-     * 上传
+     * @var array|mixed
      */
-    public function upload($file)
+    public mixed $config = [];
+
+
+    /**
+     * @param array $upload_config
+     */
+    public function __construct(array $upload_config = [])
     {
-        $name = $file->getOriginalName();
-        $format = strrchr($name, '.');
-        $filePath = $file->getRealPath();
-        $fileName = date("Y") . date("m") . date("d") . uniqid() . $format;
-        $upload_config = sysconfig('upload');
+        $this->config = !empty($upload_config) ? $upload_config : config('upload');
+    }
 
-        $upload_type = $upload_config['upload_type'] ? $upload_config['upload_type'] : 'local';
-        $res = null;
-        if ($upload_type == "local") {
-            $res = $this->localUpload($file);
-        } elseif ($upload_type == "alioss") {
-            $res = Alioss::instance()->upload($fileName, $filePath);
-        } elseif ($upload_type == "qiniu") {
-            $res = Qiniuoss::instance()->upload($fileName, $filePath);
-        } elseif ($upload_type == "cos") {
-            $res = Tencentcos::instance()->upload($fileName, $filePath);
-        }
 
-        if ($res['url']) {
-            Event::listen('uploadFile', "app\admin\listener\Files");
-            Event::trigger('uploadFile', [
-                'upload_type' => $upload_type,
-                'original_name' => $file->getOriginalName(),
-                'mime_type' => $file->getOriginalMime(),
-                'file_ext' => strtolower($file->getOriginalExtension()),
-                'url' => $res['url'],
-                'sha1' => $file->hash(),
-                'file_size' => $file->getSize(),
-            ]);
+    /**
+     * @param $file
+     * @param array $upload_config
+     * @return array
+     * @throws Exception
+     */
+    public function upload($file, array $upload_config = []): array
+    {
+        $this->config = array_merge($this->config, $upload_config);
+        $upload_type = $this->config['uploadType'] ?? 'local';
+        $catePath = $this->config['catePath'] ?? 'system';
+        $res = match ($upload_type) {
+            "local" => $this->localUpload($file, $catePath),
+            default => throw new Exception("上传类型错误"),
+        };
+        $save_file = $this->config['saveFile'] ?? false;
+        if ($res['path'] && $save_file) {
+            $listener = $this->config['listener'] ?? null;
+            $event = $this->config['event'] ?? null;
+            if ($event && $listener) {
+                Event::listen($event, $listener);
+                Event::trigger($event, [
+                    'upload_type' => $upload_type,
+                    'original_name' => $file->getOriginalName(),
+                    'mime_type' => $file->getOriginalMime(),
+                    'file_ext' => strtolower($file->getOriginalExtension()),
+                    'url' => "{$res['domain']}{$res['path']}",
+                    'sha1' => $file->hash(),
+                    'file_size' => $file->getSize(),
+                ]);
+            }
         }
+        $res['url'] = "{$res['domain']}{$res['path']}";
         return $res;
     }
+
     /**
-     * 本地文件
+     * @param $file
+     * @param string $filename
+     * @return array
+     * @throws Exception
      */
-    public function localUpload($file, $filename = "system")
+    public function localUpload($file, string $filename = "system"): array
     {
         try {
+            //逻辑代码
             $savename = Filesystem::disk('public')->putFile($filename, $file);
-
-            $upload_config = sysconfig('upload');
-            $domain = isset($upload_config['upload_url']) ? $upload_config['upload_url'] : '';
-            if (!$domain) {
-                return ['msg' => '请到后台配置管理-系统管理-上传配置中配置：本地图片路径', 'url' => ""];
-            }
-            $savepath = "/storage/";
-            $url = $domain . $savepath . str_replace(DIRECTORY_SEPARATOR, '/', $savename);
-            return ['msg' => '上传成功', 'url' => $url];
-        } catch (\Exception $e) {
-            return ['msg' => '上传失败', 'url' => ""];
+            return [
+                'domain' => null,
+                'path' => "/storage/" . str_replace(DIRECTORY_SEPARATOR, '/', $savename)
+            ];
+        } catch (Exception $exception) {
+            throw new Exception($exception->getMessage());
         }
-
     }
 }
