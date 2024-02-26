@@ -10,7 +10,6 @@ use think\App;
  */
 class Category extends AdminBase
 {
-    protected bool $relationSearch = false;
 
     public function __construct(App $app)
     {

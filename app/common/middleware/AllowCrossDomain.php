@@ -15,17 +15,15 @@ class AllowCrossDomain
      * @param Closure $next
      * @return Response
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: *');
         header('Content-type: application/json; charset=UTF-8');
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE, HEAD');
-
         if ($request->isOptions()) {
             return Response::create();
         }
-
         return $next($request);
     }
 }

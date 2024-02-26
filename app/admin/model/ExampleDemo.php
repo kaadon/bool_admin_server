@@ -11,7 +11,7 @@
 // +----------------------------------------------------------------------
 namespace app\admin\model;
 
-use app\common\model\BaseModel;
+use Kaadon\ThinkBase\BaseClass\BaseModel;
 
 /*
  * @Autor: zs

@@ -3,7 +3,10 @@
 namespace app\common\model\system;
 
 
-use app\common\model\BaseModel;
+use Kaadon\ThinkBase\BaseClass\BaseModel;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\facade\Log;
 use think\Model;
 
@@ -24,8 +27,9 @@ class SystemConfig extends BaseModel
     /**
      * @param string $group
      * @return array|mixed|string
+     * @throws \RedisException
      */
-    public static function get_config_group(string $group)
+    public static function get_config_group(string $group): mixed
     {
         $configs = redisCacheGet("config:groups:{$group}s");
         if ( empty($configs) ) {
@@ -44,9 +48,9 @@ class SystemConfig extends BaseModel
      * @param string $group
      * @param string $sign
      * @return mixed|null
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException|\RedisException
      */
     public static function get_config(string $group, string $sign)
     {
@@ -74,9 +78,9 @@ class SystemConfig extends BaseModel
      * @param string $group
      * @param string $sign
      * @return bool
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public static function del_config(string $group, string $sign): bool
     {
@@ -97,9 +101,9 @@ class SystemConfig extends BaseModel
      * @param string $sign
      * @param $value
      * @return bool
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public static function set_config(string $group, string $sign, $value, array $config = []): bool
     {

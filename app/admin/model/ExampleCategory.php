@@ -2,7 +2,7 @@
 
 namespace app\admin\model;
 
-use app\common\model\BaseModel;
+use Kaadon\ThinkBase\BaseClass\BaseModel;
 
 class ExampleCategory extends BaseModel
 {

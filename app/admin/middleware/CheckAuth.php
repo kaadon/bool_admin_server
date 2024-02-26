@@ -43,11 +43,11 @@ class CheckAuth
 
         $token = $request->header('token');
         $admin = Token::admin($token);
-        $admin_id = isset($admin['id']) ? $admin['id'] : 0;
+        $admin_id = $admin['id'] ?? 0;
 
         //验证权限
         if (!in_array($controller, $auth_config['no_login_controller']) && !in_array($node, $auth_config['no_login_node']) && !in_array($controller, $auth_config['no_auth_controller']) && !in_array($controller, $auth_config['no_auth_node']) && !in_array($action, $system_no_auth_function) && $admin_id) {
-            $group_ids = isset($admin['group_ids']) ? $admin['group_ids'] : [];
+            $group_ids = $admin['group_ids'] ?? [];
             $authservice = new AuthService($admin_id, $group_ids);
             $check = $authservice->checkPermission($node);
             if (!$check) {

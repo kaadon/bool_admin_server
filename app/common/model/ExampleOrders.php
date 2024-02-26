@@ -2,7 +2,7 @@
 
 namespace app\common\model;
 
-use app\common\model\BaseModel;
+use Kaadon\ThinkBase\BaseClass\BaseModel;
 
 class ExampleOrders extends BaseModel
 {
@@ -11,9 +11,9 @@ class ExampleOrders extends BaseModel
     // 追加属性
     protected $append = [
         'status_text'];
-    protected $deleteTime = false;
+    protected bool $deleteTime = false;
 
-    public function getStatusList()
+    public function getStatusList(): array
     {
         return ['1' => '未付款', '2' => '待发货', '3' => '待收货', '4' => '已完成'];
     }

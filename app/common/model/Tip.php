@@ -2,7 +2,7 @@
 
 namespace app\common\model;
 
-use app\common\model\BaseModel;
+use Kaadon\ThinkBase\BaseClass\BaseModel;
 
 
 class Tip extends BaseModel

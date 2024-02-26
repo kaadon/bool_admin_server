@@ -26,8 +26,6 @@ use think\response\Json;
  */
 class Systemlog extends AdminBase
 {
-    protected bool $relationSearch = false;
-
     public function __construct(App $app)
     {
         parent::__construct($app);

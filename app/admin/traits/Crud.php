@@ -94,7 +94,7 @@ trait Crud
     /**
      * 查找
      */
-    public function find()
+    public function find(): Json
     {
         try {
             //逻辑代码

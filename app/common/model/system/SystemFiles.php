@@ -11,7 +11,8 @@
 // +----------------------------------------------------------------------
 namespace app\common\model\system;
 
-use app\common\model\BaseModel;
+
+use Kaadon\ThinkBase\BaseClass\BaseModel;
 
 class SystemFiles extends BaseModel
 {

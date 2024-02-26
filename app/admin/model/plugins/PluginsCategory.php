@@ -2,7 +2,7 @@
 
 namespace app\admin\model\plugins;
 
-use app\common\model\BaseModel;
+use Kaadon\ThinkBase\BaseClass\BaseModel;
 
 class PluginsCategory extends BaseModel
 {

@@ -2,7 +2,7 @@
 
 namespace app\admin\model\system;
 
-use app\common\model\BaseModel;
+use Kaadon\ThinkBase\BaseClass\BaseModel;
 
 class SystemGroup extends BaseModel
 {

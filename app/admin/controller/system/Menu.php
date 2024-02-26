@@ -14,10 +14,6 @@ use util\Token;
  */
 class Menu extends AdminBase
 {
-    protected ?\think\Model $model = null;
-
-    protected bool $relationSearch = false;
-
     public function __construct(App $app)
     {
         parent::__construct($app);

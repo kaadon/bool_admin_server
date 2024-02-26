@@ -16,7 +16,7 @@ class VisitLog
      * @param Closure $next
      * @return Response
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         /**
          * 记录访问信息
@@ -29,6 +29,5 @@ class VisitLog
         Log::write($request->header(), 'HEADER');
         Log::write($request->param(), 'PARAM');
         return $next($request);
-
     }
 }
