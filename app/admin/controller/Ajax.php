@@ -12,14 +12,15 @@
 
 namespace app\admin\controller;
 
+use app\admin\listener\Files;
 use app\admin\service\MenuService;
 use app\common\controller\AdminBase;
+use Kaadon\ThinkBase\utils\Upload;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\Log;
 use think\response\Json;
-use util\Upload;
 
 class Ajax extends AdminBase
 {
@@ -56,20 +57,25 @@ class Ajax extends AdminBase
      */
     public function upload(): Json
     {
-
         $file = $this->request->file('file');
         try {
+            $upload_config = [
+                'catePath' => $this->request->header('catePath', 'system'),
+                'listener' => Files::class,
+                'event' => "uploadFile"
+            ];
+            if ($this->request->header('saveFile', false)) $upload_config['saveFile'] = true;
             $upload = new Upload();
-            $res = $upload->upload($file);
+            $res = $upload->upload($file, $upload_config);
             if ($res['url']) {
-                return successes('ok', ['url' => $res['url']]);
+                return successes('ok', ['url' => $res['url'], 'savePath' => $this->request->header('savepath'),'saveFile'=>$this->request->header('saveFile', false)]);
             } else {
                 return error($res['msg']);
             }
         } catch (\Exception $e) {
             Log::error("---ajax---upload--error:" . $e);
+            return error('上传文件失败', 201, $e->getTrace());
         }
-        return error('上传文件失败');
     }
 
     /**
