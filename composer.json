@@ -30,7 +30,7 @@
         "phpoffice/phpspreadsheet": "^1.29",
         "symfony/var-exporter": "^6.3",
         "kaadon/uploadfile": "^0.0.1",
-        "kaadon/thinkbase": "^1.0",
+        "kaadon/thinkbase": "1.x-dev",
         "kaadon/capcha": "^2.0",
         "kaadon/think-addons": "^3.0",
         "ext-redis": "*"

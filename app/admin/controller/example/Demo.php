@@ -44,16 +44,7 @@ class Demo extends AdminBase
             ->where($where)
             ->order($sortArr)
             ->paginate($limit);
-
-        $data = [
-            'code' => 200,
-            'msg' => '',
-            'count' => $list->total(),
-            'data' => $list->items(),
-            "config" => get_config_group("site")
-        ];
-
-        return json($data);
+        return paginate($list,["config" => get_config_group("site")]);
     }
     /**
      * 添加

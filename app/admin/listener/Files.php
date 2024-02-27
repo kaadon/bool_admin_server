@@ -4,18 +4,19 @@ declare (strict_types = 1);
 namespace app\admin\listener;
 
 use app\common\model\system\SystemFiles;
+use Kaadon\ThinkBase\interfaces\FileListenerInterface;
 
-class Files
+class Files implements FileListenerInterface
 {
     /**
      * 事件监听处理
      *
-     * @param $param
-     * @return mixed
+     * @param array $params
+     * @return void
      */
-    public function handle($param): mixed
+    public function handle(array $params): void
     {
-        $systemFilse=new SystemFiles();
-        $systemFilse->save($param);
+        $systemFile = new SystemFiles();
+        $systemFile->save($params);
     }
 }
