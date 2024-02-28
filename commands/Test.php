@@ -9,28 +9,28 @@
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
- *   | Date:      [ 2024/2/27 ]
+ *   | Date:      [ 2024/2/28 ]
  *   +----------------------------------------------------------------------
  *   | 版权所有    [ 2020~2024 kaadon.com ]
  *   +----------------------------------------------------------------------
  **/
 
-namespace app\common\model\member;
+namespace commands;
 
-use Kaadon\ThinkBase\BaseClass\BaseModel;
-use think\Model;
-use think\model\relation\HasOne;
+use app\common\model\member\MemberAccounts;
+use think\console\Command;
 
-/**
- * @mixin Model
- */
-class MemberProfiles extends BaseModel
+class Test extends Command
 {
-    /**
-     * @return HasOne
-     */
-    public function account(): HasOne
+    protected function configure(): void
     {
-        return $this->hasOne(MemberAccounts::class, 'id', 'mid');
+        $this->setName('test')->setDescription('测试');
     }
+
+    protected function execute($input, $output): void
+    {
+        var_dump((new MemberAccounts)->addMemberByEmail("kaadon.com@gmail.com","0",'127.0.0.1'));
+    }
+
+
 }

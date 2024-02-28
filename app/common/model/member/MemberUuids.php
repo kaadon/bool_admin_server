@@ -9,7 +9,7 @@
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
- *   | Date:      [ 2024/2/27 ]
+ *   | Date:      [ 2024/2/28 ]
  *   +----------------------------------------------------------------------
  *   | 版权所有    [ 2020~2024 kaadon.com ]
  *   +----------------------------------------------------------------------
@@ -17,20 +17,31 @@
 
 namespace app\common\model\member;
 
+use app\common\model\SystemUuid;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
-use think\Model;
-use think\model\relation\HasOne;
 
-/**
- * @mixin Model
- */
-class MemberProfiles extends BaseModel
+class MemberUuids extends BaseModel
 {
-    /**
-     * @return HasOne
-     */
-    public function account(): HasOne
+    public static function getUuid(int $type = 1): string
     {
-        return $this->hasOne(MemberAccounts::class, 'id', 'mid');
+        try {
+            //逻辑代码
+            $prefix = chr(mt_rand(65, 90));
+            do {
+                $number = mt_rand(100000000, 999999999);
+                $uid    = $prefix . $number;
+            } while (!empty(self::where('uuid', '=', $uid)->find()));
+            $bool = self::create([
+                'type' => $type,
+                'uuid' => $uid,
+            ]);
+            if (empty($bool)) {
+                throw new \Exception("Sorry, the account number generation failed!");
+            }
+            return $uid;
+        } catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage());
+        }
     }
+
 }

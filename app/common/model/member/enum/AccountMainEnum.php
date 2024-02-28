@@ -9,28 +9,17 @@
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
- *   | Date:      [ 2024/2/27 ]
+ *   | Date:      [ 2024/2/28 ]
  *   +----------------------------------------------------------------------
  *   | 版权所有    [ 2020~2024 kaadon.com ]
  *   +----------------------------------------------------------------------
  **/
 
-namespace app\common\model\member;
+namespace app\common\model\member\enum;
 
-use Kaadon\ThinkBase\BaseClass\BaseModel;
-use think\Model;
-use think\model\relation\HasOne;
-
-/**
- * @mixin Model
- */
-class MemberProfiles extends BaseModel
+enum AccountMainEnum: int
 {
-    /**
-     * @return HasOne
-     */
-    public function account(): HasOne
-    {
-        return $this->hasOne(MemberAccounts::class, 'id', 'mid');
-    }
+    case email = 1;
+    case mobile = 2;
 }
+
