@@ -20,6 +20,7 @@ use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\Log;
+use think\File;
 use think\response\Json;
 
 class Ajax extends AdminBase
@@ -58,7 +59,9 @@ class Ajax extends AdminBase
     public function upload(): Json
     {
         $file = $this->request->file('file');
+
         try {
+            if (!($file instanceof File)) throw new \Exception('file文件类型不正确,请上传文件');
             $upload_config = [
                 'catePath' => $this->request->header('catePath', 'system'),
                 'listener' => Files::class,
@@ -73,8 +76,7 @@ class Ajax extends AdminBase
                 return error($res['msg']);
             }
         } catch (\Exception $e) {
-            Log::error("---ajax---upload--error:" . $e);
-            return error('上传文件失败', 201, $e->getTrace());
+            return error($e->getMessage(), 201);
         }
     }
 
