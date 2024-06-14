@@ -47,11 +47,22 @@ class Config extends AdminBase
         }
     }
 
+    private function _upload_ext(string $str): string
+    {
+        $array = explode(',', $str);
+        $remove_items = array("php", "sh", "jsp");
+        $result = array_udiff($array, $remove_items, 'strcasecmp');
+        if (count($result) > 1) $result = array_unique($result);
+        sort($result);
+        return implode(',', $result);
+    }
+
     public function update(): Json
     {
         try {
             $post = $this->request->post();
-            foreach ($post as $key => $val) {
+            foreach ($post as $key => &$val) {
+                if (method_exists(self::class, '_' . $key)) $val = $this->{'_' . $key}($val);
                 $this->model
                     ->where('name', $key)
                     ->update([
@@ -62,7 +73,7 @@ class Config extends AdminBase
         } catch (\Exception $e) {
             return error('保存失败');
         }
-        return successes('保存成功');
+        return successes('保存成功'.method_exists(self::class, '_' . $key));
     }
 
     public function getGroupList(): Json
