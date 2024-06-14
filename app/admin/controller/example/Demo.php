@@ -10,9 +10,8 @@
 // +----------------------------------------------------------------------
 namespace app\admin\controller\example;
 
-use app\admin\model\ExampleDemo;
-use app\common\controller\AdminBase;
-use app\common\model\system\SystemConfig;
+use app\admin\AdminBase;
+use app\admin\model\example\ExampleDemo;
 use think\App;
 use think\exception\ValidateException;
 use think\facade\Log;

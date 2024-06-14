@@ -9,6 +9,6 @@ class Index
 {
     public function index(): Json
     {
-        return successes("这是 boolAdmin 站点");
+        return successes("这是 Kaadon Admin 站点");
     }
 }

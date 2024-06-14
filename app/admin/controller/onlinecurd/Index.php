@@ -3,7 +3,7 @@ namespace app\admin\controller\onlinecurd;
 
 use app\admin\model\system\SystemMenu;
 use app\admin\model\system\SystemOnlinecurd;
-use app\common\controller\AdminBase;
+use app\admin\AdminBase;
 use onlinecurd\BuildOnlineCurd;
 use think\facade\Db;
 use think\facade\Log;

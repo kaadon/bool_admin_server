@@ -14,7 +14,7 @@ use app\admin\model\system\SystemAdmin;
 use app\admin\model\system\SystemGroup;
 use app\admin\model\system\SystemGroupAdmin;
 use app\admin\service\AuthService;
-use app\common\controller\AdminBase;
+use app\admin\AdminBase;
 use think\App;
 use think\facade\Cache;
 use think\response\Json;

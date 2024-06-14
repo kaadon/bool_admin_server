@@ -1,7 +1,8 @@
 <?php
 // 全局中间件定义文件
 
-use app\common\middleware\VisitLog;
+use commons\middleware\AllowCrossDomain;
+use commons\middleware\VisitLog;
 
 return [
     // 全局请求缓存
@@ -10,6 +11,6 @@ return [
     // \think\middleware\LoadLangPack::class,
     // Session初始化
     // \think\middleware\SessionInit::class
-    \app\common\middleware\AllowCrossDomain::class,
-    \app\common\middleware\VisitLog::class,
+    AllowCrossDomain::class,
+    VisitLog::class,
 ];

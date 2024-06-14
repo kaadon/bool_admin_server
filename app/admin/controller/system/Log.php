@@ -2,7 +2,7 @@
 
 namespace app\admin\controller\system;
 
-use app\common\controller\AdminBase;
+use app\admin\AdminBase;
 use think\App;
 use think\response\Json;
 

@@ -2,8 +2,8 @@
 
 namespace app\admin\controller\example;
 
-use app\common\controller\AdminBase;
-use app\common\model\ExampleOrders;
+use app\admin\AdminBase;
+use app\admin\model\example\ExampleOrders;
 use think\App;
 use think\facade\Log;
 use think\response\Json;

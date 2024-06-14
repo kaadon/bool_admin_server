@@ -17,8 +17,8 @@
 
 namespace app\admin\controller\merchant;
 
-use app\common\controller\AdminBase;
-use app\common\model\merchant\MerchantAccounts;
+use app\admin\AdminBase;
+use commons\models\merchant\MerchantAccounts;
 use think\App;
 
 class Accounts extends AdminBase

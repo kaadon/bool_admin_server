@@ -120,9 +120,9 @@ if (!function_exists('sysconfig')) {
         if (empty($value)) {
             if (!empty($name)) {
                 $where['name'] = $name;
-                $value = \app\common\model\system\SystemConfig::where($where)->value('value');
+                $value = \commons\models\system\SystemConfig::where($where)->value('value');
             } else {
-                $value = \app\common\model\system\SystemConfig::where($where)->column('value', 'name');
+                $value = \commons\models\system\SystemConfig::where($where)->column('value', 'name');
             }
         }
         return $value;
@@ -206,7 +206,7 @@ if (!function_exists('get_config')) {
      */
     function get_config(string $group, string $name)
     {
-        return \app\common\model\system\SystemConfig::get_config($group, $name);
+        return \commons\models\system\SystemConfig::get_config($group, $name);
     }
 }
 if (!function_exists('get_config_group')) {
@@ -217,7 +217,7 @@ if (!function_exists('get_config_group')) {
      */
     function get_config_group(string $group)
     {
-        return \app\common\model\system\SystemConfig::get_config_group($group);
+        return \commons\models\system\SystemConfig::get_config_group($group);
     }
 }
 if (!function_exists('del_config')) {
@@ -229,7 +229,7 @@ if (!function_exists('del_config')) {
      */
     function del_config(string $group, string $name)
     {
-        return \app\common\model\system\SystemConfig::del_config($group, $name);
+        return \commons\models\system\SystemConfig::del_config($group, $name);
     }
 }
 if (!function_exists('set_config')) {
@@ -241,7 +241,7 @@ if (!function_exists('set_config')) {
      */
     function set_config(string $group, string $name, $value)
     {
-        return \app\common\model\system\SystemConfig::set_config($group, $name, $value);
+        return \commons\models\system\SystemConfig::set_config($group, $name, $value);
     }
 }
 

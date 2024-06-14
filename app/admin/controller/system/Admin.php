@@ -5,7 +5,7 @@ namespace app\admin\controller\system;
 use app\admin\model\system\SystemGroup;
 use app\admin\model\system\SystemGroupAdmin;
 use app\admin\validate\SystemAdmin;
-use app\common\controller\AdminBase;
+use app\admin\AdminBase;
 use think\App;
 use think\exception\ValidateException;
 use think\facade\Db;

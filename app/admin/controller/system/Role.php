@@ -5,7 +5,7 @@ namespace app\admin\controller\system;
 use app\admin\model\system\SystemGroupAdmin;
 use app\admin\model\system\SystemGroupMenu;
 use app\admin\service\MenuService;
-use app\common\controller\AdminBase;
+use app\admin\AdminBase;
 use think\App;
 use think\exception\ValidateException;
 use think\facade\Log;

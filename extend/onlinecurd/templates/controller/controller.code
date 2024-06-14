@@ -2,7 +2,7 @@
 
 namespace {{{controllerNamespace}}};
 
-use app\common\controller\AdminBase;
+use app\admin\AdminBase;
 use think\App;
 {{{usePackage}}}
 /**

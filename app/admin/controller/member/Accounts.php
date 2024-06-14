@@ -17,8 +17,8 @@
 
 namespace app\admin\controller\member;
 
-use app\common\controller\AdminBase;
-use app\common\model\member\MemberAccounts;
+use app\admin\AdminBase;
+use commons\models\member\MemberAccounts;
 use think\App;
 class Accounts extends AdminBase
 {

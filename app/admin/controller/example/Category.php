@@ -2,7 +2,8 @@
 
 namespace app\admin\controller\example;
 
-use app\common\controller\AdminBase;
+use app\admin\AdminBase;
+use app\admin\model\example\ExampleCategory;
 use think\App;
 
 /**
@@ -15,7 +16,7 @@ class Category extends AdminBase
     {
         parent::__construct($app);
 
-        $this->model = new \app\admin\model\ExampleCategory();
+        $this->model = new ExampleCategory();
 
     }
 

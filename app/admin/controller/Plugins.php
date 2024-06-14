@@ -2,7 +2,7 @@
 
 namespace app\admin\controller;
 
-use app\common\controller\AdminBase;
+use app\admin\AdminBase;
 use Exception;
 use PDO;
 use think\App;

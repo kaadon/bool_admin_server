@@ -16,7 +16,7 @@
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 
-use app\common\controller\AdminBase;
+use app\admin\AdminBase;
 use think\App;
 use think\response\Json;
 

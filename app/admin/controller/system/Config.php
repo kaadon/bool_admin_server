@@ -2,7 +2,7 @@
 
 namespace app\admin\controller\system;
 
-use app\common\controller\AdminBase;
+use app\admin\AdminBase;
 use think\App;
 use think\facade\Log;
 use think\response\Json;
@@ -16,7 +16,7 @@ class Config extends AdminBase
     {
         parent::__construct($app);
 
-        $this->model = new \app\common\model\system\SystemConfig();
+        $this->model = new \commons\models\system\SystemConfig();
     }
 
     /**
@@ -59,6 +59,7 @@ class Config extends AdminBase
 
     public function update(): Json
     {
+        if ($this->appdemo) return error('演示站点禁止修改');
         try {
             $post = $this->request->post();
             foreach ($post as $key => &$val) {

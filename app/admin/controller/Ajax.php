@@ -14,7 +14,7 @@ namespace app\admin\controller;
 
 use app\admin\listener\Files;
 use app\admin\service\MenuService;
-use app\common\controller\AdminBase;
+use app\admin\AdminBase;
 use Kaadon\ThinkBase\utils\Upload;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;

@@ -17,7 +17,7 @@
 
 namespace commands;
 
-use app\common\model\member\MemberAccounts;
+use commons\models\member\MemberAccounts;
 use think\console\Command;
 
 class Test extends Command
