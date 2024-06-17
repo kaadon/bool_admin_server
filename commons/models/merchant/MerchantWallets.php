@@ -9,17 +9,28 @@
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
- *   | Date:      [ 2024/2/28 ]
+ *   | Date:      [ 2024/2/27 ]
  *   +----------------------------------------------------------------------
  *   | 版权所有    [ 2020~2024 kaadon.com ]
  *   +----------------------------------------------------------------------
  **/
 
-namespace commons\models\member\enum;
+namespace commons\models\merchant;
 
-enum AccountCateEnum: int
+use Kaadon\ThinkBase\BaseClass\BaseModel;
+use think\Model;
+use think\model\relation\HasOne;
+
+/**
+ * @mixin Model
+ */
+class MerchantWallets extends BaseModel
 {
-    case email = 1;
-    case mobile = 2;
+    /**
+     * @return HasOne
+     */
+    public function account(): HasOne
+    {
+        return $this->hasOne(MerchantAccounts::class);
+    }
 }
-
