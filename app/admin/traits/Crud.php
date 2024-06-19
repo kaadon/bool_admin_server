@@ -11,6 +11,7 @@
 namespace app\admin\traits;
 
 use think\exception\ValidateException;
+use think\facade\Db;
 use think\response\Json;
 use util\Excel;
 
@@ -55,13 +56,13 @@ trait Crud
             }
             return error('添加失败');
         } catch (ValidateException $e) {
-
             return error($e->getError());
         } catch (\Exception $e) {
             return error('添加失败:' . $e->getMessage());
         }
 
     }
+
     /**
      * 修改
      *
@@ -70,19 +71,43 @@ trait Crud
     {
         try {
             //逻辑代码
-            $id = input('id');
+            $id = $this->request->param('id');
             $row = $this->model->find($id);
             if (empty($row)) {
                 return error('数据不存在');
             }
             $post = $this->request->post();
+            // 启动事务
+            Db::startTrans();
             try {
+                //逻辑代码
                 $this->validate && validate($this->validate)->scene('edit')->check($post);
-                $result = $row->save($post);
+                $relationUpdates = [];
+                foreach ($post as $key => $item) {
+                    if (str_contains($key, '.')) {
+                        unset($post[$key]);
+                        $keyArr = explode(".", $key);
+                        if (isset($keyArr[0])) {
+                            if (isset($relationUpdates[$keyArr[0]])) {
+                                $relationUpdates[$keyArr[0]] = [$keyArr[1] => $item];
+                            } else {
+                                $relationUpdates[$keyArr[0]][$keyArr[1]] = $item;
+                            }
+                        }
+                    }
+                }
+                if (!empty($relationUpdates)) {
+                    foreach ($relationUpdates as $key => $relationUpdate) {
+                        if (!empty($row->$key)) ($row->$key)->save($relationUpdate);
+                    }
+                }
+                $result = $post ? $row->save($post) : true;
                 if (empty($result)) throw new \Exception('保存失败');
-            } catch (ValidateException $e) {
-                return error("", 201, $e->getError());
-            } catch (\Exception $e) {
+                // 提交事务
+                Db::commit();
+            } catch (\Exception $exception) {
+                // 回滚事务
+                Db::rollback();
                 return error('保存失败');
             }
             return success($row);
@@ -98,7 +123,7 @@ trait Crud
     {
         try {
             //逻辑代码
-            $id = input('id');
+            $id = $this->request->param('id');
             $row = $this->model->find($id);
             if (empty($row)) {
                 return error('数据不存在');
@@ -115,8 +140,8 @@ trait Crud
     public function status(): Json
     {
         try {
-            $id = input('id');
-            $status = input('status');
+            $id = $this->request->param('id');
+            $status = $this->request->param('status');
             $row = $this->model->find($id);
             if (empty($row)) {
                 return error('数据不存在');
@@ -157,7 +182,7 @@ trait Crud
     public function selectList(): Json
     {
         try {
-            $fields = input('fields');
+            $fields = $this->request->param('fields');
             if (empty($fields)) {
                 $fields = "id,name";
             }
