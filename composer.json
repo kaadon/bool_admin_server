@@ -34,7 +34,8 @@
         "kaadon/capcha": "^2.0",
         "kaadon/think-addons": "^3.0",
         "ext-redis": "*",
-        "kaadon/uuid": "^1.0"
+        "kaadon/uuid": "^1.0",
+        "react/event-loop": "^1.5"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",

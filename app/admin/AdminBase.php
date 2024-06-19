@@ -28,8 +28,7 @@ class AdminBase extends BaseController
 
     protected int|string|null $adminId;
     protected bool $relationSearch = false;
-    public Validate|array|string|null $validate;
-
+    protected Validate|array|string|null $validate;
     public bool $appdemo = false;
     protected string $prefix = "qu_";
     /**

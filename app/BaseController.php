@@ -23,7 +23,7 @@ abstract class BaseController
      * 应用实例
      * @var App
      */
-    protected $app;
+    protected App $app;
 
     /**
      * 是否批量验证

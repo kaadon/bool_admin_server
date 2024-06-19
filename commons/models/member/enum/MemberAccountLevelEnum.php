@@ -9,22 +9,20 @@
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
- *   | Date:      [ 2024/2/27 ]
+ *   | Date:      [ 2024/2/28 ]
  *   +----------------------------------------------------------------------
  *   | 版权所有    [ 2020~2024 kaadon.com ]
  *   +----------------------------------------------------------------------
  **/
 
-namespace app\admin\controller\member;
+namespace commons\models\member\enum;
 
-use app\admin\AdminBase;
-use commons\models\member\MemberAccounts;
-use think\App;
-class Accounts extends AdminBase
+enum MemberAccountLevelEnum: int
 {
-    public function __construct(App $app)
-    {
-        parent::__construct($app);
-        $this->model = new MemberAccounts();
-    }
+    case ORDINARY_MEMBER = 0; //普通会员
+    case JUNIOR_MEMBERSHIP = 1; //初级会员
+    case INTERMEDIATE_MEMBERSHIP = 2; // 中级会员
+    case PREMIUM_MEMBERSHIP = 3; // 高级会员
+    case EXCLUSIVE_MEMBERSHIP = 4; // 至尊会员
 }
+

@@ -19,6 +19,7 @@ namespace commons\models\merchant\enum;
 
 enum MerchantAccountCateEnum: int
 {
+    case system = 0;
     case email = 1;
     case mobile = 2;
 }

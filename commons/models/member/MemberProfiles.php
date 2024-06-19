@@ -17,6 +17,8 @@
 
 namespace commons\models\member;
 
+use commons\models\member\enum\MemberAccountCateEnum;
+use commons\models\member\enum\MemberAccountLevelEnum;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use think\Model;
 use think\model\relation\HasOne;
@@ -33,4 +35,32 @@ class MemberProfiles extends BaseModel
     {
         return $this->hasOne(MemberAccounts::class, 'id', 'mid');
     }
+
+    public static function getCates(): array
+    {
+        $cates = [];
+        foreach (MemberAccountCateEnum::cases() as $case) {
+            $cates[] = [
+                'label' => $case->name,
+                'value' => $case->value,
+            ];
+        }
+        return $cates;
+    }
+
+    public static function getLevels(): array
+    {
+        $levels = [];
+        foreach (MemberAccountLevelEnum::cases() as $case) {
+            $levels[] = [
+                'label' => $case->name,
+                'value' => $case->value,
+            ];
+        }
+        return $levels;
+    }
+
+
+
+
 }

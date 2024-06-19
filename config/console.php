@@ -6,6 +6,6 @@ return [
     // 指令定义
     'commands' => [
         'curd' => app\admin\command\Curd::class,
-        "Test" =>\commands\Test::class
+        "Test" =>\commons\commands\Test::class,
     ],
 ];

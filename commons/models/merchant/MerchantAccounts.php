@@ -83,6 +83,6 @@ class MerchantAccounts extends BaseModel
      */
     public function profile(): HasOne
     {
-        return $this->hasOne(MerchantProfiles::class);
+        return $this->hasOne(MerchantProfiles::class,'uid','id');
     }
 }

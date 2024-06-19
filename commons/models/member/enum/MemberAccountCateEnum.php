@@ -19,7 +19,8 @@ namespace commons\models\member\enum;
 
 enum MemberAccountCateEnum: int
 {
-    case email = 1;
-    case mobile = 2;
+    case system = 0; //后台添加账号
+    case email = 1; //邮箱注册
+    case mobile = 2; // 手机注册
 }
 

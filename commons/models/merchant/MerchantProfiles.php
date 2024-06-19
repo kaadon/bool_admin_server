@@ -17,11 +17,13 @@
 
 namespace commons\models\merchant;
 
+use commons\models\merchant\enum\MerchantAccountCateEnum;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
+use think\Model;
 use think\model\relation\HasOne;
 
 /**
- * @mixin \think\Model
+ * @mixin Model
  */
 class MerchantProfiles extends BaseModel
 {
@@ -30,6 +32,18 @@ class MerchantProfiles extends BaseModel
      */
     public function account(): HasOne
     {
-        return $this->hasOne(MerchantAccounts::class);
+        return $this->hasOne(MerchantAccounts::class, 'id', 'uid');
+    }
+
+    public static function getCates(): array
+    {
+        $cates = [];
+        foreach (MerchantAccountCateEnum::cases() as $case) {
+            $cates[] = [
+                'label' => $case->name,
+                'value' => $case->value,
+            ];
+        }
+        return $cates;
     }
 }

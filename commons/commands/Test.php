@@ -18,6 +18,7 @@
 namespace commons\commands;
 
 use commons\models\member\MemberAccounts;
+use React\EventLoop\Loop;
 use think\console\Command;
 
 class Test extends Command
@@ -29,8 +30,8 @@ class Test extends Command
 
     protected function execute($input, $output): void
     {
-        var_dump((new MemberAccounts)->addMemberByEmail("kaadon.com@gmail.com","0",'127.0.0.1'));
+        Loop::addPeriodicTimer(1, function (){
+            echo "没有数据";
+        });
     }
-
-
 }

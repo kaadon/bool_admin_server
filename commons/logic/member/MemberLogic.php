@@ -54,6 +54,7 @@ class MemberLogic
                 "agent_line" => "0|",
             ];
         } else {
+            if (empty($inviter)) throw new \Exception("THE_INVITATION_CODE_IS_INCORRECT");
             $inviterCate = substr($inviter, 0, 2) ?? 'me';
             $inviterEnum = UuidEnum::tryFrom($inviterCate);
             if (!$inviterEnum) {
@@ -62,20 +63,23 @@ class MemberLogic
                 switch ($inviterEnum->value) {
                     case UuidEnum::Merchant->value:
                         $inviter = MerchantAccounts::where('uuid', $inviter)->find();
-                        if (!empty($inviter)) $inviteData = [
+                        if (!empty($inviter)) throw new \Exception("THE_INVITATION_CODE_IS_INCORRECT");
+                        $inviteData = [
                             'floor' => 0,
                             "inviter_line" => '0|',
                             "agent_line" => $inviter->agent_line . '|' . $inviter->id,
                         ];
+                        break;
                     case UuidEnum::Member->value:
                         $inviter = MemberAccounts::where('uuid', $inviter)->find();
-                        if (!empty($inviter)) $inviteData = [
+                        if (empty($inviter)) throw new \Exception("THE_INVITATION_CODE_IS_INCORRECT");
+                        $inviteData = [
                             'floor' => $inviter->floor + 1,
                             "inviter_line" => $inviter->inviter_line . '|' . $inviter->id,
                             "agent_line" => $inviter->agent_line,
                         ];
+                        break;
                     default:
-                        if (!env('INVITE_REQUIRE', false)) throw new Exception("AN_INVITATION_CODE_IS_REQUIRED");
                         $inviteData = [
                             'floor' => 0,
                             "inviter_line" => "0|",
@@ -88,11 +92,42 @@ class MemberLogic
         return $inviteData;
     }
 
+    public static function getInviter(string $inviter = null): array
+    {
+        if (empty($inviter)) return [];
+        $inviterCate = substr($inviter, 0, 2) ?? 'me';
+        $inviterEnum = UuidEnum::tryFrom($inviterCate);
+        if (!$inviterEnum) return [];
+        switch ($inviterEnum->value) {
+            case UuidEnum::Merchant->value:
+                $inviter = MerchantAccounts::where(['uuid' => $inviter, 'status' => 1])->withJoin('profile')->find();
+                if (empty($inviter)) $inviter = [];
+                $inviter = [
+                    "type" => $inviterEnum->name,
+                    "inviter" => $inviter->uuid,
+                    "username" => $inviter->profile[UuidEnum::from($inviter->profile->account_main)->name],
+                ];
+                break;
+            case UuidEnum::Member->value:
+                $inviter = MemberAccounts::where(['uuid' => $inviter, 'status' => 1])->withJoin('profile')->find();
+                if (empty($inviter)) $inviter = [];
+                $inviter = [
+                    "type" => $inviterEnum->name,
+                    "inviter" => $inviter->uuid,
+                    "username" => $inviter->profile[MemberAccountCateEnum::from($inviter->profile->account_main)->name],
+                ];
+                break;
+            default:
+                $inviter = [];
+        }
+        return $inviter;
+    }
+
     /**
      * 注册会员
      * @throws Exception
      */
-    public static function AddMember(MemberAccountCateEnum $AccountCateEnum, string $userName, string $password, string $inviter, bool $is_admin = false): object
+    public static function AddMember(MemberAccountCateEnum $AccountCateEnum, string $userName, string $password, string $inviter, bool $is_admin = false, array $data = []): object
     {
         // 启动事务
         Db::startTrans();
@@ -101,6 +136,8 @@ class MemberLogic
             $account = new MemberAccounts();
             $inviterData = self::fromInviterData($inviter, $is_admin);
             $createTime = time();
+
+            /*创建用户主体*/
             $account->save(array_merge([
                 "uuid" => ServiceUuids::getUuid(UuidEnum::Member),
                 "uid" => 0,
@@ -110,13 +147,27 @@ class MemberLogic
                 "password" => password_hash($password, PASSWORD_DEFAULT),
                 "safeword" => password_hash($password, PASSWORD_DEFAULT),
             ], $inviterData));
-            $profile = (new MemberProfiles())->save([
-                $AccountCateEnum->name => $userName,
-                "mid" => $account->id,
-            ]);
+
+            /*创建用户资料*/
+            $profileDate = [];
+            if ($AccountCateEnum->value === MemberAccountCateEnum::system->value && $is_admin) {
+                foreach (MemberAccountCateEnum::cases() as $case) {
+                    if (array_key_exists($case->name, $data)) $profileDate[$case->name] = $data[$case->name];
+                }
+                if (empty($profileDate)) throw new \Exception("参数不全");
+            }else{
+                $profileDate[$AccountCateEnum->name] = $userName;
+            }
+            $profileDate['account_main'] = $AccountCateEnum->value;
+            $profileDate['mid'] = $account->id;
+            $profile = (new MemberProfiles())->save($profileDate);
+
+            /*创建用户钱包*/
             $wallet = (new MemberWallets())->save([
                 'mid' => $account->id
             ]);
+
+
             // 提交事务
             Db::commit();
         } catch (Exception $exception) {
