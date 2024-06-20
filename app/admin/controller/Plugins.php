@@ -8,7 +8,7 @@ use PDO;
 use think\App;
 use think\facade\Log;
 use think\response\Json;
-use util\File;
+use Kaadon\ThinkBase\utils\File;
 
 /**
  * Plugins控制器
