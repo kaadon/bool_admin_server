@@ -108,6 +108,6 @@ class ExampleDemo extends BaseModel
 
     public function category()
     {
-        return $this->belongsTo('\app\admin\model\ExampleCategory', 'category_id', 'id');
+        return $this->belongsTo(ExampleCategory::class, 'category_id', 'id');
     }
 }
