@@ -46,6 +46,7 @@ class AdminBase extends BaseController
         parent::initialize();
         $this->adminId = request()->adminId;
         $this->appdemo = env('APP_DEMO', false);
+        $this->prefix = config('database.connections.mysql.prefix');
     }
 
     /**
