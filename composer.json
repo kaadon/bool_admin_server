@@ -36,7 +36,8 @@
         "ext-redis": "*",
         "kaadon/uuid": "^1.0",
         "react/event-loop": "^1.5",
-        "usdtcloud/tronservice": "^2.0"
+        "usdtcloud/tronservice": "^2.0",
+        "ext-curl": "*"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",

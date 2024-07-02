@@ -5,11 +5,18 @@
  * @LastEditors: zs
  * @LastEditTime: 2021-05-26 16:03:50
  */
+
 // 应用公共文件
 
+use commons\models\system\SystemConfig;
 use Symfony\Component\VarExporter\VarExporter;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\exception\HttpResponseException;
+use think\facade\Log;
 use think\Response;
+
 if (!function_exists('lineToHump')) {
 
     /**
@@ -47,7 +54,7 @@ if (!function_exists('getRealIP')) {
     function getRealIP()
     {
         $forwarded = request()->header("x-forwarded-for");
-        if ( $forwarded ) {
+        if ($forwarded) {
             $ip = explode(',', $forwarded)[0];
         } else {
             $ip = request()->ip();
@@ -65,7 +72,7 @@ if (!function_exists('parseNodeStr')) {
                 foreach ($val as &$vo) {
                     $vo = humpToLine(lcfirst($vo));
                 }
-                $val         = implode('.', $val);
+                $val = implode('.', $val);
                 $array[$key] = $val;
             }
         }
@@ -114,15 +121,15 @@ if (!function_exists('sysconfig')) {
      * @param null $name
      * @return array|mixed
      */
-    function sysconfig($group, $name = null)
+    function sysconfig($group, $name = null): mixed
     {
         $where = ['group' => $group];
         if (empty($value)) {
             if (!empty($name)) {
                 $where['name'] = $name;
-                $value = \commons\models\system\SystemConfig::where($where)->value('value');
+                $value = (new SystemConfig())->where($where)->value('value');
             } else {
-                $value = \commons\models\system\SystemConfig::where($where)->column('value', 'name');
+                $value = (new SystemConfig())->where($where)->column('value', 'name');
             }
         }
         return $value;
@@ -134,11 +141,11 @@ if (!function_exists('api_post')) {
     /**
      * api发起POST请求
      * @param string $func [请求api方法]
-     * @param string $data [请求api数据]
+     * @param array|string $data [请求api数据]
      */
-    function api_post(string $func, $data = [], $header = [])
+    function api_post(string $func, array|string $data = [], $header = [])
     {
-        $url    = config('app.api') . $func;
+        $url = config('app.api') . $func;
         $output = curl($url, $data, $header);
         return json_decode($output, true);
     }
@@ -148,10 +155,11 @@ if (!function_exists('curl')) {
     /**
      * CURL请求函数:支持POST及基本header头信息定义
      * @param string $api_url [请求远程链接]
-     * @param array $post_data [请求远程数据]
-     * @param array $header [头信息数组]
+     * @param array|string|null $post_data [请求远程数据]
+     * @param array|null $header [头信息数组]
+     * @return array|bool|string
      */
-    function curl(string $api_url, $post_data = [], $header = [])
+    function curl(string $api_url, array|string|null $post_data, ?array $header): bool|array|string
     {
         /**初始化CURL句柄**/
         $ch = curl_init();
@@ -175,14 +183,14 @@ if (!function_exists('curl')) {
         //模拟浏览器头信息
         curl_setopt($ch, CURLOPT_REFERER, request()->domain()); //伪造来源地址
         /**配置POST请求**/
-        if ( $post_data && is_array($post_data) ) {
+        if ($post_data && is_array($post_data)) {
             curl_setopt($ch, CURLOPT_POST, 1); //支持post提交数据
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post_data));
         }
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); //禁止 cURL 验证对等证书
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); //是否检测服务器的域名与证书上的是否一致
         $data = curl_exec($ch);
-        if ( curl_errno($ch) ) {
+        if (curl_errno($ch)) {
             // 捕抓异常
             return ['status' => 'error', 'message' => curl_error($ch)];
         } else {
@@ -200,13 +208,13 @@ if (!function_exists('get_config')) {
      * @param string $group
      * @param string $name
      * @return array|mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException|RedisException
      */
-    function get_config(string $group, string $name)
+    function get_config(string $group, string $name): mixed
     {
-        return \commons\models\system\SystemConfig::get_config($group, $name);
+        return SystemConfig::get_config($group, $name);
     }
 }
 if (!function_exists('get_config_group')) {
@@ -214,10 +222,15 @@ if (!function_exists('get_config_group')) {
      * 获取缓存组
      * @param string $group
      * @return array|null
+     * @throws Exception
      */
-    function get_config_group(string $group)
+    function get_config_group(string $group): ?array
     {
-        return \commons\models\system\SystemConfig::get_config_group($group);
+        try {
+            return SystemConfig::get_config_group($group);
+        } catch (RedisException $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 }
 if (!function_exists('del_config')) {
@@ -226,10 +239,13 @@ if (!function_exists('del_config')) {
      * @param string $group
      * @param string $name
      * @return mixed|string
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException|RedisException
      */
-    function del_config(string $group, string $name)
+    function del_config(string $group, string $name): mixed
     {
-        return \commons\models\system\SystemConfig::del_config($group, $name);
+        return SystemConfig::del_config($group, $name);
     }
 }
 if (!function_exists('set_config')) {
@@ -237,11 +253,16 @@ if (!function_exists('set_config')) {
      * 设置缓存
      * @param string $group
      * @param string $name
-     * @return mixed|string
+     * @param string|int $value
+     * @param array|null $options
+     * @return bool
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
-    function set_config(string $group, string $name, $value)
+    function set_config(string $group, string $name, string|int $value, ?array $options): bool
     {
-        return \commons\models\system\SystemConfig::set_config($group, $name, $value);
+        return SystemConfig::set_config($group, $name, $value, $options);
     }
 }
 
@@ -264,21 +285,21 @@ if (!function_exists('get_addons_config_format')) {
     /**
      * 获取插件配置 数组格式
      */
-    function get_addons_config_format($name)
+    function get_addons_config_format($name): array
     {
-        $configf = [];
-        $config  = get_addons_all_config($name);
-        foreach ($config as $k => $v) {
-            $configf[$v['name']] = $v['value'];
+        $config_format = [];
+        $config = get_addons_all_config($name);
+        foreach ($config as $v) {
+            $config_format[$v['name']] = $v['value'];
         }
-        return $configf;
+        return $config_format;
     }
 }
 if (!function_exists('set_addons_config')) {
     /**
      * 设置插件配置
      */
-    function set_addons_config($name, $config)
+    function set_addons_config($name, $config): bool
     {
         $file = get_back_addons_path() . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . "config.php";
         if (!is_file($file)) {
@@ -298,7 +319,7 @@ if (!function_exists('get_back_addons_path')) {
     /**
      * 返回后台跟目录
      */
-    function get_back_addons_path()
+    function get_back_addons_path(): string
     {
 
         $back_addons_path = root_path() . "addons";
@@ -401,6 +422,7 @@ function result($code = 0, $msg = '', $data = [])
     ];
     return json($data);
 }
+
 function addonresult($code = 0, $msg = '', $data = [], $type = 'json', array $header = [])
 {
     $result = [

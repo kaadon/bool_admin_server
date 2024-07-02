@@ -4,6 +4,7 @@ namespace commons\models\system;
 
 
 use Kaadon\ThinkBase\BaseClass\BaseModel;
+use RedisException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -27,15 +28,15 @@ class SystemConfig extends BaseModel
     /**
      * @param string $group
      * @return array|mixed|string
-     * @throws \RedisException
+     * @throws RedisException
      */
     public static function get_config_group(string $group): mixed
     {
         $configs = redisCacheGet("config:groups:{$group}s");
-        if ( empty($configs) ) {
+        if (empty($configs)) {
             $where = ['group' => $group];
             $value = self::where($where)->column('value', 'name');
-            if ( !empty($value) ) {
+            if (!empty($value)) {
                 redisCacheSet("config:groups:{$group}s", $value);
             }
         } else {
@@ -50,20 +51,20 @@ class SystemConfig extends BaseModel
      * @return mixed|null
      * @throws DataNotFoundException
      * @throws DbException
-     * @throws ModelNotFoundException|\RedisException
+     * @throws ModelNotFoundException|RedisException
      */
     public static function get_config(string $group, string $sign)
     {
-        $value  = null;
+        $value = null;
         $config = redisCacheGet("config:{$group}_{$sign}");
-        if ( empty($config) ) {
+        if (empty($config)) {
             $config = self::where([
-                                      ['group', '=', $group],
-                                      ['sign', '=', $sign]
-                                  ])
-                          ->field("value")
-                          ->find();
-            if ( !empty($config) && !empty($config->value) ) {
+                ['group', '=', $group],
+                ['sign', '=', $sign]
+            ])
+                ->field("value")
+                ->find();
+            if (!empty($config) && !empty($config->value)) {
                 $value = $config->value;
                 redisCacheSet("config:{$group}_{$sign}", $config->value);
             }
@@ -80,15 +81,15 @@ class SystemConfig extends BaseModel
      * @return bool
      * @throws DataNotFoundException
      * @throws DbException
-     * @throws ModelNotFoundException
+     * @throws ModelNotFoundException|RedisException
      */
     public static function del_config(string $group, string $sign): bool
     {
-        $config = self::where([
-                                  ['group', '=', $group],
-                                  ['sign', '=', $sign]
-                              ])->find();
-        if ( !empty($config) ) {
+        $config = (new self())->where([
+            ['group', '=', $group],
+            ['sign', '=', $sign]
+        ])->find();
+        if (!empty($config)) {
             $config->delete();
             redisCacheDel("config:{$group}_{$sign}");
         }
@@ -99,48 +100,33 @@ class SystemConfig extends BaseModel
     /**
      * @param string $group
      * @param string $sign
-     * @param $value
+     * @param string|int $value
+     * @param array|null $options
      * @return bool
      * @throws DataNotFoundException
      * @throws DbException
      * @throws ModelNotFoundException
      */
-    public static function set_config(string $group, string $sign, $value, array $config = []): bool
+    public static function set_config(string $group, string $sign, string|int $value, ?array $options): bool
     {
-        $config = self::where([
-                                  ['group', '=', $group],
-                                  ['sign', '=', $sign]
-                              ])->find();
-        if ( empty($config) ) {
-            $insertData = [
-                'name'  => "{$group}_{$sign}",
-                'group' => $group,
-                'sign'  => "$sign",
-                'value' => $value
-            ];
-            if ( isset($config['type']) && !empty($config['type']) ) {
-                $insertData['type'] = $config['type'];
-            }
-            if ( isset($config['disabled']) && !is_null($config['disabled']) ) {
-                $insertData['disabled'] = $config['disabled'];
-            }
-            if ( isset($config['weigh']) && !empty($config['weigh']) ) {
-                $insertData['weigh'] = $config['weigh'];
-            }
-            if ( isset($config['remark']) && !empty($config['remark']) ) {
-                $insertData['remark'] = $config['remark'];
-            }
-            $bool = self::create($insertData);
-            if ( empty($bool) ) {
-                return false;
-            }
-        } else {
-            $config->save([
-                              'value' => $value
-                          ]);
+        $config = (new self())->where([
+            ['group', '=', $group],
+            ['sign', '=', $sign]
+        ])->find();
+        $insertData = [];
+        if (isset($options['type'])) $insertData['type'] = $options['type'];
+        if (isset($options['disabled'])) $insertData['disabled'] = $options['disabled'];
+        if (isset($options['weigh'])) $insertData['weigh'] = $options['weigh'];
+        if (isset($config['remark'])) $insertData['remark'] = $config['remark'];
+        if (empty($config)) {
+            $insertData['name'] = "{$group}_{$sign}";
+            $insertData['group'] = "$group";
+            $insertData['sign'] = "$sign";
         }
+        $insertData['value'] = $value;
+        $bool = $config->save($insertData);
         redisCacheSet("config:{$group}_{$sign}", $value);
-        return true;
+        return (bool)$bool;
     }
 
 }
