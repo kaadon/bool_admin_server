@@ -16,6 +16,7 @@ use think\db\exception\ModelNotFoundException;
 use think\exception\HttpResponseException;
 use think\facade\Log;
 use think\Response;
+use think\response\Json;
 
 if (!function_exists('lineToHump')) {
 
@@ -331,86 +332,12 @@ if (!function_exists('get_back_addons_path')) {
     }
 }
 
-/** ARRAY **/
-if (!function_exists('array_rand_value')) {
-    /**
-     * OBJECT TO ARRAY
-     * @param $array
-     * @return array|mixed
-     */
-    function array_rand_value(array $array, int $num = 1)
-    {
-        $value = null;
-        if (is_array($array)) {
-            if ($num >= count($array)) {
-                return $array;
-            }
-            $array_rand = array_rand($array, $num);
-            if ($num == 1) {
-                $value = $array[$array_rand];
-            } else {
-                foreach ($array_rand as $item) {
-                    $value[] = $array[$item];
-                }
-            }
-        } else {
-            return $array;
-        }
-        return $value;
-    }
-}
-if (!function_exists('object_array')) {
-    /**
-     * OBJECT TO ARRAY
-     * @param $array
-     * @return array|mixed
-     */
-    function object_array($array)
-    {
-        if (is_object($array)) {
-            $array = (array)$array;
-        }
-        if (is_array($array)) {
-            foreach ($array as $key => $value) {
-                $array[$key] = object_array($value);
-            }
-        }
-        return $array;
-    }
-}
-if (!function_exists('line_array')) {
-
-
-    /**
-     * @param string $str 待分割字符串
-     * @param string $separator 分割字符串
-     * @param bool $reverse 是否反序
-     * @return array
-     */
-    function line_array(string $str, string $separator = ',', bool $reverse = false): array
-    {
-        try {
-            $strArray = explode($separator, $str);
-            foreach ($strArray as $key => $item) {
-                if (empty($item)) {
-                    unset($strArray[$key]);
-                }
-            }
-            if ($reverse) {
-                $strArray = array_reverse($strArray);
-            }
-        } catch (\Exception $exception) {
-            return [];
-        }
-        return $strArray;
-    }
-}
-
 /**
  * @description: 其他状态
- * @param {*} $msg
- * @param {*} $data
- * @return {*}
+ * @param int $code
+ * @param string $msg
+ * @param array $data
+ * @return Json {*}
  */
 function result($code = 0, $msg = '', $data = [])
 {
