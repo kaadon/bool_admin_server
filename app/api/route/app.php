@@ -14,7 +14,7 @@ Route::get(':controller/:function' , ':controller/:function')
     'controller' => '\w+',
     'function'   => '\w+',
 ]);;
-Route::rule(':version/:controller/:function' , ':version.:controller/:function', "get")
+Route::any(':version/:controller/:function' , ':version.:controller/:function')
     ->pattern([
         'version' => 'v\d+',
         'controller' => '\w+',

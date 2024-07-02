@@ -13,7 +13,7 @@ Route::get(':controller/:function' , ':controller/:function')
     ->pattern([
     'controller' => '\w+',
     'function'   => '\w+',
-]);;
+]);
 Route::rule(':version/:controller/:function' , ':version.:controller/:function', "get")
     ->pattern([
         'version' => 'v\d+',
