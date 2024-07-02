@@ -14,7 +14,6 @@ use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\HttpResponseException;
-use think\facade\Log;
 use think\Response;
 use think\response\Json;
 
@@ -322,7 +321,6 @@ if (!function_exists('get_back_addons_path')) {
      */
     function get_back_addons_path(): string
     {
-
         $back_addons_path = root_path() . "addons";
         // 如果插件目录不存在则创建
         if (!is_dir($back_addons_path)) {
@@ -339,7 +337,7 @@ if (!function_exists('get_back_addons_path')) {
  * @param array $data
  * @return Json {*}
  */
-function result($code = 0, $msg = '', $data = [])
+function result(int $code = 0, string $msg = '', array $data = []): Json
 {
     $data = [
         'code' => $code,
