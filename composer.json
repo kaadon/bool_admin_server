@@ -1,13 +1,14 @@
 {
-    "name": "topthink/think",
-    "description": "the new thinkphp framework",
+    "name": "topthink/bool_admin_server",
+    "description": "bool_admin framework for thinkphp8.*",
     "type": "project",
     "keywords": [
+        "bool_admin",
         "framework",
         "thinkphp",
         "ORM"
     ],
-    "homepage": "http://thinkphp.cn/",
+    "homepage": "http://developer.kaadon.com/",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -15,8 +16,8 @@
             "email": "liu21st@gmail.com"
         },
         {
-            "name": "yunwuxin",
-            "email": "448901948@qq.com"
+            "name": "kaadon.com",
+            "email": "kaadon.com@gmail.com"
         }
     ],
     "require": {
@@ -37,7 +38,8 @@
         "kaadon/uuid": "^1.0",
         "react/event-loop": "^1.5",
         "usdtcloud/tronservice": "^2.0",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-yaconf": "*"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",
