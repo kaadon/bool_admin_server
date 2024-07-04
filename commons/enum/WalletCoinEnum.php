@@ -1,7 +1,7 @@
 <?php
 /**
  *   +----------------------------------------------------------------------
- *   | PROJECT:   [ bool_admin_server ]
+ *   | PROJECT:   [ authapi_server ]
  *   +----------------------------------------------------------------------
  *   | 官方网站:   [ https://developer.kaadon.com ]
  *   +----------------------------------------------------------------------
@@ -9,20 +9,20 @@
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
- *   | Date:      [ 2024/2/28 ]
+ *   | Date:      [ 2024/6/23 ]
  *   +----------------------------------------------------------------------
  *   | 版权所有    [ 2020~2024 kaadon.com ]
  *   +----------------------------------------------------------------------
  **/
 
-namespace commons\models\member\enum;
+namespace commons\enum;
 
-enum MemberAccountLevelEnum: int
+enum WalletCoinEnum:int
 {
-    case ORDINARY_MEMBER = 0; //普通会员
-    case JUNIOR_MEMBERSHIP = 1; //初级会员
-    case INTERMEDIATE_MEMBERSHIP = 2; // 中级会员
-    case PREMIUM_MEMBERSHIP = 3; // 高级会员
-    case EXCLUSIVE_MEMBERSHIP = 4; // 至尊会员
+    case rmb = 1;
+    case usd = 2;
+    case trx = 3;
+    case usdt = 4;
+    case eth = 5;
+    case btc = 6;
 }
-

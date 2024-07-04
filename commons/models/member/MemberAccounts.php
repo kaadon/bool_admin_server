@@ -5,7 +5,7 @@
  *   +----------------------------------------------------------------------
  *   | 官方网站:   [ https://developer.kaadon.com ]
  *   +----------------------------------------------------------------------
- *   | Author:    [ kaadon <kaadon.com@gmail.com> codemiracle]
+ *   | Author:    [ kaadon.com <kaadon.com@gmail.com>]
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
@@ -17,13 +17,11 @@
 
 namespace commons\models\member;
 
+use commons\models\member\enum\MemberAccountCateEnum;
+use commons\models\member\enum\MemberAccountLevelEnum;
 use Exception;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
-use Kaadon\Uuid\Uuids;
-use RedisException;
-use think\db\exception\DataNotFoundException;
-use think\db\exception\DbException;
-use think\db\exception\ModelNotFoundException;
+use Kaadon\ThinkBase\traits\ModelTrait;
 use think\facade\Db;
 use think\Model;
 use think\model\relation\HasOne;
@@ -33,52 +31,25 @@ use think\model\relation\HasOne;
  */
 class MemberAccounts extends BaseModel
 {
-    /**
-     * @var string
-     */
-    private string $cacheKey = 'member_accounts:';
-    public static function fromInviter(string $inviterCode): mixed
-    {
-        return (new self())->where("uuid", $inviterCode)->find();
-    }
+    use ModelTrait;
+
     /**
      * @throws Exception
      */
-    public function clearCache(Model $model): void
+    public static function clearCache(Model $model): void
     {
         try {
             //逻辑代码
-            redisCacheDel($this->cacheKey . 'id:' . $model->id);
+            redisCacheDel('member_accounts:id:' . $model->id);
         } catch (Exception $exception) {
             throw new Exception($exception->getMessage());
         }
     }
 
-    /**
-     * @param int $id
-     * @return array
-     * @throws RedisException
-     * @throws DataNotFoundException
-     * @throws DbException
-     * @throws ModelNotFoundException
-     * @throws Exception
-     */
-    public function getAccountById(int $id): array
+
+    public static function fromInviter(string $inviterCode): mixed
     {
-        try {
-            //逻辑代码
-            if (redisCacheGet($this->cacheKey . 'id:' . $id)) return redisCacheGet($this->cacheKey . 'id:' . $id);
-            $account = $this->find($id);
-            if (empty($account)) return [];
-            $data = [
-                'profile' => $account->profile->toArray(),
-                'account' => $account->toArray()
-            ];
-            redisCacheSet($this->cacheKey . 'id:' . $id, $data, 3600);
-            return $data;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+        return (new self())->where("uuid", $inviterCode)->find();
     }
 
     /**
@@ -89,7 +60,28 @@ class MemberAccounts extends BaseModel
         return $this->hasOne(MemberProfiles::class, 'mid', 'id');
     }
 
-
+    /**
+     * @param int $id
+     * @return object
+     * @throws Exception
+     */
+    public static function getAccountById(int $id): object
+    {
+        try {
+            //逻辑代码
+            $account = redisCacheGet('member_accounts:id:' . $id);
+            if (!$account) {
+                $account = (new self())->where('id',$id)->find();
+                if (!empty($account)) {
+                    $account = $account->toArray();
+                    redisCacheSet('member_accounts:id:' . $id, $account, 3600);
+                }
+            }
+            return (object)($account ?: []);
+        } catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage());
+        }
+    }
     /**
      * 添加会员
      * @param string $email
@@ -102,13 +94,13 @@ class MemberAccounts extends BaseModel
      */
     public function addMemberByEmail(string $email, string $inviterCode, $register_ip = '0.0.0.0', string $password = "123456", string $safeword = "123456",): array
     {
-        if (self::profile()->where(['email'=>$email])->find()) throw new Exception('邮箱已存在') ;
-        $inviter = self::where('uuid',$inviterCode)->find();
-        if(empty($inviter) && $inviterCode !== "0") throw new \Exception('邀请人不存在');
+        if (self::profile()->where(['email' => $email])->find()) throw new Exception('邮箱已存在');
+        $inviter = self::where('uuid', $inviterCode)->find();
+        if (empty($inviter) && $inviterCode !== "0") throw new \Exception('邀请人不存在');
         $accountData = [
-            "floor" => $inviter?$inviter->floor + 1:0,
-            "inviter_line" => $inviter?$inviter->inviter_line ."$inviter->id":"0|",
-            "agent_line" => $inviter?$inviter->agent_line:"0|",
+            "floor" => $inviter ? $inviter->floor + 1 : 0,
+            "inviter_line" => $inviter ? $inviter->inviter_line . "$inviter->id" : "0|",
+            "agent_line" => $inviter ? $inviter->agent_line : "0|",
             'uuid' => MemberUuids::getUuid(1),
             'email' => $email,
             'inviter' => $inviterCode,
@@ -160,5 +152,29 @@ class MemberAccounts extends BaseModel
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
+    }
+
+    public static function getCates(): array
+    {
+        $cates = [];
+        foreach (MemberAccountCateEnum::cases() as $case) {
+            $cates[] = [
+                'label' => $case->name,
+                'value' => $case->value,
+            ];
+        }
+        return $cates;
+    }
+
+    public static function getLevels(): array
+    {
+        $levels = [];
+        foreach (MemberAccountLevelEnum::cases() as $case) {
+            $levels[] = [
+                'label' => lang($case->name),
+                'value' => $case->value,
+            ];
+        }
+        return $levels;
     }
 }

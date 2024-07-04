@@ -5,7 +5,7 @@
  *   +----------------------------------------------------------------------
  *   | 官方网站:   [ https://developer.kaadon.com ]
  *   +----------------------------------------------------------------------
- *   | Author:    [ kaadon <kaadon.com@gmail.com> codemiracle]
+ *   | Author:    [ kaadon.com <kaadon.com@gmail.com>]
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
@@ -26,6 +26,7 @@ use commons\models\service\enum\UuidEnum;
 use commons\models\service\ServiceUuids;
 use Exception;
 use Kaadon\Uuid\Uuids;
+use stdClass;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -127,7 +128,7 @@ class MemberLogic
      * 注册会员
      * @throws Exception
      */
-    public static function AddMember(MemberAccountCateEnum $AccountCateEnum, string $userName, string $password, string $inviter, bool $is_admin = false, array $data = []): object
+    public static function AddMember(MemberAccountCateEnum $AccountCateEnum, string $userName, string $password, string $inviter, bool $is_admin = false, array $data = []): stdClass
     {
         // 启动事务
         Db::startTrans();
@@ -155,7 +156,7 @@ class MemberLogic
                     if (array_key_exists($case->name, $data)) $profileDate[$case->name] = $data[$case->name];
                 }
                 if (empty($profileDate)) throw new \Exception("参数不全");
-            }else{
+            } else {
                 $profileDate[$AccountCateEnum->name] = $userName;
             }
             $profileDate['account_main'] = $AccountCateEnum->value;
@@ -166,8 +167,6 @@ class MemberLogic
             $wallet = (new MemberWallets())->save([
                 'mid' => $account->id
             ]);
-
-
             // 提交事务
             Db::commit();
         } catch (Exception $exception) {
@@ -178,10 +177,10 @@ class MemberLogic
         }
         unset($account->password);
         unset($account->safeword);
-        return new \stdClass([
+        return (object)[
             'profile' => $profile,
             'account' => $account,
             'wallet' => $wallet
-        ]);;
+        ];
     }
 }

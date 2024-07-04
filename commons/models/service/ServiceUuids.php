@@ -5,7 +5,7 @@
  *   +----------------------------------------------------------------------
  *   | 官方网站:   [ https://developer.kaadon.com ]
  *   +----------------------------------------------------------------------
- *   | Author:    [ kaadon <kaadon.com@gmail.com> codemiracle]
+ *   | Author:    [ kaadon.com <kaadon.com@gmail.com>]
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
@@ -17,8 +17,8 @@
 
 namespace commons\models\service;
 
-use app\common\model\SystemUuid;
 use commons\models\service\enum\UuidEnum;
+use Exception;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
@@ -30,6 +30,7 @@ class ServiceUuids extends BaseModel
      * @throws ModelNotFoundException
      * @throws DataNotFoundException
      * @throws DbException
+     * @throws Exception
      */
     public static function getUuid(UuidEnum $uuidEnum, int $index = 1):string
     {
@@ -50,7 +51,7 @@ class ServiceUuids extends BaseModel
                 $index++;
                 $uid = self::getUuid($uuidEnum, $index);
             } else {
-                throw new \Exception("Sorry, the UUID generation failed!");
+                throw new Exception("Sorry, the UUID generation failed!");
             }
         }
         return $uid;

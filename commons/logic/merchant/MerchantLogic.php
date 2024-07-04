@@ -5,7 +5,7 @@
  *   +----------------------------------------------------------------------
  *   | 官方网站:   [ https://developer.kaadon.com ]
  *   +----------------------------------------------------------------------
- *   | Author:    [ kaadon <kaadon.com@gmail.com> codemiracle]
+ *   | Author:    [ kaadon.com <kaadon.com@gmail.com>]
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
@@ -17,8 +17,6 @@
 
 namespace commons\logic\merchant;
 
-use commons\models\member\MemberProfiles;
-use commons\models\member\MemberWallets;
 use commons\models\merchant\enum\MerchantAccountCateEnum;
 use commons\models\merchant\MerchantAccounts;
 use commons\models\merchant\MerchantProfiles;
@@ -27,6 +25,7 @@ use commons\models\service\enum\UuidEnum;
 use commons\models\service\ServiceUuids;
 use Exception;
 use Kaadon\Uuid\Uuids;
+use stdClass;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -39,11 +38,11 @@ class MerchantLogic
 {
     /**
      * @param string $inviter
+     * @param bool $is_admin
      * @return array
      * @throws DataNotFoundException
      * @throws DbException
      * @throws ModelNotFoundException
-     * @throws Exception
      */
     public static function fromAgentData(string $inviter, $is_admin = false): array
     {
@@ -88,7 +87,7 @@ class MerchantLogic
      * 注册代理
      * @throws Exception
      */
-    public static function AddMerchant(MerchantAccountCateEnum $AccountCateEnum, string $userName, string $password, string $agentUuid, bool $is_admin = false,array $data = []): object
+    public static function AddMerchant(MerchantAccountCateEnum $AccountCateEnum, string $userName, string $password, string $agentUuid, bool $is_admin = false, array $data = []): stdClass
     {
         // 启动事务
         Db::startTrans();
@@ -114,7 +113,7 @@ class MerchantLogic
                     if (array_key_exists($case->name, $data)) $profileDate[$case->name] = $data[$case->name];
                 }
                 if (empty($profileDate)) throw new \Exception("参数不全");
-            }else{
+            } else {
                 $profileDate[$AccountCateEnum->name] = $userName;
             }
             $profileDate['account_main'] = $AccountCateEnum->value;
@@ -133,10 +132,10 @@ class MerchantLogic
         }
         unset($account->password);
         unset($account->safeword);
-        return new \stdClass([
+        return (object)[
             'profile' => $profile,
             'account' => $account,
             'wallet' => $wallet
-        ]);
+        ];
     }
 }

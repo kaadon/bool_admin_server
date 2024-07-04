@@ -5,7 +5,7 @@
  *   +----------------------------------------------------------------------
  *   | 官方网站:   [ https://developer.kaadon.com ]
  *   +----------------------------------------------------------------------
- *   | Author:    [ kaadon <kaadon.com@gmail.com> codemiracle]
+ *   | Author:    [ kaadon.com <kaadon.com@gmail.com>]
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
@@ -20,6 +20,7 @@ namespace app\admin\controller\member;
 use app\admin\AdminBase;
 use commons\logic\member\MemberLogic;
 use commons\models\member\enum\MemberAccountCateEnum;
+use commons\models\member\MemberAccounts;
 use commons\models\member\MemberProfiles;
 use think\App;
 use think\exception\ValidateException;
@@ -77,8 +78,8 @@ class Profiles extends AdminBase
     public function getOptions(): Json
     {
         return successes('', [
-            "cates" => MemberProfiles::getCates(),
-            "levels" => MemberProfiles::getLevels()
+            "cates" => MemberAccounts::getCates(),
+            "levels" => MemberAccounts::getLevels()
         ]);
     }
 
