@@ -35,6 +35,7 @@ use think\model\relation\HasOne;
 class MemberWallets extends BaseModel
 {
     /**
+     * 账户一对一关联
      * @return HasOne
      */
     public function account(): HasOne
@@ -44,21 +45,23 @@ class MemberWallets extends BaseModel
 
 
     /**
+     * 获取余额
      * @param int $mid
      * @param WalletCoinEnum|null $coin
      * @return mixed
      * @throws DataNotFoundException
      * @throws DbException
      * @throws ModelNotFoundException
+     * @throws \Exception
      */
     public static function getWallet(int $mid,?WalletCoinEnum $coin = null): mixed
     {
         $wallet = (new self())->where([['mid', '=', $mid]])
             ->withoutField("id,delete_time,create_time,update_time")
             ->find();
-        if (empty($wallet)) return null;
+        if (empty($wallet)) throw new \Exception('账户不存在');;
         if ($coin) {
-            $coinKey = $coin->value;
+            $coinKey = $coin->field();
             return $wallet->$coinKey;
         }else{
             return $wallet;
@@ -66,9 +69,10 @@ class MemberWallets extends BaseModel
     }
 
     /**
+     * 账变金额
      * @throws Exception
      */
-    public static function walletCharge(MemberWallets $MemberWallet, MemberRecordBusinessEnum $business, array $data, array $options = []): bool|MemberWallets
+    public static function walletCharge(MemberWallets $MemberWallet, MemberRecordBusinessEnum $business, array $data, array $options = []): bool
     {
         if (!isset($MemberWallet->mid)) throw new \Exception("THE AMOUNT DATA IS INCORRECT");
         $record_rows = [];
@@ -78,9 +82,9 @@ class MemberWallets extends BaseModel
             $coin = WalletCoinEnum::tryFrom((int)$key);
             if (!$coin) throw new Exception("CURRENCIES DO NOT EXIST");
             /**数据有误**/
-            $coinName = $coin->name;
+            $coinName = $coin->field();
             // 保存数据
-            $record_rows[] = [
+            $record = [
                 'mid' => $MemberWallet->mid,
                 'currency' => $coin->value,
                 'business' => $business->value,
@@ -88,19 +92,31 @@ class MemberWallets extends BaseModel
                 'now' => $item,
                 'after' => bcadd($MemberWallet->$coinName, $item,18),
             ];
-            if (!empty($optionsKeys)) foreach ($options as $optionKey => $option) {
+            foreach ($options as $optionKey => $option) {
                 $optionData = RecordOptionsEnum::tryFrom($optionKey);
-                if ($optionData) $record_rows[$optionData->value] = $option;
+                if ($optionData) $record[$optionData->value] = $option;
             }
+            $record_rows[] = $record;
             $MemberWalletData[$coinName] = Db::raw($coinName . '+' . $item);
         }
-        /*写入金额*/
+        /** 写入金额 **/
         $MemberWallet->save($MemberWalletData);
         /** 写入账变记录 **/
         $record = MemberRecords::initialize()
             ->saveAll($record_rows);
         if ($record->isEmpty()) throw new \Exception("RECORD WRITE FAILED");
-        return $MemberWallet;
+        return true;
+    }
+
+    public static function getWalletCoinCates(): array
+    {
+        return array_map(function ($case){
+            return [
+                'value' => $case->value,
+                'label' => $case->label(),
+                'unit' => $case->unit(),
+            ];
+        },WalletCoinEnum::cases());
     }
 
 }

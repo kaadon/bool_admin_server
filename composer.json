@@ -39,7 +39,8 @@
         "react/event-loop": "^1.5",
         "usdtcloud/tronservice": "^2.0",
         "ext-curl": "*",
-        "ext-yaconf": "*"
+        "ext-yaconf": "*",
+      "ext-bcmath": "*"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",

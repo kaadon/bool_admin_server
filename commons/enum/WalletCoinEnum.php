@@ -17,12 +17,67 @@
 
 namespace commons\enum;
 
+/**
+ * 钱包币种 枚举
+ * Class WalletCoinEnum
+ * @package commons\enum
+ */
 enum WalletCoinEnum:int
 {
-    case rmb = 1;
-    case usd = 2;
-    case trx = 3;
-    case usdt = 4;
-    case eth = 5;
-    case btc = 6;
+    case RMB = 1;
+    case USD = 2;
+    case TRX = 3;
+    case USDT = 4;
+    case ETH = 5;
+    case BTC = 6;
+    case SYSTEM = 99;
+
+
+    /**
+     * @return string
+     */
+    public function label(): string
+    {
+        return match ($this) {
+            self::RMB => '人民币',
+            self::USD => '美元',
+            self::TRX => 'TRX',
+            self::USDT => 'USDT',
+            self::ETH => 'ETH',
+            self::BTC => 'BTC',
+            self::SYSTEM => '金币',
+        };
+    }
+
+    /**
+     * @return string
+     */
+    public function unit(): string
+    {
+        return match ($this) {
+            self::RMB => '¥',
+            self::USD => '$',
+            self::TRX => 'TRX',
+            self::USDT => 'USDT',
+            self::ETH => 'ETH',
+            self::BTC => 'BTC',
+            self::SYSTEM => '金币',
+        };
+    }
+
+    /**
+     * @return string
+     */
+    public function field(): string
+    {
+        return match ($this) {
+            self::RMB => 'rmb',
+            self::USD => 'usd',
+            self::TRX => 'trx',
+            self::USDT => 'usdt',
+            self::ETH => 'eth',
+            self::BTC => 'btc',
+            self::SYSTEM => 'system',
+        };
+    }
 }

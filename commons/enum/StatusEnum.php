@@ -1,7 +1,7 @@
 <?php
 /**
  *   +----------------------------------------------------------------------
- *   | PROJECT:   [ authapi_server ]
+ *   | PROJECT:   [ bool_admin_server ]
  *   +----------------------------------------------------------------------
  *   | 官方网站:   [ https://developer.kaadon.com ]
  *   +----------------------------------------------------------------------
@@ -9,7 +9,7 @@
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
- *   | Date:      [ 2024/6/24 ]
+ *   | Date:      [ 2024/7/25 ]
  *   +----------------------------------------------------------------------
  *   | 版权所有    [ 2020~2024 kaadon.com ]
  *   +----------------------------------------------------------------------
@@ -18,12 +18,26 @@
 namespace commons\enum;
 
 /**
- * 记录类型 枚举
- * Class RecordOptionsEnum
+ * 状态类型 枚举
+ * Class StatusEnum
  * @package commons\enum
  */
-enum RecordOptionsEnum: string
+enum StatusEnum:int
 {
-    case REMARK = 'remark';
-    case SYSTEM = 'system';
+    case NORMAL = 1;
+    case DISABLE = -1;
+    case WAIT = 2;
+
+    /**
+     * @return string
+     */
+    public function label(): string
+    {
+        return match ($this) {
+            self::NORMAL => '正常',
+            self::DISABLE => '禁用',
+            self::WAIT => '待审核',
+        };
+    }
+
 }

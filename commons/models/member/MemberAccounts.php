@@ -45,8 +45,6 @@ class MemberAccounts extends BaseModel
             throw new Exception($exception->getMessage());
         }
     }
-
-
     public static function fromInviter(string $inviterCode): mixed
     {
         return (new self())->where("uuid", $inviterCode)->find();
