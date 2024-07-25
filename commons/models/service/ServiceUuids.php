@@ -59,40 +59,6 @@ class ServiceUuids extends BaseModel
         }
         return $uid;
     }
-
-    /**
-     * @param \commons\enum\AccountTypeEnum $uuidEnum
-     * @param int $index
-     * @return string
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-    public static function getUuidByCate(AccountTypeEnum $uuidEnum, int $index = 1): string
-    {
-        do {
-            $number = mt_rand(100000000, 999999999);
-            $uid = $uuidEnum->value . $number;
-        } while (!empty(self::where([
-            ['uuid', '=', $uid],
-            ['cate', '=', $uuidEnum->value]
-        ])->find()));
-        $ServiceUuids = new ServiceUuids();
-        $bool = $ServiceUuids->save([
-            'cate' => $uuidEnum->value,
-            'uuid' => $uid,
-        ]);
-        if (empty($bool)) {
-            if ($index < 3) {
-                $index++;
-                $uid = self::getUuid($uuidEnum, $index);
-            } else {
-                throw new Exception("Sorry, the UUID generation failed!");
-            }
-        }
-        return $uid;
-    }
-
     /**
      * 根据UUID 获取 账号枚举类型
      * @param string $uuid
