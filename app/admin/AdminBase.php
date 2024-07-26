@@ -19,11 +19,13 @@ namespace app\admin;
 
 use app\admin\traits\Crud;
 use app\BaseController;
+use think\App;
 use think\Model;
 use think\Validate;
 
 class AdminBase extends BaseController
 {
+    use Crud;
     protected Model|null $model = null;
 
     protected int|string|null $adminId;
@@ -31,13 +33,19 @@ class AdminBase extends BaseController
     protected Validate|array|string|null $validate;
     public bool $appdemo = false;
     protected string $prefix = "qu_";
+
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
+        $this->prefix = env('database.prefix');
+    }
+
     /**
      * 不导出的字段信息
      * @var array
      */
     protected array $noExportFields = ['delete_time', 'update_time'];
 
-    use Crud;
     /**
      * 初始化方法
      */
@@ -55,7 +63,6 @@ class AdminBase extends BaseController
      */
     protected function buildTableParames(): array
     {
-
         $page = $this->request->param('page', 1);
         $limit = $this->request->param('limit', 15);
         $filters = $this->request->param('filter', '{}');
@@ -95,18 +102,7 @@ class AdminBase extends BaseController
                 case '%*':
                     $where[] = [$key, 'LIKE', "%{$val}"];
                     break;
-                case '%like%':
-                case 'like':
-                    $where[] = [$key, 'LIKE', "%{$val}%"];
-                    break;
-                case 'like%':
-                    $where[] = [$key, 'LIKE', "{$val}%"];
-                    break;
-                case '%like':
-                    $where[] = [$key, 'LIKE', "%{$val}"];
-                    break;
                 case 'range':
-                    //  [$beginTime, $endTime] = explode(' - ', $val);
                     $where[] = [$key, '>=', $val[0]];
                     $where[] = [$key, '<=', $val[1]];
                     break;

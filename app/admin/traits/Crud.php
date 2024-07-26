@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\admin\traits;
 
+use commons\enum\StatusEnum;
 use think\exception\ValidateException;
 use think\facade\Db;
 use think\response\Json;
@@ -141,17 +142,15 @@ trait Crud
     {
         try {
             $id = $this->request->param('id');
-            $status = $this->request->param('status');
+            $status = $this->request->param('status') ? StatusEnum::tryFrom($this->request->param('status')) : null;
+            if (empty($status)) return error('状态错误');
             $row = $this->model->find($id);
-            if (empty($row)) {
-                return error('数据不存在');
-            }
-            $msg = $status == 0 ? "禁用" : "启用";
+            if (empty($row)) return error('数据不存在');
             $row->status = $status;
             $row->save();
-            return successes("状态{$msg}成功！");
+            return successes("修改状态成功:{$status->label()}");
         } catch (\Exception $e) {
-            return error("状态{$msg}失败");
+            return error("修改状态失败");
         }
     }
 
@@ -167,12 +166,10 @@ trait Crud
             if ($row->isEmpty()) {
                 return error('数据不存在');
             }
-            $save = $row->delete();
-            return $save ? successes('删除成功！') : error('删除失败');
+            return $row->delete() ? successes('删除成功！') : error('删除失败');
         } catch (\Exception $e) {
             return error('删除失败');
         }
-        return $save ? successes('删除成功！') : error('删除失败');
     }
 
     /**
@@ -181,10 +178,13 @@ trait Crud
      */
     public function selectList(): Json
     {
+
         try {
+            $field = $this->request->param('field');
+            $field = empty($field)?"name":"$field as label";
             $fields = $this->request->param('fields');
             if (empty($fields)) {
-                $fields = "id,name";
+                $fields = "id,{$field}";
             }
             $data = $this->model
                 ->field($fields)
@@ -203,23 +203,19 @@ trait Crud
     {
         try {
             list($limit, $where, $sortArr) = $this->buildTableParames();
-
             $page = $this->request->post('page', 1);
             $limit = $this->request->post('limit', 15);
             $show_id = $this->request->post('show_id', 'id'); //前端显示的value
             $query_field = $this->request->post('query_field', 'name'); //查询的参数名称
             $show_field = $this->request->post('show_field', 'name'); //前端显示的label
             $keyword = $this->request->post('keyword', ''); //查询的参数值
-
             $query_value = $this->request->post('query_value', ''); //编辑查询检索的值
-
             if ($query_value) {
                 $where[] = [$show_id, '=', $query_value];
             }
             if ($keyword) {
                 $where[] = [$query_field, 'LIKE', "%{$keyword}%"];
             }
-
             $fields = $show_id . ',' . $show_field;
             $count = $this->model
                 ->where($where)
@@ -237,14 +233,13 @@ trait Crud
                 ];
                 $list[] = $result;
             }
+            return success([
+                'count' => $count,
+                'data' => $list
+            ]);
         } catch (\Exception $e) {
             return error($e->getMessage());
         }
-        return success([
-            'count' => $count,
-            'data' => $list
-        ]);
-
     }
 
     /**

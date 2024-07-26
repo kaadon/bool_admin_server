@@ -17,6 +17,8 @@
 
 namespace commons\models\member;
 
+use commons\enum\AccountCateEnum;
+use commons\enum\StatusEnum;
 use commons\models\member\enum\MemberAccountCateEnum;
 use commons\models\member\enum\MemberAccountLevelEnum;
 use Exception;
@@ -45,10 +47,19 @@ class MemberAccounts extends BaseModel
             throw new Exception($exception->getMessage());
         }
     }
+
+    /**
+     * @param string $inviterCode
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public static function fromInviter(string $inviterCode): mixed
     {
         return (new self())->where("uuid", $inviterCode)->find();
     }
+
 
     /**
      * @return HasOne
@@ -126,6 +137,12 @@ class MemberAccounts extends BaseModel
         }
     }
 
+    /**
+     * @param int $id
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
     public function updateMemberById(int $id, array $data): array
     {
         try {
@@ -139,6 +156,12 @@ class MemberAccounts extends BaseModel
         }
     }
 
+    /**
+     * @param int $id
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
     public function updateMemberProfileById(int $id, array $data): array
     {
         try {
@@ -152,10 +175,14 @@ class MemberAccounts extends BaseModel
         }
     }
 
+    /**
+     * 获取会员注册类型 mobile email
+     * @return array
+     */
     public static function getCates(): array
     {
         $cates = [];
-        foreach (MemberAccountCateEnum::cases() as $case) {
+        foreach (AccountCateEnum::cases() as $case) {
             $cates[] = [
                 'label' => $case->name,
                 'value' => $case->value,
@@ -164,15 +191,36 @@ class MemberAccounts extends BaseModel
         return $cates;
     }
 
+    /**
+     * 获取会员等级 1 2 3 4 5
+     * @return array
+     */
     public static function getLevels(): array
     {
         $levels = [];
         foreach (MemberAccountLevelEnum::cases() as $case) {
             $levels[] = [
-                'label' => lang($case->name),
+                'label' => $case->label(),
                 'value' => $case->value,
             ];
         }
         return $levels;
     }
+
+    /**
+     * 获取会员状态 -1 1 2
+     * @return array
+     */
+    public static function getStatus(): array
+    {
+        $levels = [];
+        foreach (StatusEnum::cases() as $case) {
+            $levels[] = [
+                'label' => $case->label(),
+                'value' => $case->value,
+            ];
+        }
+        return $levels;
+    }
+
 }

@@ -18,8 +18,13 @@
 namespace app\admin\controller\member;
 
 use app\admin\AdminBase;
+use commons\enum\AccountCateEnum;
+use commons\enum\StatusEnum;
+use commons\Jobs\MemberJobs;
 use commons\logic\member\MemberLogic;
+use commons\models\member\enum\MemberAccountAuthenEnum;
 use commons\models\member\enum\MemberAccountCateEnum;
+use commons\models\member\enum\MemberTeamCateEnum;
 use commons\models\member\MemberAccounts;
 use commons\models\member\MemberProfiles;
 use think\App;
@@ -50,7 +55,11 @@ class Profiles extends AdminBase
                 ->where($where)
                 ->order($sortArr)
                 ->paginate($limit);
-            return paginate($list);
+            return paginate($list, [
+                "cates" => MemberAccounts::getCates(),
+                "levels" => MemberAccounts::getLevels(),
+                "status" => MemberAccounts::getStatus()
+            ]);
         } catch (\Exception $exception) {
             return error($exception->getMessage());
         }
@@ -61,18 +70,13 @@ class Profiles extends AdminBase
         $post = $this->request->post();
         try {
             $this->validate && validate($this->validate)->check($post);
-            $cate = MemberAccountCateEnum::tryFrom((int)$post['cate']);
+            $cate = AccountCateEnum::tryFrom((int)$post['cate']);
             if (empty($cate)) throw new \Exception('注册类型不存在...');
-            $result = MemberLogic::AddMember(MemberAccountCateEnum::system, $post['username'], $post['password'], $post['inviter'], true, [MemberAccountCateEnum::from($post['cate'])->name => $post['username']]);
-            if ($result) {
-                return successes('添加成功！');
-            }
-            return error('添加失败');
-        } catch (ValidateException $e) {
-            return error($e->getError());
+            MemberLogic::AddMember($cate, $post['username'], $post['password'], $post['inviter'] ?? null, true);
         } catch (\Exception $e) {
             return error('添加失败:' . $e->getMessage());
         }
+        return successes('添加成功');
     }
 
     public function getOptions(): Json
@@ -90,7 +94,35 @@ class Profiles extends AdminBase
 
     public function delete(): Json
     {
-        return error('站不支持删除炒作');
+        return error('占时不支持删除操作');
+    }
+    public function authen(): Json
+    {
+        $post = $this->request->post();
+        $post['authen'] = isset($post['authen'])? StatusEnum::tryFrom($post['authen']) : null;
+        if (empty($post['authen'])) return error('认证状态错误');
+        try {
+            $account = (new MemberAccounts())->where([
+                'id' => $post['mid'],
+                'authen' => StatusEnum::WAIT->value
+            ])->find();
+            if (empty($account)) return error('会员不存在或已认证');
+            if ($post['authen'] == StatusEnum::DISABLE) {
+                $account->authen =$post['authen']->value;
+                $account->save();
+                $profile = $account->profile;
+                $profile->save([
+                    'verify' => null
+                ]);
+            } else {
+                $account->authen = StatusEnum::NORMAL->value;
+                $account->save();
+                $account->inviter_line = line_array($account->inviter_line, '|', true);
+            }
+            return successes('认证成功');
+        } catch (\Exception $e) {
+            return error('添加失败:' . $e->getMessage());
+        }
     }
 
 }

@@ -19,7 +19,6 @@ use Kaadon\ThinkBase\utils\Upload;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
-use think\facade\Log;
 use think\File;
 use think\response\Json;
 
