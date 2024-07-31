@@ -8,7 +8,7 @@
 
 // 应用公共文件
 
-use commons\models\system\SystemConfig;
+use resources\model\system\SystemConfig;
 use Symfony\Component\VarExporter\VarExporter;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;

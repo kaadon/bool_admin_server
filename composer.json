@@ -49,7 +49,7 @@
     "autoload": {
         "psr-4": {
             "app\\": "app",
-            "commons\\": "commons"
+            "resources\\": "resources"
         },
         "psr-0": {
             "": "extend/"

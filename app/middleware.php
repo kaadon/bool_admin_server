@@ -1,8 +1,8 @@
 <?php
 // 全局中间件定义文件
 
-use commons\middleware\AllowCrossDomain;
-use commons\middleware\VisitLog;
+use resources\middleware\AllowCrossDomain;
+use resources\middleware\VisitLog;
 
 return [
     // 全局请求缓存

@@ -18,9 +18,9 @@
 namespace app\admin\controller\merchant;
 
 use app\admin\AdminBase;
-use commons\logic\merchant\MerchantLogic;
-use commons\models\merchant\enum\MerchantAccountCateEnum;
-use commons\models\merchant\MerchantProfiles;
+use resources\logic\merchant\MerchantLogic;
+use resources\model\merchant\enum\MerchantAccountCateEnum;
+use resources\model\merchant\MerchantProfiles;
 use think\App;
 use think\exception\ValidateException;
 use think\response\Json;

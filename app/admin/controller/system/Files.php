@@ -13,6 +13,6 @@ class Files extends AdminBase
     public function __construct(App $app)
     {
         parent::__construct($app);
-        $this->model = new \commons\models\system\SystemFiles();
+        $this->model = new \resources\model\system\SystemFiles();
     }
 }

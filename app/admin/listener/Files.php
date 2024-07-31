@@ -3,7 +3,7 @@ declare (strict_types = 1);
 
 namespace app\admin\listener;
 
-use commons\models\system\SystemFiles;
+use resources\model\system\SystemFiles;
 use Kaadon\ThinkBase\interfaces\FileListenerInterface;
 
 class Files implements FileListenerInterface

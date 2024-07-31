@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\admin\traits;
 
-use commons\enum\StatusEnum;
+use resources\enum\StatusEnum;
 use think\exception\ValidateException;
 use think\facade\Db;
 use think\response\Json;

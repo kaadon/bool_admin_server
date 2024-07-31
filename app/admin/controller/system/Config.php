@@ -16,7 +16,7 @@ class Config extends AdminBase
     {
         parent::__construct($app);
 
-        $this->model = new \commons\models\system\SystemConfig();
+        $this->model = new \resources\model\system\SystemConfig();
     }
 
     /**

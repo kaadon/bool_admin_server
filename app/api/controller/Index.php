@@ -4,7 +4,7 @@ declare (strict_types = 1);
 namespace app\api\controller;
 
 
-use commons\models\member\enum\MemberAccountCateEnum;
+use resources\model\member\enum\MemberAccountCateEnum;
 
 
 class Index

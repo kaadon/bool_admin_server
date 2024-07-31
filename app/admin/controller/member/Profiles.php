@@ -18,15 +18,15 @@
 namespace app\admin\controller\member;
 
 use app\admin\AdminBase;
-use commons\enum\AccountCateEnum;
-use commons\enum\StatusEnum;
-use commons\Jobs\MemberJobs;
-use commons\logic\member\MemberLogic;
-use commons\models\member\enum\MemberAccountAuthenEnum;
-use commons\models\member\enum\MemberAccountCateEnum;
-use commons\models\member\enum\MemberTeamCateEnum;
-use commons\models\member\MemberAccounts;
-use commons\models\member\MemberProfiles;
+use resources\enum\AccountCateEnum;
+use resources\enum\StatusEnum;
+use resources\Jobs\MemberJobs;
+use resources\logic\member\MemberLogic;
+use resources\model\member\enum\MemberAccountAuthenEnum;
+use resources\model\member\enum\MemberAccountCateEnum;
+use resources\model\member\enum\MemberTeamCateEnum;
+use resources\model\member\MemberAccounts;
+use resources\model\member\MemberProfiles;
 use think\App;
 use think\exception\ValidateException;
 use think\response\Json;
