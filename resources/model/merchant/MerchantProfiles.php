@@ -56,13 +56,6 @@ class MerchantProfiles extends BaseModel
         return  $this->hasOne(MerchantWallets::class, 'uid', 'uid');
     }
 
-    /**
-     * @return \think\model\relation\HasOne
-     */
-    public function profile(): HasOne
-    {
-        return $this->hasOne(MerchantProfiles::class, 'uid', 'uid');
-    }
 
     /**
      * @throws \think\db\exception\ModelNotFoundException

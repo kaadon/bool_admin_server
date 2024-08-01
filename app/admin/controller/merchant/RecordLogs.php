@@ -40,7 +40,7 @@ class RecordLogs extends AdminBase
             $sortArr['after'] = 'desc';
             $time = time();
             foreach ($where as $key => $item) {
-                if ($item[0] === 'time') {
+                if ($item[0] === ($this->relationSearch ?humpToLine(lcfirst($this->model->getName())) .'.':'') .'time') {
                     $time = strtotime($item[2]);
                     unset($where[$key]);
                 }

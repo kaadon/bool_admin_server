@@ -39,6 +39,11 @@ class MemberRecords extends BaseModel
         return $this->hasOne(MemberProfiles::class, 'mid', 'mid');
     }
 
+    public function wallet():HasOne
+    {
+        return $this->hasOne(MemberWallets::class, 'mid', 'mid');
+    }
+
     /**
      * @param int|null $time
      *
@@ -64,7 +69,11 @@ class MemberRecords extends BaseModel
         if (is_null($time)) $time = time();
         $tableName = (new self())->getTable() . "_" . date('Ym', $time);
         $check = Db::query("show tables like '{$tableName}'");
-        if (empty($check)) return false;
+        if (empty($check)) {
+            if (date('Ym', $time) == date('Ym')) {
+                Db::execute(self::getCreateSql($time));
+            } else return false;
+        };
         return true;
     }
 

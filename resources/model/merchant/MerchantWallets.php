@@ -18,12 +18,13 @@
 namespace resources\model\merchant;
 
 use Exception;
+use Kaadon\ThinkBase\BaseClass\BaseModel;
 use resources\enum\CoinEnum;
 use resources\enum\RecordBusinessEnum;
 use resources\enum\RecordOptionsEnum;
-use Kaadon\ThinkBase\BaseClass\BaseModel;
 use think\facade\Db;
 use think\Model;
+use think\model\relation\HasMany;
 use think\model\relation\HasOne;
 
 /**
@@ -36,7 +37,23 @@ class MerchantWallets extends BaseModel
      */
     public function account(): HasOne
     {
-        return $this->hasOne(MerchantAccounts::class);
+        return $this->hasOne(MerchantAccounts::class, 'id', 'uid');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function profile(): HasOne
+    {
+        return $this->hasOne(MerchantProfiles::class, 'uid', 'uid');
+    }
+
+    /**
+     * @return \think\model\relation\HasMany
+     */
+    public function record(): HasMany
+    {
+        return $this->hasMany(MerchantRecords::class, 'uid', 'uid');
     }
 
     /**

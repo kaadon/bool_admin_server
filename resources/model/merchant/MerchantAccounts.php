@@ -24,6 +24,7 @@ use RedisException;
 use resources\enum\AccountCateEnum;
 use resources\enum\StatusEnum;
 use think\Model;
+use think\model\relation\HasMany;
 use think\model\relation\HasOne;
 
 /**
@@ -57,6 +58,11 @@ class MerchantAccounts extends BaseModel
     public function wallet():HasOne
     {
         return $this->hasOne(MerchantWallets::class, 'uid', 'id');
+    }
+
+    public function hasMany():HasMany
+    {
+        return $this->hasMany(MerchantRecords::class, 'uid', 'id');
     }
     /**
      * @param int $id

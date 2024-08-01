@@ -18,6 +18,7 @@
 namespace app\admin\controller\member;
 
 use app\admin\AdminBase;
+use Kaadon\ThinkBase\traits\ModelTrait;
 use resources\enum\CoinEnum;
 use resources\enum\RecordBusinessEnum;
 use resources\model\member\MemberWallets;

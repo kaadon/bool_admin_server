@@ -36,7 +36,23 @@ class MerchantRecords extends BaseModel
      */
     public function account(): HasOne
     {
-        return $this->HasOne(MemberAccounts::class, 'mid', 'id');
+        return $this->HasOne(MemberAccounts::class,'id','uid');
+    }
+
+    /**
+     * @return \think\model\relation\HasOne
+     */
+    public function profile():HasOne
+    {
+        return $this->hasOne(MerchantProfiles::class,'uid','uid');
+    }
+
+    /**
+     * @return \think\model\relation\HasOne
+     */
+    public function wallet():HasOne
+    {
+        return $this->hasOne(MerchantWallets::class,'uid','uid');
     }
 
     /**
@@ -64,7 +80,11 @@ class MerchantRecords extends BaseModel
         if (is_null($time)) $time = time();
         $tableName = (new self())->getTable() . "_" . date('Ym', $time);
         $check = Db::query("show tables like '{$tableName}'");
-        if (empty($check)) return false;
+        if (empty($check)) {
+            if (date('Ym', $time) == date('Ym')) {
+                Db::execute(self::getCreateSql($time));
+            } else return false;
+        };
         return true;
     }
 
@@ -95,7 +115,7 @@ class MerchantRecords extends BaseModel
         return <<<EOT
 CREATE TABLE `{$tableName}` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '系统编号',
-  `mid` varchar(11) CHARACTER SET utf8 NOT NULL COMMENT '用户账号',
+  `uid` varchar(11) CHARACTER SET utf8 NOT NULL COMMENT '用户账号',
   `currency` tinyint(4) NOT NULL COMMENT '具体货币;见 WalletCoinEnum',
   `business` tinyint(4) NOT NULL COMMENT '具体业务:见 RecordBusinessEnum',
   `before` decimal(30,12) NOT NULL DEFAULT '0.000000000000' COMMENT '原本货币数量',
@@ -111,7 +131,7 @@ CREATE TABLE `{$tableName}` (
   KEY `currency` (`currency`) USING BTREE,
   KEY `business` (`business`) USING BTREE,
   KEY `now` (`now`) USING BTREE,
-  KEY `mid` (`mid`) USING BTREE,
+  KEY `uid` (`uid`) USING BTREE,
   KEY `after` (`after`) USING BTREE,
   KEY `before` (`before`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT={$AUTO_INCREMENT} DEFAULT CHARSET=utf8mb4 COMMENT='用户账变记录 - {$tableName}';

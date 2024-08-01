@@ -17,6 +17,7 @@
 
 namespace resources\model\member;
 
+use Kaadon\ThinkBase\traits\ModelTrait;
 use resources\enum\RecordBusinessEnum;
 use resources\enum\RecordOptionsEnum;
 use resources\enum\CoinEnum;
@@ -27,6 +28,7 @@ use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\Db;
 use think\Model;
+use think\model\relation\HasMany;
 use think\model\relation\HasOne;
 
 /**
@@ -34,6 +36,7 @@ use think\model\relation\HasOne;
  */
 class MemberWallets extends BaseModel
 {
+    use ModelTrait;
     /**
      * 账户一对一关联
      * @return HasOne
@@ -43,6 +46,15 @@ class MemberWallets extends BaseModel
         return $this->hasOne(MemberAccounts::class, 'id', 'mid');
     }
 
+    public function profile(): HasOne
+    {
+        return $this->hasOne(MemberProfiles::class, 'mid', 'mid');
+    }
+
+    public function record():HasMany
+    {
+        return $this->hasMany(MemberRecords::class,'mid','mid');
+    }
 
     /**
      * 获取余额

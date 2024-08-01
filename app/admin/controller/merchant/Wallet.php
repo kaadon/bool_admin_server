@@ -40,9 +40,9 @@ class Wallet extends AdminBase
             //逻辑代码
             list($limit, $where, $sortArr) = $this->buildTableParames();
             $list = $this->model
-                ->withJoin([
-                    'profile' => ['mobile', 'email']
-                ])
+//                ->withJoin([
+//                    'profile' => ['mobile', 'email']
+//                ])
                 ->where($where)
                 ->order($sortArr)
                 ->paginate($limit);
@@ -50,7 +50,7 @@ class Wallet extends AdminBase
                 'coins' => $this->model::getWalletCoinCates(),
             ]);
         } catch (\Exception $exception) {
-            return error($exception->getMessage());
+            return error($exception->getMessage(), $exception->getCode(), $exception->getTrace());
         }
     }
 
