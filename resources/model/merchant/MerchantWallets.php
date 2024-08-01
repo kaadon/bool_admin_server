@@ -17,13 +17,17 @@
 
 namespace resources\model\merchant;
 
+use Exception;
 use resources\enum\CoinEnum;
-use resources\model\member\enum\MerchantRecordBusinessEnum;
-use resources\model\member\MemberWallets;
+use resources\enum\RecordBusinessEnum;
+use resources\enum\RecordOptionsEnum;
+use resources\model\merchant\enum\MerchantRecordBusinessEnum;
+use resources\model\merchant\MemberWallets;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
+use think\facade\Db;
 use think\Model;
 use think\model\relation\HasOne;
 
@@ -41,67 +45,64 @@ class MerchantWallets extends BaseModel
     }
 
     /**
-     * @param int $uid
-     * @return array
-     * @throws DataNotFoundException
-     * @throws DbException
-     * @throws ModelNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \Exception
      */
-    public static function getWallet(int $uid,?CoinEnum $coin = null): mixed
+    public static function getWallet(int $uid, ?CoinEnum $coin = null): mixed
     {
         $wallet = (new self())->where([['uid', '=', $uid]])
             ->withoutField("id,delete_time,create_time,update_time")
             ->find();
-        if (empty($wallet)) return null;
+        if (empty($wallet)) throw new \Exception('账户不存在');;
         if ($coin) {
-            $coinKey = $coin->value;
+            $coinKey = $coin->field();
+            if (!isset($wallet->$coinKey)) throw new \Exception('币种不存在');
             return $wallet->$coinKey;
         }else{
             return $wallet;
         }
     }
-    public static function walletCharge(MerchantWallets $MerchantWallet, MerchantRecordBusinessEnum $business, array $data, int $create_time, array $options = []): bool|MerchantWallets
+
+    /**
+     * @throws \Exception
+     */
+    public static function walletCharge(MerchantWallets $wallet, RecordBusinessEnum $business, array $data, array $options = []): bool
     {
-        if ($MerchantWallet->uid) throw new \Exception("THE AMOUNT DATA IS INCORRECT");
+        if (!isset($wallet->uid)) throw new \Exception("THE WALLET DOES NOT EXIST");
         $record_rows = [];
         $MemberWalletData = [];
-        if (count($data)) throw new \Exception("THE AMOUNT DATA IS INCORRECT");
+        if (count($data) === 0) throw new \Exception("THE AMOUNT DATA IS INCORRECT");
         foreach ($data as $key => $item) {
-            // 数据不对
-            if (count($item) != 3) {
-                throw new Exception("THE AMOUNT DATA IS INCORRECT");
-            }
             $coin = CoinEnum::tryFrom((int)$key);
             if (!$coin) throw new Exception("CURRENCIES DO NOT EXIST");
-
             /**数据有误**/
-            if ($item[2] < 0) {
-                throw new Exception("THE AMOUNT CHANGE CANNOT BE LESS THAN 0");
-            }
+            $coinName = $coin->field();
             // 保存数据
-            $record_rows[] = [
-                'mid' => $MerchantWallet->uid,
+            $record = [
+                'uid' => $wallet->uid,
                 'currency' => $coin->value,
                 'business' => $business->value,
-                'before' => $item[0],
-                'now' => $item[1],
-                'after' => $item[2],
+                'before' => $wallet->$coinName,
+                'now' => $item,
+                'after' => bcadd($wallet->$coinName, $item,18),
             ];
-
-            if (!empty($optionsKeys)) foreach ($options as $optionKey => $option) {
-                $optionData = MerchantRecordBusinessEnum::tryFrom($optionKey);
-                if ($optionData) $record_rows[$optionData->value] = $option;
+            foreach ($options as $optionKey => $option) {
+                $optionData = RecordOptionsEnum::tryFrom($optionKey);
+                if ($optionData) $record[$optionData->value] = $option;
             }
-            $MemberWalletData[$coin->name] = Db::raw($coin->name . '+' . $item[1]);
+            $record_rows[] = $record;
+            $MemberWalletData[$coinName] = Db::raw($coinName . '+' . $item);
         }
-        /*写入金额*/
-        $MerchantWallet->save($MemberWalletData);
+        /** 写入金额 **/
+       $bool = $wallet->save($MemberWalletData);
+       if (empty($bool)) throw new \Exception("AMOUNT WRITE FAILED");
         /** 写入账变记录 **/
-        $record = MerchantRecords::initialize($create_time)
+        $record = MerchantRecords::initialize()
             ->saveAll($record_rows);
         if ($record->isEmpty()) throw new \Exception("RECORD WRITE FAILED");
-        return $MerchantWallet;
+        return true;
     }
-
 
 }

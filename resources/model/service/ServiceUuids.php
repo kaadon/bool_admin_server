@@ -67,9 +67,9 @@ class ServiceUuids extends BaseModel
      */
     public static function getAccountType(string $uuid): AccountTypeEnum
     {
-        $caseArr = array_filter(AccountTypeEnum::cases(), function ($case) use ($uuid) {
+        $caseArr = array_values(array_filter(AccountTypeEnum::cases(), function ($case) use ($uuid) {
             return substr($uuid, 0, 2) == $case->uuidField();
-        });
+        }));
         if (empty($caseArr)) throw new \Exception("The UUID is incorrect");
         return array_values($caseArr)[0];
     }

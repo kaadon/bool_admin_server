@@ -20,7 +20,7 @@ namespace resources\enum;
 enum RecordBusinessEnum: int
 {
     case SYSTEM_CHANGE = 1;
-    public function getName(): string
+    public function label(): string
     {
         return match ($this) {
             self::SYSTEM_CHANGE => '系统变更',

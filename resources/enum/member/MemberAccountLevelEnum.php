@@ -15,10 +15,9 @@
  *   +----------------------------------------------------------------------
  **/
 
-namespace resources\model\member\enum;
+namespace resources\enum\member;
 
-use resources\model\member\MemberLevels;
-use resources\model\member\MemberRecords;
+use resources\model\system\SystemMemberLevels;
 
 enum MemberAccountLevelEnum: int
 {
@@ -58,10 +57,10 @@ enum MemberAccountLevelEnum: int
      */
     public function getLevelOptions(): ?array
     {
-        $option = (new MemberLevels())->where('cate', $this->value)
+        $option = (new SystemMemberLevels())->where('cate', $this->value)
             ->withoutField('id,cate,delete_time,update_time,create_time')
             ->find();
-        if (!$option) return null;
+        if (empty($option)) return null;
         return array_merge($option->toArray(), match ($this) {
             self::ORDINARY_MEMBER, self::ONE_MEMBERSHIP => [],
             self::TWO_MEMBERSHIP => [

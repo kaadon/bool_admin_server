@@ -9,17 +9,17 @@
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
- *   | Date:      [ 2024/6/14 ]
+ *   | Date:      [ 2024/7/26 ]
  *   +----------------------------------------------------------------------
  *   | 版权所有    [ 2020~2024 kaadon.com ]
  *   +----------------------------------------------------------------------
  **/
 
-namespace resources\model\service\enum;
+namespace resources\model\system;
 
-enum UuidEnum : string
+use Kaadon\ThinkBase\BaseClass\BaseModel;
+
+class SystemMemberLevels extends BaseModel
 {
-    case Merchant = 'me';
-    case Member = 'mb';
-}
 
+}

@@ -19,10 +19,10 @@ namespace resources\model\merchant;
 
 use Exception;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
+use Kaadon\ThinkBase\traits\ModelTrait;
 use RedisException;
-use think\db\exception\DataNotFoundException;
-use think\db\exception\DbException;
-use think\db\exception\ModelNotFoundException;
+use resources\enum\AccountCateEnum;
+use resources\enum\StatusEnum;
 use think\Model;
 use think\model\relation\HasOne;
 
@@ -31,10 +31,7 @@ use think\model\relation\HasOne;
  */
 class MerchantAccounts extends BaseModel
 {
-    /**
-     * @var string
-     */
-    private string $cacheKey = 'merchant_accounts:';
+    use ModelTrait;
 
     /**
      * @param Model $model
@@ -43,39 +40,7 @@ class MerchantAccounts extends BaseModel
      */
     public function clearCache(Model $model): void
     {
-        try {
-            //逻辑代码
-            redisCacheDel($this->cacheKey . 'id:' . $model->id);
-        } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
-        }
-    }
-
-    /**
-     * @param int $id
-     * @return array
-     * @throws RedisException
-     * @throws DataNotFoundException
-     * @throws DbException
-     * @throws ModelNotFoundException
-     * @throws Exception
-     */
-    public function getAccountById(int $id): array
-    {
-        try {
-            //逻辑代码
-            if (redisCacheGet($this->cacheKey . 'id:' . $id)) return redisCacheGet($this->cacheKey . 'id:' . $id);
-            $account = $this->find($id);
-            if (empty($account)) return [];
-            $data = [
-                'profile' => $account->profile->toArray(),
-                'account' => $account->toArray()
-            ];
-            redisCacheSet($this->cacheKey . 'id:' . $id, $data, 3600);
-            return $data;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+        if (isset($model->id)) redisCacheDel('merchant_accounts:id:' . $model->id);
     }
 
     /**
@@ -83,6 +48,67 @@ class MerchantAccounts extends BaseModel
      */
     public function profile(): HasOne
     {
-        return $this->hasOne(MerchantProfiles::class,'uid','id');
+        return $this->hasOne(MerchantProfiles::class, 'uid', 'id');
+    }
+
+    /**
+     * @return \think\model\relation\HasOne
+     */
+    public function wallet():HasOne
+    {
+        return $this->hasOne(MerchantWallets::class, 'uid', 'id');
+    }
+    /**
+     * @param int $id
+     * @return object|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \Exception
+     */
+    public static function getAccountById(int $id): ?object
+    {
+        //逻辑代码
+        $account = redisCacheGet('merchant_accounts:id:' . $id);
+        if (empty($account)) {
+            $account = (new self())->where('id', $id)->find();
+            if (!empty($account)) {
+                $account = $account->toArray();
+                redisCacheSet('merchant_accounts:id:' . $id, $account, 3600);
+            }
+        }
+        return $account ? (object)$account : null;
+    }
+
+    /**
+     * 获取会员注册类型 mobile email
+     * @return array
+     */
+    public static function getCates(): array
+    {
+        $cates = [];
+        foreach (AccountCateEnum::cases() as $case) {
+            $cates[] = [
+                'label' => $case->label(),
+                'value' => $case->value,
+            ];
+        }
+        return $cates;
+    }
+
+    /**
+     * 获取会员状态 -1 1 2
+     * @return array
+     */
+    public static function getStatus(): array
+    {
+        $levels = [];
+        foreach (StatusEnum::cases() as $case) {
+            $levels[] = [
+                'label' => $case->label(),
+                'value' => $case->value,
+            ];
+        }
+        return $levels;
     }
 }

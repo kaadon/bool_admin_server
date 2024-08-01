@@ -18,14 +18,13 @@
 namespace resources\model\member;
 
 use resources\enum\AccountCateEnum;
+use resources\enum\member\MemberAccountLevelEnum;
 use resources\enum\StatusEnum;
-use resources\model\member\enum\MemberAccountCateEnum;
-use resources\model\member\enum\MemberAccountLevelEnum;
 use Exception;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use Kaadon\ThinkBase\traits\ModelTrait;
-use think\facade\Db;
 use think\Model;
+use think\model\relation\HasMany;
 use think\model\relation\HasOne;
 
 /**
@@ -40,12 +39,7 @@ class MemberAccounts extends BaseModel
      */
     public static function clearCache(Model $model): void
     {
-        try {
-            //逻辑代码
-            redisCacheDel('member_accounts:id:' . $model->id);
-        } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
-        }
+        if (isset($model->id)) redisCacheDel('member_accounts:id:' . $model->id);
     }
 
     /**
@@ -62,6 +56,7 @@ class MemberAccounts extends BaseModel
 
 
     /**
+     * 资料
      * @return HasOne
      */
     public function profile(): HasOne
@@ -69,6 +64,22 @@ class MemberAccounts extends BaseModel
         return $this->hasOne(MemberProfiles::class, 'mid', 'id');
     }
 
+    /**
+     * 钱包
+     * @return \think\model\relation\HasOne
+     */
+    public function wallet():HasOne
+    {
+        return $this->hasOne(MemberWallets::class,'mid','id');
+    }
+    /**
+     * 变更记录
+     * @return \think\model\relation\HasMany
+     */
+    public function record():HasMany
+    {
+        return $this->HasMany(MemberRecords::class,'mid','id');
+    }
     /**
      * @param int $id
      * @return object
@@ -92,90 +103,6 @@ class MemberAccounts extends BaseModel
         }
     }
     /**
-     * 添加会员
-     * @param string $email
-     * @param string $inviterCode
-     * @param string $register_ip
-     * @param string $password
-     * @param string $safeword
-     * @return array
-     * @throws Exception
-     */
-    public function addMemberByEmail(string $email, string $inviterCode, $register_ip = '0.0.0.0', string $password = "123456", string $safeword = "123456",): array
-    {
-        if (self::profile()->where(['email' => $email])->find()) throw new Exception('邮箱已存在');
-        $inviter = self::where('uuid', $inviterCode)->find();
-        if (empty($inviter) && $inviterCode !== "0") throw new \Exception('邀请人不存在');
-        $accountData = [
-            "floor" => $inviter ? $inviter->floor + 1 : 0,
-            "inviter_line" => $inviter ? $inviter->inviter_line . "$inviter->id" : "0|",
-            "agent_line" => $inviter ? $inviter->agent_line : "0|",
-            'uuid' => MemberUuids::getUuid(1),
-            'email' => $email,
-            'inviter' => $inviterCode,
-            'register_ip' => $register_ip,
-            "safeword" => password_hash($password, PASSWORD_DEFAULT),
-            "password" => password_hash($safeword, PASSWORD_DEFAULT),
-        ];
-        // 启动事务
-        Db::startTrans();
-        try {
-            //逻辑代码
-            $account = self::create($accountData);
-            $profileData = [
-                'account_main' => 1,
-                'email' => $email,
-            ];
-            $profile = $account->profile()->save($profileData);
-            // 提交事务
-            Db::commit();
-            return ['account' => $account->toArray(), 'profile' => $profile->toArray()];
-        } catch (\Exception $exception) {
-            // 回滚事务
-            Db::rollback();
-            throw new \Exception($exception->getMessage());
-        }
-    }
-
-    /**
-     * @param int $id
-     * @param array $data
-     * @return array
-     * @throws \Exception
-     */
-    public function updateMemberById(int $id, array $data): array
-    {
-        try {
-            //逻辑代码
-            $account = self::find($id);
-            if (empty($account)) return [];
-            $account->save($data);
-            return ['account' => $account];
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
-    }
-
-    /**
-     * @param int $id
-     * @param array $data
-     * @return array
-     * @throws \Exception
-     */
-    public function updateMemberProfileById(int $id, array $data): array
-    {
-        try {
-            //逻辑代码
-            $account = self::find($id);
-            if (empty($account)) return [];
-            $account->profile()->save($data);
-            return ['profile' => $account->profile];
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
-    }
-
-    /**
      * 获取会员注册类型 mobile email
      * @return array
      */
@@ -184,13 +111,12 @@ class MemberAccounts extends BaseModel
         $cates = [];
         foreach (AccountCateEnum::cases() as $case) {
             $cates[] = [
-                'label' => $case->name,
+                'label' => $case->label(),
                 'value' => $case->value,
             ];
         }
         return $cates;
     }
-
     /**
      * 获取会员等级 1 2 3 4 5
      * @return array

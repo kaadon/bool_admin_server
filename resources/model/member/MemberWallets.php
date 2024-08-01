@@ -17,9 +17,9 @@
 
 namespace resources\model\member;
 
+use resources\enum\RecordBusinessEnum;
 use resources\enum\RecordOptionsEnum;
 use resources\enum\CoinEnum;
-use resources\model\member\enum\MemberRecordBusinessEnum;
 use Exception;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use think\db\exception\DataNotFoundException;
@@ -72,7 +72,7 @@ class MemberWallets extends BaseModel
      * 账变金额
      * @throws Exception
      */
-    public static function walletCharge(MemberWallets $MemberWallet, MemberRecordBusinessEnum $business, array $data, array $options = []): bool
+    public static function walletCharge(MemberWallets $MemberWallet, RecordBusinessEnum $business, array $data, array $options = []): bool
     {
         if (!isset($MemberWallet->mid)) throw new \Exception("THE AMOUNT DATA IS INCORRECT");
         $record_rows = [];

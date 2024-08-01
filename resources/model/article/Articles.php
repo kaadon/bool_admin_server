@@ -20,6 +20,10 @@ namespace resources\model\article;
 use resources\enum\ArticleCateEnum;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 
+/**
+ * Class Articles
+ * @mixin \think\Model
+ */
 class Articles extends BaseModel
 {
 

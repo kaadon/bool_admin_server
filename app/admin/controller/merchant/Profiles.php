@@ -83,6 +83,9 @@ class Profiles extends AdminBase
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getAgent():Json
     {
         return successes('', MerchantLogic::getAgent($this->request->param('inviter/s', '')));

@@ -17,7 +17,7 @@
 
 namespace resources\commands;
 
-use resources\model\member\MemberAccounts;
+use resources\model\merchant\MemberAccounts;
 use React\EventLoop\Loop;
 use think\console\Command;
 

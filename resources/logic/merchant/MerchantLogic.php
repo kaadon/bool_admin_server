@@ -17,15 +17,14 @@
 
 namespace resources\logic\merchant;
 
-use resources\model\merchant\enum\MerchantAccountCateEnum;
+use resources\enum\AccountCateEnum;
+use resources\enum\AccountTypeEnum;
 use resources\model\merchant\MerchantAccounts;
 use resources\model\merchant\MerchantProfiles;
 use resources\model\merchant\MerchantWallets;
-use resources\model\service\enum\UuidEnum;
 use resources\model\service\ServiceUuids;
 use Exception;
 use Kaadon\Uuid\Uuids;
-use stdClass;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -43,51 +42,54 @@ class MerchantLogic
      * @throws DataNotFoundException
      * @throws DbException
      * @throws ModelNotFoundException
+     * @throws \Exception
      */
-    public static function fromAgentData(string $inviter, $is_admin = false): array
+    public static function fromAgentData(string $inviter, bool $is_admin = false): array
     {
-        $inviterCate = substr($inviter, 0, 2);
-        if (UuidEnum::Merchant->value != $inviterCate) throw new Exception("THE_INVITATION_CODE_IS_INCORRECT");
-        $inviter = MerchantAccounts::where('uuid', $inviter)->find();
-        if (empty($inviter)) {
-            if (!$is_admin) {
-                throw new \Exception("THE_INVITATION_CODE_IS_INCORRECT");
-            } else {
-                $inviteData = [
-                    'floor' => "0",
-                    "inviter" => '',
-                    "agent_line" => "0|",
-                ];
-            }
-        } else {
-            $inviteData = [
-                'floor' => $inviter->floor + 1,
-                'inviter' => $inviter,
-                "agent_line" => $inviter->agent_line,
-            ];
-        }
-
-        return $inviteData;
+        if (empty($inviter) && $is_admin) return [
+            'floor' => 0,
+            "inviter_line" => "0|",
+            "agent_line" => "0|",
+        ];
+        if (empty($inviter)) throw new \Exception("邀请码不能为空");
+        $inviterEnum = ServiceUuids::getAccountType($inviter);
+        if ($inviterEnum !== AccountTypeEnum::MERCHANT) throw new \Exception("邀请码不正确");
+        //逻辑代码
+        $inviterData = (new MerchantAccounts)->where('uuid', $inviter)->find();
+        if (empty($inviterData)) throw new \Exception("邀请人不存在");
+        return [
+            'floor' => 0,
+            "inviter_line" => '0|',
+            "agent_line" => $inviterData->agent_line . $inviterData->id . '|',
+        ];
     }
 
-    public static function getAgent($inviter): array
+    /**
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \Exception
+     */
+    public static function getAgent($inviter): ?array
     {
-        $inviterCate = substr($inviter, 0, 2);
-        if (UuidEnum::Merchant->value != $inviterCate) return [$inviterCate];
-        $inviterData = MerchantAccounts::where('uuid', $inviter)->withJoin('profile')->find();
-        if (empty($inviterData)) return [];
+        if (empty($inviter)) return null;
+        $inviterEnum = ServiceUuids::getAccountType($inviter);
+        if ($inviterEnum !== AccountTypeEnum::MERCHANT) return null;
+        $inviterData = (new MerchantAccounts)->where(['uuid' => $inviter, 'status' => 1])->withJoin('profile')->find();
+        if (empty($inviterData)) return null;
         return [
-            'floor' => $inviterData->floor + 1,
+            'floor' => $inviterData->floor,
             'inviter' => $inviter,
             "agent_line" => $inviterData->agent_line
         ];
     }
 
+
     /**
      * 注册代理
      * @throws Exception
      */
-    public static function AddMerchant(MerchantAccountCateEnum $AccountCateEnum, string $userName, string $password, string $agentUuid, bool $is_admin = false, array $data = []): stdClass
+    public static function AddMerchant(AccountCateEnum $AccountCateEnum, string $userName, string $password, string $agentUuid, bool $is_admin = false, array $data = []): bool
     {
         // 启动事务
         Db::startTrans();
@@ -95,32 +97,21 @@ class MerchantLogic
             //逻辑代码
             $account = new MerchantAccounts();
             $inviterData = self::fromAgentData($agentUuid, $is_admin);
-            $createTime = time();
-
             /*创建用户主体*/
             $account->save(array_merge([
-                "uuid" => ServiceUuids::getUuid(UuidEnum::Merchant),
+                "uuid" =>  AccountTypeEnum::MERCHANT->getUuid(),
                 "api_id" => Uuids::getUuid4(),
                 "api_key" => md5($userName),
                 "password" => password_hash($password, PASSWORD_DEFAULT),
                 "safeword" => password_hash($password, PASSWORD_DEFAULT),
             ], $inviterData));
-
             /*创建用户资料*/
-            $profileDate = [];
-            if ($AccountCateEnum->value === MerchantAccountCateEnum::system->value && $is_admin) {
-                foreach (MerchantAccountCateEnum::cases() as $case) {
-                    if (array_key_exists($case->name, $data)) $profileDate[$case->name] = $data[$case->name];
-                }
-                if (empty($profileDate)) throw new \Exception("参数不全");
-            } else {
-                $profileDate[$AccountCateEnum->name] = $userName;
-            }
-            $profileDate['account_main'] = $AccountCateEnum->value;
-            $profileDate['uid'] = $account->id;
-            $profile = (new MerchantProfiles())->save($profileDate);
+            (new MerchantProfiles())->save([
+                $AccountCateEnum->name => $userName,
+                'mid' => $account->id
+            ]);
             /*创建用户钱包*/
-            $wallet = (new MerchantWallets())->save([
+            (new MerchantWallets())->save([
                 'uid' => $account->id
             ]);
             // 提交事务
@@ -130,12 +121,6 @@ class MerchantLogic
             Db::rollback();
             throw new Exception($exception->getMessage());
         }
-        unset($account->password);
-        unset($account->safeword);
-        return (object)[
-            'profile' => $profile,
-            'account' => $account,
-            'wallet' => $wallet
-        ];
+        return true;
     }
 }
