@@ -106,10 +106,10 @@ class MerchantLogic
                 "safeword" => password_hash($password, PASSWORD_DEFAULT),
             ], $inviterData));
             /*创建用户资料*/
-            (new MerchantProfiles())->save([
+            (new MerchantProfiles())->save(array_merge([
                 $AccountCateEnum->name => $userName,
-                'mid' => $account->id
-            ]);
+                'uid' => $account->id
+            ], $data));
             /*创建用户钱包*/
             (new MerchantWallets())->save([
                 'uid' => $account->id

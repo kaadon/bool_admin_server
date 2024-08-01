@@ -21,12 +21,7 @@ use Exception;
 use resources\enum\CoinEnum;
 use resources\enum\RecordBusinessEnum;
 use resources\enum\RecordOptionsEnum;
-use resources\model\merchant\enum\MerchantRecordBusinessEnum;
-use resources\model\merchant\MemberWallets;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
-use think\db\exception\DataNotFoundException;
-use think\db\exception\DbException;
-use think\db\exception\ModelNotFoundException;
 use think\facade\Db;
 use think\Model;
 use think\model\relation\HasOne;
@@ -105,4 +100,17 @@ class MerchantWallets extends BaseModel
         return true;
     }
 
+    /**
+     * @return array
+     */
+    public static function getWalletCoinCates(): array
+    {
+        return array_map(function ($case){
+            return [
+                'value' => $case->value,
+                'label' => $case->label(),
+                'unit' => $case->unit(),
+            ];
+        },CoinEnum::cases());
+    }
 }

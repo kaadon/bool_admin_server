@@ -18,8 +18,9 @@
 namespace app\admin\controller\merchant;
 
 use app\admin\AdminBase;
+use resources\enum\AccountCateEnum;
 use resources\logic\merchant\MerchantLogic;
-use resources\model\merchant\enum\MerchantAccountCateEnum;
+use resources\model\merchant\MerchantAccounts;
 use resources\model\merchant\MerchantProfiles;
 use think\App;
 use think\exception\ValidateException;
@@ -47,7 +48,10 @@ class Profiles extends AdminBase
                 ->where($where)
                 ->order($sortArr)
                 ->paginate($limit);
-            return paginate($list);
+            return paginate($list,[
+                "cates" => MerchantAccounts::getCates(),
+                "status" => MerchantAccounts::getStatus()
+            ]);
         } catch (\Exception $exception) {
             return error($exception->getMessage());
         }
@@ -57,9 +61,9 @@ class Profiles extends AdminBase
         $post = $this->request->post();
         try {
             $this->validate && validate($this->validate)->check($post);
-            $cate = MerchantAccountCateEnum::tryFrom((int)$post['cate']);
+            $cate = AccountCateEnum::tryFrom((int)$post['cate']);
             if (empty($cate)) throw new \Exception('注册类型不存在...');
-            $result = MerchantLogic::AddMerchant(MerchantAccountCateEnum::system, $post['username'], $post['password'], $post['inviter'], true, [MerchantAccountCateEnum::from($post['cate'])->name => $post['username']]);
+            $result = MerchantLogic::AddMerchant($cate, $post['username'], $post['password'], $post['inviter'], true, [MerchantAccountCateEnum::from($post['cate'])->name => $post['username']]);
             if ($result) {
                 return successes('添加成功！');
             }

@@ -22,15 +22,21 @@ use resources\enum\RecordBusinessEnum;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use think\facade\Db;
 use think\model\relation\BelongsTo;
+use think\model\relation\HasOne;
 
 class MemberRecords extends BaseModel
 {
     /**
-     * @return BelongsTo
+     * @return hasOne
      */
-    public function account(): BelongsTo
+    public function account(): hasOne
     {
-        return $this->belongsTo(MemberAccounts::class, 'mid', 'id');
+        return $this->hasOne(MemberAccounts::class, 'mid', 'id');
+    }
+
+    public function profile():HasOne
+    {
+        return $this->hasOne(MemberProfiles::class, 'mid', 'mid');
     }
 
     /**

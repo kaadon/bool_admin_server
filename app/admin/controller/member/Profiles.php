@@ -20,15 +20,10 @@ namespace app\admin\controller\member;
 use app\admin\AdminBase;
 use resources\enum\AccountCateEnum;
 use resources\enum\StatusEnum;
-use resources\Jobs\MemberJobs;
 use resources\logic\member\MemberLogic;
-use resources\model\merchant\enum\MemberAccountAuthenEnum;
-use resources\model\merchant\enum\MemberAccountCateEnum;
-use resources\model\merchant\enum\MemberTeamCateEnum;
-use resources\model\merchant\MemberAccounts;
-use resources\model\merchant\MemberProfiles;
+use resources\model\member\MemberAccounts;
+use resources\model\member\MemberProfiles;
 use think\App;
-use think\exception\ValidateException;
 use think\response\Json;
 
 class Profiles extends AdminBase
