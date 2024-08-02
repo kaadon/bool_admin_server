@@ -26,7 +26,6 @@ class CheckLogin
 {
     public function handle(Request $request, \Closure $next)
     {
-
         $controller = parse_lower($request->controller());
         $node = $request->root() . "/" . parseNodeStr($request->controller() . '/' . $request->action());
         $auth_config = config('auth');

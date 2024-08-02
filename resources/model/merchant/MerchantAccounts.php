@@ -60,10 +60,7 @@ class MerchantAccounts extends BaseModel
         return $this->hasOne(MerchantWallets::class, 'uid', 'id');
     }
 
-    public function hasMany():HasMany
-    {
-        return $this->hasMany(MerchantRecords::class, 'uid', 'id');
-    }
+
     /**
      * @param int $id
      * @return object|null

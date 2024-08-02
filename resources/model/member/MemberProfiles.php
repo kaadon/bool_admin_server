@@ -71,13 +71,6 @@ class MemberProfiles extends BaseModel
         return $this->hasOne(MemberWallets::class, 'mid', 'mid');
     }
 
-    /**
-     * @return \think\model\relation\HasMany
-     */
-    public function record():HasMany
-    {
-        return $this->hasMany(MemberRecords::class, 'mid', 'mid');
-    }
 
 
 

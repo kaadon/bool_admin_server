@@ -13,7 +13,7 @@ enum ConfigGroupEnum: string
     case UPLOAD = 'upload';
     case BLOCK = 'block';
 
-    public function getLabel(): string
+    public function label(): string
     {
         return match ($this) {
             self::SITE => '基础配置',

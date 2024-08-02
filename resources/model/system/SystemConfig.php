@@ -8,10 +8,10 @@ use Kaadon\ThinkBase\BaseClass\BaseModel;
 use Kaadon\ThinkBase\traits\ModelTrait;
 use RedisException;
 use resources\enum\ConfigGroupEnum;
+use resources\enum\ConfigTypeEnum;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
-use think\Model;
 
 
 class SystemConfig extends BaseModel
@@ -24,25 +24,24 @@ class SystemConfig extends BaseModel
     {
         try {
             //逻辑代码
-            if (isset($model->group))  redisCacheDel("config:groups:{$model->group}s");
-            if (isset($model->sign) && isset($model->group))  redisCacheDel("config:{$model->group}_{$model->sign}");
+            if (isset($model->group)) redisCacheDel("config:groups:{$model->group}s");
+            if (isset($model->sign) && isset($model->group)) redisCacheDel("config:{$model->group}_{$model->sign}");
         } catch (Exception $exception) {
             throw new Exception($exception->getMessage());
         }
     }
-    
+
     public function getGroupList(): array
     {
         return array_map(function ($item) {
-            return ['tab' => $item->getLabel(), 'value' => $item->value];
+            return ['label' => $item->label(), 'value' => $item->value];
         }, ConfigGroupEnum::cases());
     }
-
 
     /**
      * @param string $group
      * @return array|mixed|string
-     * @throws RedisException
+     * @throws Exception
      */
     public static function get_config_group(string $group): mixed
     {
@@ -65,7 +64,8 @@ class SystemConfig extends BaseModel
      * @return mixed|null
      * @throws DataNotFoundException
      * @throws DbException
-     * @throws ModelNotFoundException|RedisException
+     * @throws ModelNotFoundException
+     * @throws Exception
      */
     public static function get_config(string $group, string $sign): mixed
     {
@@ -114,14 +114,14 @@ class SystemConfig extends BaseModel
     /**
      * @param string $group
      * @param string $sign
-     * @param $value
+     * @param string|int|float|null $value
      * @param array $options
      * @return bool
      * @throws DataNotFoundException
      * @throws DbException
      * @throws ModelNotFoundException
      */
-    public static function set_config(string $group, string $sign, $value, array $options = []): bool
+    public static function set_config(string $group, string $sign, string|int|float|null $value, array $options = []): bool
     {
         $config = (new self())->where([
             ['group', '=', $group],
@@ -135,10 +135,13 @@ class SystemConfig extends BaseModel
                 'value' => $value
             ];
             if (isset($options['type'])) {
-                $insertData['type'] = $config['type'];
+                $insertData['type'] = $options['type'];
             }
-            if (isset($options['disabled'])) {
-                $insertData['disabled'] = $options['disabled'];
+            if (isset($options['title'])) {
+                $insertData['title'] = $options['title'];
+            }
+            if (isset($options['extend'])) {
+                $insertData['extend'] = $options['extend'];
             }
             if (isset($options['weigh'])) {
                 $insertData['weigh'] = $options['weigh'];
@@ -153,8 +156,18 @@ class SystemConfig extends BaseModel
         } else {
             $config->save(['value' => $value]);
         }
-        redisCacheSet("config:{$group}_{$sign}", $value);
         return true;
+    }
+
+    public function getConfigTypes(): array
+    {
+        return array_map(function ($case) {
+            return [
+                'value' => $case->value,
+                'label' => $case->label(),
+                'extend' => $case->getExtend()
+            ];
+        }, ConfigTypeEnum::cases());
     }
 
 }

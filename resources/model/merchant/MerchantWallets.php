@@ -48,13 +48,6 @@ class MerchantWallets extends BaseModel
         return $this->hasOne(MerchantProfiles::class, 'uid', 'uid');
     }
 
-    /**
-     * @return \think\model\relation\HasMany
-     */
-    public function record(): HasMany
-    {
-        return $this->hasMany(MerchantRecords::class, 'uid', 'uid');
-    }
 
     /**
      * @throws \think\db\exception\ModelNotFoundException

@@ -51,11 +51,6 @@ class MemberWallets extends BaseModel
         return $this->hasOne(MemberProfiles::class, 'mid', 'mid');
     }
 
-    public function record():HasMany
-    {
-        return $this->hasMany(MemberRecords::class,'mid','mid');
-    }
-
     /**
      * 获取余额
      * @param int $mid

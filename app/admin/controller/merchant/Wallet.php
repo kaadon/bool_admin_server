@@ -65,11 +65,11 @@ class Wallet extends AdminBase
         //逻辑代码
         $post = $this->request->post();
         $this->validate($post, [
-            'mid' => 'require',
+            'uid' => 'require',
             'amount' => 'require',
             'remark' => 'chsAlphaNum',
         ],[
-            'mid.require' => '会员ID不能为空',
+            'uid.require' => '会员ID不能为空',
             'amount.require' => '金额不能为空',
             'remark.chsAlphaNum' => '备注只能是中文、字母和数字',
         ]);

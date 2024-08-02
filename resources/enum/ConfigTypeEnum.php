@@ -40,7 +40,7 @@ enum ConfigTypeEnum:string
     case DATETIME_RANGE = 'datetime_range';
 
 
-    public function getTab(): string
+    public function label(): string
     {
         return match ($this) {
             self::INPUT => '输入型',
@@ -58,6 +58,7 @@ enum ConfigTypeEnum:string
             self::TIME_RANGE => '时间范围',
             self::DATE_RANGE => '日期范围',
             self::DATETIME_RANGE => '日期时间范围',
+
         };
     }
 

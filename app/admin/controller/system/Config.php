@@ -3,8 +3,9 @@
 namespace app\admin\controller\system;
 
 use app\admin\AdminBase;
+use Exception;
+use resources\model\system\SystemConfig;
 use think\App;
-use think\facade\Log;
 use think\response\Json;
 
 /**
@@ -15,8 +16,8 @@ class Config extends AdminBase
     public function __construct(App $app)
     {
         parent::__construct($app);
-
-        $this->model = new \resources\model\system\SystemConfig();
+        $this->model = new SystemConfig();
+        $this->validate = null;
     }
 
     /**
@@ -27,7 +28,7 @@ class Config extends AdminBase
         try {
             $groupList = $this->model->getGroupList();
             foreach ($groupList as $k => $v) {
-                $list = $this->model->field('name,title,value,remark')->where('group', $v['value'])->select();
+                $list = $this->model->field('name,title,value,remark,type,extend')->where('group', $v['value'])->select();
                 $detail = [];
                 foreach ($list as $key => $val) {
                     /**
@@ -40,10 +41,9 @@ class Config extends AdminBase
                 }
                 $groupList[$k]['detail'] = $detail;
             }
-            return successes("success", $groupList);
-        } catch (\Exception $e) {
-            Log::write("get config index error:" . $e);
-            return error('系统异常');
+            return successes("success", ['list' => $groupList,'types' => $this->model->getConfigTypes()]);
+        } catch (Exception $e) {
+            return error($e->getMessage());
         }
     }
 
@@ -57,24 +57,36 @@ class Config extends AdminBase
         return implode(',', $result);
     }
 
+    public function add(): Json
+    {
+        if ($this->appdemo) return error('演示站点禁止添加');
+        $post = $this->request->post();
+        try {
+            $this->validate && validate($this->validate)->check($post);
+            $result = set_config($post['group'], $post['sign'], $post['value'], $post);
+            if (!$result) throw new Exception('添加失败');
+        } catch (Exception $e) {
+            return error('添加失败:' . $e->getMessage());
+        }
+        return successes('添加成功！');
+    }
+
     public function update(): Json
     {
         if ($this->appdemo) return error('演示站点禁止修改');
         try {
             $post = $this->request->post();
+            $update = [];
             foreach ($post as $key => &$val) {
                 if (method_exists(self::class, '_' . $key)) $val = $this->{'_' . $key}($val);
-                $this->model
-                    ->where('name', $key)
-                    ->update([
-                        'value' => $val,
-                    ]);
-                redisCacheDel("config:{$key}");
+               $model = $this->model->where('name', $key)->find();
+                $update[] = ['id' => $model->id, 'value' => $val,'group'=>$model->group,'sign'=>$model->sign];
             }
-        } catch (\Exception $e) {
+            $this->model->saveAll($update);
+        } catch (Exception $e) {
             return error('保存失败');
         }
-        return successes('保存成功'.method_exists(self::class, '_' . $key));
+        return successes('保存成功');
     }
 
     public function getGroupList(): Json
@@ -93,7 +105,6 @@ class Config extends AdminBase
                 unset($addons[$k]);
             }
         }
-
         array_unshift($addons, 'local');
         return $addons;
     }

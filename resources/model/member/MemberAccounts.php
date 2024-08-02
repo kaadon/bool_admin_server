@@ -72,14 +72,7 @@ class MemberAccounts extends BaseModel
     {
         return $this->hasOne(MemberWallets::class,'mid','id');
     }
-    /**
-     * 变更记录
-     * @return \think\model\relation\HasMany
-     */
-    public function record():HasMany
-    {
-        return $this->HasMany(MemberRecords::class,'mid','id');
-    }
+
     /**
      * @param int $id
      * @return object
