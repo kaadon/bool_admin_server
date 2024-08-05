@@ -40,9 +40,9 @@ class Wallet extends AdminBase
             //逻辑代码
             list($limit, $where, $sortArr) = $this->buildTableParames();
             $list = $this->model
-//                ->withJoin([
-//                    'profile' => ['mobile', 'email']
-//                ])
+                ->withJoin([
+                    'profile' => ['mobile', 'email']
+                ])
                 ->where($where)
                 ->order($sortArr)
                 ->paginate($limit);
@@ -73,7 +73,7 @@ class Wallet extends AdminBase
             'amount.require' => '金额不能为空',
             'remark.chsAlphaNum' => '备注只能是中文、字母和数字',
         ]);
-        $row = $this->model::getWallet($post['mid']);
+        $row = $this->model::getWallet($post['uid']);
         if (empty($row)) return error('数据不存在');
         $bool = $this->model::walletCharge($row, RecordBusinessEnum::SYSTEM_CHANGE, [
             CoinEnum::SYSTEM->value => $post['amount']

@@ -39,7 +39,7 @@ class ServiceUuids extends BaseModel
     {
         do {
             $number = mt_rand(100000000, 999999999);
-            $uid = $uuidEnum->value . $number;
+            $uid = $uuidEnum->uuidField() . $number;
         } while (!empty(self::where([
             ['uuid', '=', $uid],
             ['cate', '=', $uuidEnum->value]

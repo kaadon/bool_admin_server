@@ -22,7 +22,6 @@ use resources\enum\RecordBusinessEnum;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use resources\model\member\MemberAccounts;
 use think\facade\Db;
-use think\model\relation\BelongsTo;
 use think\model\relation\HasOne;
 
 /**

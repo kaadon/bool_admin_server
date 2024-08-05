@@ -36,15 +36,14 @@ use think\facade\Db;
 class MerchantLogic
 {
     /**
-     * @param string $inviter
+     * @param string|null $inviter
      * @param bool $is_admin
      * @return array
-     * @throws DataNotFoundException
-     * @throws DbException
-     * @throws ModelNotFoundException
-     * @throws \Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
-    public static function fromAgentData(string $inviter, bool $is_admin = false): array
+    public static function fromAgentData(?string $inviter, bool $is_admin = false): array
     {
         if (empty($inviter) && $is_admin) return [
             'floor' => 0,
@@ -89,7 +88,7 @@ class MerchantLogic
      * 注册代理
      * @throws Exception
      */
-    public static function AddMerchant(AccountCateEnum $AccountCateEnum, string $userName, string $password, string $agentUuid, bool $is_admin = false, array $data = []): bool
+    public static function AddMerchant(AccountCateEnum $AccountCateEnum, string $userName, string $password, ?string $agentUuid, bool $is_admin = false, array $data = []): bool
     {
         // 启动事务
         Db::startTrans();
@@ -107,7 +106,7 @@ class MerchantLogic
             ], $inviterData));
             /*创建用户资料*/
             (new MerchantProfiles())->save(array_merge([
-                $AccountCateEnum->name => $userName,
+                $AccountCateEnum->field() => $userName,
                 'uid' => $account->id
             ], $data));
             /*创建用户钱包*/

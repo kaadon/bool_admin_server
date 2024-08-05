@@ -39,7 +39,7 @@ class MerchantAccounts extends BaseModel
      * @return void
      * @throws RedisException|Exception
      */
-    public function clearCache(Model $model): void
+    public static function clearCache(Model $model): void
     {
         if (isset($model->id)) redisCacheDel('merchant_accounts:id:' . $model->id);
     }

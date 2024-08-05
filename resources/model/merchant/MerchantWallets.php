@@ -119,6 +119,7 @@ class MerchantWallets extends BaseModel
             return [
                 'value' => $case->value,
                 'label' => $case->label(),
+                'field' => $case->field(),
                 'unit' => $case->unit(),
             ];
         },CoinEnum::cases());

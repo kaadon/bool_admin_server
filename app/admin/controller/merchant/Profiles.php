@@ -63,7 +63,7 @@ class Profiles extends AdminBase
             $this->validate && validate($this->validate)->check($post);
             $cate = AccountCateEnum::tryFrom((int)$post['cate']);
             if (empty($cate)) throw new \Exception('注册类型不存在...');
-            $result = MerchantLogic::AddMerchant($cate, $post['username'], $post['password'], $post['inviter'], true, [MerchantAccountCateEnum::from($post['cate'])->name => $post['username']]);
+            $result = MerchantLogic::AddMerchant($cate, $post['username'], $post['password'], $post['inviter']??null, true);
             if ($result) {
                 return successes('添加成功！');
             }
@@ -92,6 +92,6 @@ class Profiles extends AdminBase
      */
     public function getAgent():Json
     {
-        return successes('', MerchantLogic::getAgent($this->request->param('inviter/s', '')));
+        return successes('', MerchantLogic::getAgent($this->request->post('inviter/s', '')));
     }
 }

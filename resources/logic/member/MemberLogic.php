@@ -136,8 +136,8 @@ class MemberLogic
                 "safeword" => password_hash($password, PASSWORD_DEFAULT),
             ], $inviterData));
             /*创建用户资料*/
-            $profile = (new MemberProfiles())->save([
-                $AccountCateEnum->name => $userName,
+            (new MemberProfiles())->save([
+                $AccountCateEnum->field() => $userName,
                 'mid' => $account->id
             ]);
             /*创建用户钱包*/
