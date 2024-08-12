@@ -63,13 +63,13 @@ abstract class BaseController
      * 验证数据
      * @access protected
      * @param  array        $data     数据
-     * @param  string|array $validate 验证器名或者验证规则数组
+     * @param array|string $validate 验证器名或者验证规则数组
      * @param  array        $message  提示信息
      * @param  bool         $batch    是否批量验证
      * @return array|string|true
      * @throws ValidateException
      */
-    protected function validate(array $data, $validate, array $message = [], bool $batch = false): bool|array|string
+    protected function validate(array $data, array|string $validate, array $message = [], bool $batch = false): bool|array|string
     {
         if (is_array($validate)) {
             $v = new Validate();
@@ -79,7 +79,7 @@ abstract class BaseController
                 // 支持场景
                 [$validate, $scene] = explode('.', $validate);
             }
-            $class = false !== strpos($validate, '\\') ? $validate : $this->app->parseClass('validate', $validate);
+            $class = str_contains($validate, '\\') ? $validate : $this->app->parseClass('validate', $validate);
             $v     = new $class();
             if (!empty($scene)) {
                 $v->scene($scene);

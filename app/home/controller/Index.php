@@ -11,4 +11,5 @@ class Index
     {
         return successes("这是 Kaadon Admin 站点");
     }
+
 }

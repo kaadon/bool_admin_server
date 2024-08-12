@@ -249,25 +249,40 @@ trait Crud
     {
         try {
             //逻辑代码
-            list($limit, $where, $sortArr) = $this->buildTableParames();
+            list($where, $sortArr) = $this->buildTableParames();
             $fields = $this->request->post('fields');
+            $relation = [];
             $fields = json_decode($fields, true);
-
-            $header = [];
-            foreach ($fields as $vo) {
-                $header[] = [$vo['comment'], $vo['field']];
+            foreach ($fields as $field) {
+                if (isset($field['field']) && str_contains($field['field'], '.')) {
+                    $arr = explode('.', $field['field']);
+                    isset($relation[$arr[0]]) ? $relation[$arr[0]][] = $arr[1] : $relation[$arr[0]] = [$arr[1]];
+                }
             }
-            $tableName = $this->model->getName();
+            $header = [];
+            $fieldAS = '';
+            foreach ($fields as $vo) {
+                $header[] = [$vo['comment'], str_contains($vo['field'], '.') ? str_replace('.', '-', $vo['field']) : $vo['field']];
+                if (str_contains($vo['field'], '.')) $fieldAS .= $vo['field'] . ' as ' . str_replace('.', '-', $vo['field']) . ',';
+            }
+
             $list = $this->model
+                ->withJoin($relation)
                 ->where($where)
                 ->limit(100000)
                 ->order($sortArr)
+                ->field($fieldAS)
                 ->select()
                 ->toArray();
-            $fileName = "export_" . $tableName . "_" . time();
-            return Excel::exportData($list, $header, $fileName, 'xlsx');
+
+            return success([$list,$header]);
+            return Excel::exportData($list, $header, "export_" . $this->model->getName() . "_" . time(), 'xlsx');
         } catch (\Exception $exception) {
-            return error($exception->getMessage());
+            return error($exception->getMessage(), 201, [
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'trace' => $exception->getTrace()
+            ]);
         }
     }
 }
