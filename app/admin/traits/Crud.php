@@ -181,7 +181,7 @@ trait Crud
 
         try {
             $field = $this->request->param('field');
-            $field = empty($field)?"name":"$field as label";
+            $field = empty($field) ? "name" : "$field as label";
             $fields = $this->request->param('fields');
             if (empty($fields)) {
                 $fields = "id,{$field}";
@@ -260,23 +260,17 @@ trait Crud
                 }
             }
             $header = [];
-            $fieldAS = '';
             foreach ($fields as $vo) {
-                $header[] = [$vo['comment'], str_contains($vo['field'], '.') ? str_replace('.', '-', $vo['field']) : $vo['field']];
-                if (str_contains($vo['field'], '.')) $fieldAS .= $vo['field'] . ' as ' . str_replace('.', '-', $vo['field']) . ',';
+                $header[] = [$vo['comment'], $vo['field']];
             }
-
-            $list = $this->model
-                ->withJoin($relation)
-                ->where($where)
+            $list = $this->model;
+            if (count($relation) > 0) $list = $list->withJoin($relation);
+            $list = $list->where($where)
                 ->limit(100000)
                 ->order($sortArr)
-                ->field($fieldAS)
                 ->select()
                 ->toArray();
-
-            return success([$list,$header]);
-            return Excel::exportData($list, $header, "export_" . $this->model->getName() . "_" . time(), 'xlsx');
+            return success(Excel::exportData($list, $header, "export_" . $this->model->getName() . "_" . time(),'xlsx'));
         } catch (\Exception $exception) {
             return error($exception->getMessage(), 201, [
                 'file' => $exception->getFile(),

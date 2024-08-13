@@ -24,9 +24,9 @@ class Excel
      * @param array $list
      * @param array $header
      * @param string $filename
-     * @param string $title
+     * @param string $suffix
+     * @param string $path
      * @return bool
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public static function exportData($list = [], $header = [], $filename = '', $suffix = 'xlsx', $path = '')
@@ -46,7 +46,7 @@ class Excel
         $sheet = $spreadsheet->getActiveSheet();
         // 写入头部
         $hk = 1;
-        foreach ($header as $k => $v) {
+        foreach ($header as $v) {
             $sheet->setCellValue(Coordinate::stringFromColumnIndex($hk) . '1', self::formatComment($v[0]));
             $hk += 1;
         }
@@ -255,8 +255,7 @@ class Excel
         $returnData = $excleDatas ? array_shift($excleDatas) : [];
 
         // 第一行数据就是空的，为了保留其原始数据，第一行数据就不做array_fiter操作；
-        $returnData = $returnData && isset($returnData[$startRow]) && !empty($returnData[$startRow]) ? array_filter($returnData) : $returnData;
-        return $returnData;
+        return $returnData && !empty($returnData[$startRow]) ? array_filter($returnData) : $returnData;
     }
 
     /**
@@ -296,7 +295,7 @@ class Excel
                 $i++;
             }
         }
-        return $formatData ? $formatData : $value;
+        return $formatData ?: $value;
     }
 
     /**
@@ -304,16 +303,16 @@ class Excel
      *
      * @param $row
      * @param $field
-     * @return mixed
+     * @return string
      */
     protected static function formattingField($row, $field)
     {
         $newField = explode('.', $field);
-        if (count($newField) == 1) {
-            return $row[$field];
-        }
-        return $row[$newField[0]][$newField[1]];
-
+        if (count($newField) == 1)  $result = $row[$field]??null; else $result =  $row[$newField[0]][$newField[1]]??null; // 关联查询
+        if (is_null($result)) $result = '-';
+        if (is_array($result)) $result =json_encode($result,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+        if (!is_string($result)) $result = (string)$result;
+        return  $result;
     }
 
     /**

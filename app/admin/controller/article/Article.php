@@ -3,8 +3,8 @@
 namespace app\admin\controller\article;
 
 use app\admin\AdminBase;
-use Articles;
-use resources\model\article\enum\ArticleCateEnum;
+use resources\model\article\Articles;
+use resources\enum\ArticleCateEnum;
 use Exception;
 use think\App;
 use think\facade\Db;
