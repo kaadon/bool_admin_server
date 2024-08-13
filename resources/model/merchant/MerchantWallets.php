@@ -24,7 +24,6 @@ use resources\enum\RecordBusinessEnum;
 use resources\enum\RecordOptionsEnum;
 use think\facade\Db;
 use think\Model;
-use think\model\relation\HasMany;
 use think\model\relation\HasOne;
 
 /**
