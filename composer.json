@@ -28,7 +28,6 @@
         "topthink/think-view": "^2.0",
         "topthink/think-filesystem": "^2.0",
         "topthink/think-queue": "^3.0",
-        "phpoffice/phpspreadsheet": "^1.29",
         "symfony/var-exporter": "^6.3",
         "kaadon/uploadfile": "^v0.0.1",
         "kaadon/thinkbase": "^1.0",
@@ -38,9 +37,10 @@
         "kaadon/uuid": "^1.0",
         "react/event-loop": "^1.5",
         "usdtcloud/tronservice": "^2.0",
+        "kaadon/office": "dev-master",
         "ext-curl": "*",
         "ext-yaconf": "*",
-      "ext-bcmath": "*"
+        "ext-bcmath": "*"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",

@@ -87,4 +87,18 @@ class Ajax extends AdminBase
     {
         return success(capcha_create() );
     }
+
+    /**
+     * 下载指定文件
+     * @return \think\response\File|\think\response\Json
+     * @throws \Exception
+     */
+    public function download(): \think\response\File|Json
+    {
+        $path = $this->request->param('path');
+        if (empty($path))  throw new \Exception('文件路径不能为空');
+        //判断$path 是否是一个文件
+        is_file($path) or die('文件不存在');
+        return download($path);
+    }
 }

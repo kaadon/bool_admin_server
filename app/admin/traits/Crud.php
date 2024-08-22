@@ -14,7 +14,7 @@ use resources\enum\StatusEnum;
 use think\exception\ValidateException;
 use think\facade\Db;
 use think\response\Json;
-use util\Excel;
+use Kaadon\Office\Excel;
 
 /**
  * crud 复用类
@@ -270,7 +270,7 @@ trait Crud
                 ->order($sortArr)
                 ->select()
                 ->toArray();
-            return success(Excel::exportData($list, $header, "export_" . $this->model->getName() . "_" . time(),'xlsx'));
+            return success(Excel::exportData($list, $header, "export_" . $this->model->getName() . "_" . time(),'xls'));
         } catch (\Exception $exception) {
             return error($exception->getMessage(), 201, [
                 'file' => $exception->getFile(),
