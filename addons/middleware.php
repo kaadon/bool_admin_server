@@ -7,7 +7,6 @@
  */
 // 全局中间件定义文件
 return [
-
     //\addons\middleware\CheckLogin::class,
     //\addons\middleware\CheckAuth::class,
 ];

@@ -15,6 +15,7 @@ use app\admin\model\system\SystemGroup;
 use app\admin\model\system\SystemGroupAdmin;
 use app\admin\service\AuthService;
 use app\admin\AdminBase;
+use resources\enum\StatusEnum;
 use think\App;
 use think\facade\Cache;
 use think\response\Json;
@@ -34,8 +35,8 @@ class Passport extends AdminBase
     public function index(): Json
     {
         $post = $this->request->post();
-        $key = isset($post['key']) ? $post['key'] : '';
-        $code = isset($post['code']) ? $post['code'] : '';
+        $key = $post['key'] ?? '';
+        $code = $post['code'] ?? '';
         if ($key && $code) {
             if (!capcha_check($key,$code)) {
                 return error('验证码不正确');
@@ -50,10 +51,10 @@ class Passport extends AdminBase
         if (md5($post['password']) != $admin->password) {
             return error('密码输入有误');
         }
-        if ($admin->status == 0) {
+        if ($admin->status == StatusEnum::DISABLE->value) {
             return error('账号已被禁用');
         }
-        $is_keeplogin = isset($post['is_keeplogin']) ? $post['is_keeplogin'] : false;
+        $is_keeplogin = $post['is_keeplogin'] ?? false;
         $group_ids = SystemGroupAdmin::where('admin_id', $admin['id'])->column('group_id');
         $admin['group_ids'] = $group_ids;
         unset($admin['password']);

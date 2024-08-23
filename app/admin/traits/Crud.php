@@ -10,8 +10,10 @@
 // +----------------------------------------------------------------------
 namespace app\admin\traits;
 
+use Kaadon\ThinkBase\utils\File;
 use resources\enum\StatusEnum;
 use think\exception\ValidateException;
+use think\facade\Cache;
 use think\facade\Db;
 use think\response\Json;
 use Kaadon\Office\Excel;
@@ -146,7 +148,7 @@ trait Crud
             if (empty($status)) return error('状态错误');
             $row = $this->model->find($id);
             if (empty($row)) return error('数据不存在');
-            $row->status = $status;
+            $row->status = $status->value;
             $row->save();
             return successes("修改状态成功:{$status->label()}");
         } catch (\Exception $e) {
@@ -270,7 +272,12 @@ trait Crud
                 ->order($sortArr)
                 ->select()
                 ->toArray();
-            return success(Excel::exportData($list, $header, "export_" . $this->model->getName() . "_" . time(),'xls'));
+            File::dirMkdir(runtime_path('file'));
+            $fileName = "export_" . $this->model->getName() . "_" . time();
+            $path =runtime_path('file') . $fileName . '.xlsx';
+            Excel::exportData($list, $header, $fileName, 'xlsx',$path);
+            Cache::set(md5($path), ['path' => $path, 'filename' => $fileName], 3600);
+            return success(['path' => md5($path)]);
         } catch (\Exception $exception) {
             return error($exception->getMessage(), 201, [
                 'file' => $exception->getFile(),

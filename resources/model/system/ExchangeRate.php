@@ -5,27 +5,21 @@
  *   +----------------------------------------------------------------------
  *   | 官方网站:   [ https://developer.kaadon.com ]
  *   +----------------------------------------------------------------------
- *   | Author:    [ kaadon <kaadon.com@gmail.com> codemiracle]
+ *   | Author:    [ kaadon.com <kaadon.com@gmail.com>]
  *   +----------------------------------------------------------------------
  *   | Tool:      [ PhpStorm ]
  *   +----------------------------------------------------------------------
- *   | Date:      [ 2024/6/14 ]
+ *   | Date:      [ 2024/8/23 ]
  *   +----------------------------------------------------------------------
  *   | 版权所有    [ 2020~2024 kaadon.com ]
  *   +----------------------------------------------------------------------
  **/
 
-namespace resources\Jobs;
+namespace resources\model\system;
 
-use Kaadon\ThinkBase\abstracts\BaseJobs;
-use Kaadon\ThinkBase\traits\JobsTrait;
+use Kaadon\ThinkBase\BaseClass\BaseModel;
 
-class TestJobs extends BaseJobs
+class ExchangeRate extends BaseModel
 {
-    use JobsTrait;
 
-    public function test(): bool
-    {
-        return true;
-    }
 }

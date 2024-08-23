@@ -23,6 +23,7 @@ use resources\enum\RecordOptionsEnum;
 use resources\enum\CoinEnum;
 use Exception;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
+use resources\ResourceException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -81,13 +82,13 @@ class MemberWallets extends BaseModel
      */
     public static function walletCharge(MemberWallets $MemberWallet, RecordBusinessEnum $business, array $data, array $options = []): bool
     {
-        if (!isset($MemberWallet->mid)) throw new \Exception("THE AMOUNT DATA IS INCORRECT");
+        if (!isset($MemberWallet->mid)) throw new ResourceException("THE AMOUNT DATA IS INCORRECT");
         $record_rows = [];
         $MemberWalletData = [];
-        if (count($data) === 0) throw new \Exception("THE AMOUNT DATA IS INCORRECT");
+        if (count($data) === 0) throw new ResourceException("THE AMOUNT DATA IS INCORRECT");
         foreach ($data as $key => $item) {
             $coin = CoinEnum::tryFrom((int)$key);
-            if (!$coin) throw new Exception("CURRENCIES DO NOT EXIST");
+            if (!$coin) throw new ResourceException("CURRENCIES DO NOT EXIST");
             /**数据有误**/
             $coinName = $coin->field();
             // 保存数据
@@ -111,7 +112,7 @@ class MemberWallets extends BaseModel
         /** 写入账变记录 **/
         $record = MemberRecords::initialize()
             ->saveAll($record_rows);
-        if ($record->isEmpty()) throw new \Exception("RECORD WRITE FAILED");
+        if ($record->isEmpty()) throw new ResourceException("RECORD WRITE FAILED");
         return true;
     }
 

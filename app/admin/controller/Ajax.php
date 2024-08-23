@@ -12,13 +12,14 @@
 
 namespace app\admin\controller;
 
+use app\admin\AdminBase;
 use app\admin\listener\Files;
 use app\admin\service\MenuService;
-use app\admin\AdminBase;
 use Kaadon\ThinkBase\utils\Upload;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
+use think\facade\Cache;
 use think\File;
 use think\response\Json;
 
@@ -95,10 +96,11 @@ class Ajax extends AdminBase
      */
     public function download(): \think\response\File|Json
     {
-        $path = $this->request->param('path');
-        if (empty($path))  throw new \Exception('文件路径不能为空');
-        //判断$path 是否是一个文件
-        is_file($path) or die('文件不存在');
-        return download($path);
+        $path = $this->request->param('path', null);
+        if (empty($path)) throw new \Exception('文件标识不能为空');
+        $path = Cache::get($path);
+        if (!isset($path['path']) || !isset($path['filename'])) throw new \Exception('文件路径不存在');
+        if (!is_file($path['path'])) throw new \Exception('文件不存在');
+        return download($path['path'], $path['filename']);
     }
 }

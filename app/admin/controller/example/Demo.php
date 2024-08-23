@@ -16,7 +16,6 @@ use think\App;
 use think\exception\ValidateException;
 use think\facade\Log;
 use think\response\Json;
-use Kaadon\Office\Excel;
 
 /*
  * @Description: Do not edit
@@ -178,33 +177,5 @@ class Demo extends AdminBase
         }
         return successes('ok', $row);
     }
-    /**
-     * 导出
-     */
-    public function export(): Json|bool
-    {
-        try {
-            //逻辑代码
-            list($limit, $where, $sortArr) = $this->buildTableParames();
-            $fields = $this->request->post('fields');
-            $fields = json_decode($fields, true);
 
-            $header = [];
-            foreach ($fields as $vo) {
-                $header[] = [$vo['comment'], $vo['field']];
-            }
-            $tableName = $this->model->getName();
-            $list = $this->model
-                ->withJoin('category', 'LEFT')
-                ->where($where)
-                ->limit(100000)
-                ->order($sortArr)
-                ->select()
-                ->toArray();
-            $fileName = "export_" . $tableName . "_" . time();
-            return Excel::exportData($list, $header, $fileName, 'xlsx');
-        } catch (\Exception $exception) {
-            return error($exception->getMessage());
-        }
-    }
 }

@@ -6,6 +6,7 @@ use app\admin\model\system\SystemGroup;
 use app\admin\model\system\SystemGroupAdmin;
 use app\admin\validate\SystemAdmin;
 use app\admin\AdminBase;
+use resources\enum\StatusEnum;
 use think\App;
 use think\exception\ValidateException;
 use think\facade\Db;
@@ -190,6 +191,26 @@ class Admin extends AdminBase
         }
         return $save ? successes('删除成功！') : error('删除失败');
 
+    }
+
+    /**
+     * 状态启用、禁用
+     */
+    public function status(): Json
+    {
+        try {
+            $id = $this->request->param('id');
+            if ((int)$id === 1) return error('超级管理员不可操作');
+            $status = $this->request->param('status') ? StatusEnum::tryFrom($this->request->param('status')) : null;
+            if (empty($status)) return error('状态错误');
+            $row = $this->model->find($id);
+            if (empty($row)) return error('数据不存在');
+            $row->status = $status->value;
+            $row->save();
+            return successes("修改状态成功:{$status->label()}");
+        } catch (\Exception $e) {
+            return error("修改状态失败");
+        }
     }
 
 }
