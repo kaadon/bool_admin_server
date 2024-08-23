@@ -27,12 +27,4 @@ class MemberBaseV1 extends MemberBase
     {
         parent::__construct($app);
     }
-
-    protected function initialize(): void
-    {
-        parent::initialize();
-        if ($this->request->account) $this->account = $this->request->account;
-    }
-
-
 }
