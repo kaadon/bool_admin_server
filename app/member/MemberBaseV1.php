@@ -17,9 +17,22 @@
 
 namespace app\member;
 
-use app\member\MemberBase;
+use think\App;
 
 class MemberBaseV1 extends MemberBase
 {
+    public object $account;
+
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
+    }
+
+    protected function initialize(): void
+    {
+        parent::initialize();
+        if ($this->request->account) $this->account = $this->request->account;
+    }
+
 
 }

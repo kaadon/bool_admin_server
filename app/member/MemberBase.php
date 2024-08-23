@@ -18,8 +18,13 @@
 namespace app\member;
 
 use app\BaseController;
+use think\App;
 
 class MemberBase extends BaseController
 {
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
+    }
 
 }
