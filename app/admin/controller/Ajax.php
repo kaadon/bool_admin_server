@@ -34,16 +34,11 @@ class Ajax extends AdminBase
      */
     public function initIndex(): Json
     {
-        // $cacheData = Cache::get('initIndex_' . $this->adminId);
-        // if (!empty($cacheData)) {
-        //     return json($cacheData);
-        // }
         $menuService = new MenuService($this->adminId);
         $data = [
             'siteConfig' => sysconfig('site'),
             'menuInfo' => $menuService->getMenuTree(),
         ];
-        //Cache::tag('initIndex')->set('initIndex_' . $this->adminId, $data);
         return successes('success', $data);
     }
     /**
