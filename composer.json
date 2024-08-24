@@ -1,5 +1,5 @@
 {
-    "name": "topthink/bool_admin_server",
+    "name": "kaadon/kaadon_admin_server",
     "description": "bool_admin framework for thinkphp8.*",
     "type": "project",
     "keywords": [
@@ -33,11 +33,11 @@
         "kaadon/thinkbase": "^1.0",
         "kaadon/capcha": "^2.0",
         "kaadon/think-addons": "^3.0",
-        "ext-redis": "*",
         "kaadon/uuid": "^1.0",
         "react/event-loop": "^1.5",
         "usdtcloud/tronservice": "^2.0",
         "kaadon/office": "dev-master",
+        "ext-redis": "*",
         "ext-curl": "*",
         "ext-yaconf": "*",
         "ext-bcmath": "*"
