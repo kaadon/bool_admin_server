@@ -7,7 +7,6 @@
 return [
     // 默认缓存驱动
     'default' => "redis",
-
     // 缓存连接方式配置
     'stores'  => [
         // redis缓存
@@ -29,7 +28,7 @@ return [
             // 缓存储存库
             'select'     => env('redis.select', 0),
             // 缓存标签前缀
-            'timeout'    => 10,
+            'timeout'    => 3600,
             // 序列化机制 例如 ['serialize', 'unserialize']
             'serialize'  => ["serialize"],
         ],

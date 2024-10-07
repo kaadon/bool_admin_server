@@ -17,14 +17,14 @@
 
 namespace resources\model\member;
 
+use Exception;
 use resources\enum\AccountCateEnum;
 use resources\enum\member\MemberAccountLevelEnum;
 use resources\enum\StatusEnum;
-use Exception;
+use resources\ResourceException;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use Kaadon\ThinkBase\traits\ModelTrait;
 use think\Model;
-use think\model\relation\HasMany;
 use think\model\relation\HasOne;
 
 /**
@@ -34,9 +34,6 @@ class MemberAccounts extends BaseModel
 {
     use ModelTrait;
 
-    /**
-     * @throws Exception
-     */
     public static function clearCache(Model $model): void
     {
         if (isset($model->id)) redisCacheDel('member_accounts:id:' . $model->id);
@@ -92,7 +89,7 @@ class MemberAccounts extends BaseModel
             }
             return (object)($account ?: []);
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+            throw new ResourceException($exception->getMessage());
         }
     }
     /**

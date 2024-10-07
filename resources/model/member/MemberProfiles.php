@@ -25,7 +25,6 @@ use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\Model;
-use think\model\relation\HasMany;
 use think\model\relation\HasOne;
 
 /**
@@ -116,5 +115,4 @@ class MemberProfiles extends BaseModel
         }
         return $profile ? (object)$profile : null;
     }
-
 }

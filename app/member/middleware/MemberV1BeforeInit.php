@@ -18,6 +18,7 @@ class MemberV1BeforeInit
     public function handle(Request $request, \Closure $next): Response
     {
         //
+        $request->version = 'v1';
         return $next($request);
     }
 }
