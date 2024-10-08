@@ -18,9 +18,7 @@
 namespace app\member;
 
 use app\BaseController;
-use app\member\middleware\MemberV1BeforeInit;
 use think\App;
-use think\Middleware;
 
 class MemberBase extends BaseController
 {

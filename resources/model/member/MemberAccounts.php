@@ -17,7 +17,6 @@
 
 namespace resources\model\member;
 
-use commons\models\member\enum\MemberAccountAuthenEnum;
 use Exception;
 use resources\enum\member\AccountCateEnum;
 use resources\enum\member\MemberAccountLevelEnum;
