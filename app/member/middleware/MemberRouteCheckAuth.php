@@ -7,12 +7,13 @@ use resources\model\member\MemberAccounts;
 use think\Request;
 use think\Response;
 
-class MemberCheckAuth
+class MemberRouteCheckAuth
 {
     private array $auth_config = [
         'no_auth' => [
             'v1.login',
-            'index'
+            'index',
+            'services'
         ]
     ];
     /**
@@ -26,16 +27,19 @@ class MemberCheckAuth
     public function handle(Request $request, \Closure $next): Response
     {
         try {
-            //逻辑代码
             $controller = parse_lower($request->controller());
-            if (!in_array($controller, $this->auth_config['no_auth'])) {
-                //验证登录
-                $jwtData = jwt_verify();
-                $request->account = MemberAccounts::getAccountById($jwtData->data->id);
+            if (!in_array($controller , $this->auth_config['no_auth'])) {
+                //验证逻辑
+                $jwt  = jwt_verify();
+                if (!isset($jwt->data->id)) {
+                    return error('请登录后操作', 4001);
+                }
+                $request->account = MemberAccounts::getAccountById((int)$jwt->data->id);
             }
-            return $next($request);
+            //逻辑代码
         } catch (\Exception $exception) {
-            return error("错误:{$exception->getMessage()}", 4001);
+            return error(is_dev()?"错误:{$exception->getMessage()}":"请登录后操作", 4001);
         }
+        return $next($request);
     }
 }

@@ -11,5 +11,6 @@ class Index extends MemberBase
     public function index(): Json
     {
         return success('Hello, member!');
+
     }
 }

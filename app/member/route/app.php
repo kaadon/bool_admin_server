@@ -9,14 +9,15 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 use think\facade\Route;
-Route::get(':controller/:function' , ':controller/:function')
-    ->pattern([
-    'controller' => '\w+',
-    'function'   => '\w+',
-]);;
-Route::rule(':version/:controller/:function' , ':version.:controller/:function', "get")
+Route::rule(':version/:controller/:action' , ':version.:controller/:action')
     ->pattern([
         'version' => 'v\d+',
         'controller' => '\w+',
-        'function'   => '\w+',
+        'action'   => '\w+',
     ]);
+
+Route::get(':controller/:action' , ':controller/:action')
+    ->pattern([
+    'controller' => '\w+',
+    'action'   => '\w+',
+]);

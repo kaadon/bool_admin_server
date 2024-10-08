@@ -18,8 +18,13 @@
 namespace app\member\controller\v1;
 
 use app\member\MemberBaseV1;
+use think\response\Json;
 
 class Index extends MemberBaseV1
 {
 
+    public function index(): Json
+    {
+        return success('Hello, member!');
+    }
 }

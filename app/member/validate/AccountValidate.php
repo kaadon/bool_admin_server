@@ -67,7 +67,7 @@ class AccountValidate extends BaseValidate
     {
         return $this->only(['id_card', 'front_image', 'back_image', 'real_name', "contact"])
             ->append([
-                'id_card' => 'require|idCard|verifyIdCard',
+                'id_card' => 'require|idCard',
                 'contact' => 'require',
                 'real_name' => 'require',
                 'front_image' => 'require',
@@ -75,7 +75,6 @@ class AccountValidate extends BaseValidate
             ])
             ->message([
                 'id_card.idCard' => '身份证号码错误',
-                'id_card.verifyIdCard' => '身份证号码已存在',
             ]);
     }
 

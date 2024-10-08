@@ -22,9 +22,9 @@ use think\App;
 class MemberBaseV1 extends MemberBase
 {
     public object $account;
-
     public function __construct(App $app)
     {
         parent::__construct($app);
+        if (isset($this->request->account)) $this->account = $this->request->account;
     }
 }

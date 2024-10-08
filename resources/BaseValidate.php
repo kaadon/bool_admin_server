@@ -23,8 +23,6 @@ use resources\enum\StatusEnum;
 use resources\logic\member\MemberLogic;
 use resources\model\member\MemberAccounts;
 use resources\model\member\MemberProfiles;
-use resources\model\merchant\MerchantAccounts;
-use resources\model\merchant\MerchantProfiles;
 use think\Validate;
 
 /**

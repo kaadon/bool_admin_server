@@ -35,6 +35,10 @@ use think\response\Json;
  */
 class Login extends MemberBase
 {
+    public function index(): Json
+    {
+        return success([]);
+    }
     /**
      * 获取用户分类
      * @return Json
@@ -54,9 +58,6 @@ class Login extends MemberBase
     public function login(): Json
     {
         try {
-            if ($this->request->header('uniappid') && ($this->request->header('appversioncode',"") === "" || $this->request->header('appversioncode',1) < 1020001)) {
-                return error('你的app版本太旧,请升级到最新版本');
-            }
             //逻辑代码
             $post = $this->request->post();
             $post['cate'] = isset($post['cate'])? AccountCateEnum::tryFrom((int)$post['cate']) : null;
@@ -105,10 +106,10 @@ class Login extends MemberBase
     }
 
     /**
-     * 修改密码
+     * 找回密码
      * @throws MemberException
      */
-    public function retrieve_password(): Json
+    public function retrievePassword(): Json
     {
         try {
             //逻辑代码
