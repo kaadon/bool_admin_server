@@ -18,7 +18,7 @@
 namespace app\admin\controller\merchant;
 
 use app\admin\AdminBase;
-use resources\enum\AccountCateEnum;
+use resources\enum\member\AccountCateEnum;
 use resources\logic\merchant\MerchantLogic;
 use resources\model\merchant\MerchantAccounts;
 use resources\model\merchant\MerchantProfiles;

@@ -3,10 +3,13 @@ declare (strict_types = 1);
 
 namespace app\member\controller;
 
-class Index
+use app\member\MemberBase;
+use think\response\Json;
+
+class Index extends MemberBase
 {
-    public function index()
+    public function index(): Json
     {
-        return '您好！这是一个[member]示例应用';
+        return success('Hello, member!');
     }
 }

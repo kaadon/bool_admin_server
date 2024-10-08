@@ -21,7 +21,7 @@ use Exception;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use Kaadon\ThinkBase\traits\ModelTrait;
 use RedisException;
-use resources\enum\AccountCateEnum;
+use resources\enum\member\AccountCateEnum;
 use resources\enum\StatusEnum;
 use think\Model;
 use think\model\relation\HasMany;

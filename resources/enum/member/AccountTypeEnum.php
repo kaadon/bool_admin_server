@@ -1,6 +1,6 @@
 <?php
 
-namespace resources\enum;
+namespace resources\enum\member;
 
 use resources\model\service\ServiceUuids;
 

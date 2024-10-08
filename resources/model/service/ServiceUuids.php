@@ -17,7 +17,7 @@
 
 namespace resources\model\service;
 
-use resources\enum\AccountTypeEnum;
+use resources\enum\member\AccountTypeEnum;
 use Exception;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use think\db\exception\DataNotFoundException;
@@ -62,7 +62,7 @@ class ServiceUuids extends BaseModel
     /**
      * 根据UUID 获取 账号枚举类型
      * @param string $uuid
-     * @return \resources\enum\AccountTypeEnum
+     * @return \resources\enum\member\AccountTypeEnum
      * @throws \Exception
      */
     public static function getAccountType(string $uuid): AccountTypeEnum

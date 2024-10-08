@@ -17,8 +17,9 @@
 
 namespace resources\model\member;
 
+use commons\models\member\enum\MemberAccountAuthenEnum;
 use Exception;
-use resources\enum\AccountCateEnum;
+use resources\enum\member\AccountCateEnum;
 use resources\enum\member\MemberAccountLevelEnum;
 use resources\enum\StatusEnum;
 use resources\ResourceException;
@@ -138,5 +139,12 @@ class MemberAccounts extends BaseModel
         }
         return $levels;
     }
-
+    public static function handleLevel(?object $account): object|null
+    {
+        if (!$account) return $account;
+        $level = MemberAccountLevelEnum::tryFrom($account->level);
+        $authen = StatusEnum::tryFrom($account->authen);
+        $account->level = ($level === null || $level === MemberAccountLevelEnum::ORDINARY_MEMBER) ? ($authen !== StatusEnum::NORMAL ?   '未实名会员': MemberAccountLevelEnum::ORDINARY_MEMBER->label()) : $level->label();
+        return $account;
+    }
 }

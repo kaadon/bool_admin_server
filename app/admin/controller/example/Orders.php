@@ -7,7 +7,6 @@ use app\admin\model\example\ExampleOrders;
 use think\App;
 use think\facade\Log;
 use think\response\Json;
-use think\Validate;
 
 /**
  * Orders控制器
@@ -42,8 +41,6 @@ class Orders extends AdminBase
             Log::error("--------:" . $e);
             return error('更新失败');
         }
-
-        return successes('ok', $row);
     }
 
 }

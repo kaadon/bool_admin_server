@@ -20,7 +20,7 @@ namespace resources\model\member;
 use Exception;
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use Kaadon\ThinkBase\traits\ModelTrait;
-use resources\enum\AccountCateEnum;
+use resources\enum\member\AccountCateEnum;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -95,7 +95,7 @@ class MemberProfiles extends BaseModel
     }
 
     /**
-     * @param \resources\enum\AccountCateEnum $accountCate
+     * @param \resources\enum\member\AccountCateEnum $accountCate
      * @param string $username
      * @return object|null
      * @throws \think\db\exception\DataNotFoundException
@@ -107,7 +107,7 @@ class MemberProfiles extends BaseModel
     {
         $profile = redisCacheGet("member_profiles:$username");
         if (!$profile) {
-            $profile = (new self())->where($accountCate->name, $username)->find();
+            $profile = (new self())->where($accountCate->field(), $username)->find();
             if (!empty($profile)) {
                 $profile = $profile->toArray();
                 redisCacheSet("member_profiles:$username", $profile, 3600);

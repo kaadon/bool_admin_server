@@ -19,6 +19,7 @@ namespace resources;
 
 use Exception;
 use Kaadon\CapCha\capcha;
+use resources\enum\StatusEnum;
 use resources\logic\member\MemberLogic;
 use resources\model\member\MemberAccounts;
 use resources\model\member\MemberProfiles;
@@ -26,6 +27,9 @@ use resources\model\merchant\MerchantAccounts;
 use resources\model\merchant\MerchantProfiles;
 use think\Validate;
 
+/**
+ *
+ */
 class BaseValidate extends Validate
 {
     /**
@@ -50,9 +54,8 @@ class BaseValidate extends Validate
             'mobile' => 'require|number',
             'email' => 'require|email',
             'cate|类型' => 'require',
-            'username' => 'require',
+            'username|账号' => 'require|requireWith:cate',
             'nickname' => 'require|chsAlphaNum|length:6,32',
-            'payment' => 'require|length:1,2|paymentNum',
             'old_password|原登录密码' => 'require',
             'password|登录密码' => 'require|alphaNum|length:6,32',
             'new_password|重复登录密码' => 'require|confirm:password',
@@ -138,7 +141,12 @@ class BaseValidate extends Validate
         return true;
     }
 
-
+    /**
+     * @param $value
+     * @param string $rule
+     * @param array $data
+     * @return bool|string
+     */
     public function UserExit($value, string $rule, array $data): bool|string
     {
         try {
@@ -164,7 +172,7 @@ class BaseValidate extends Validate
      * @param array $data
      * @return bool|string
      */
-    protected function usernameExist($value, string $rule, array $data): bool|string
+    protected function memberUsernameExist($value, string $rule, array $data): bool|string
     {
         try {
             //逻辑代码
@@ -172,8 +180,10 @@ class BaseValidate extends Validate
             $profile = MemberProfiles::getProfileByUsername($data['cate'], (string)$value);
             if (in_array('exist', $rules)) {
                 if (empty($profile)) return "用户不存在";
-                $account = MemberAccounts::getAccountById($profile->mid);
-                if (in_array('status', $rules) && $account->status !== 1) return "用户被冻结";
+                if (in_array('status', $rules)) {
+                    $account = MemberAccounts::getAccountById($profile->mid);
+                    if ((int)$account->status !== StatusEnum::NORMAL->value) return "用户被冻结";
+                }
                 return true;
             }
             if (in_array('non-exist', $rules)) {
@@ -185,6 +195,12 @@ class BaseValidate extends Validate
         return true;
     }
 
+    /**
+     * @param $value
+     * @param string $rule
+     * @param array $data
+     * @return bool|string
+     */
     protected function merchantUsernameExist($value, string $rule, array $data): bool|string
     {
         try {
@@ -193,8 +209,10 @@ class BaseValidate extends Validate
             $profile = MemberProfiles::getProfileByUsername($data['cate'], (string)$value);
             if (in_array('exist', $rules)) {
                 if (empty($profile)) return "用户不存在";
-                $account = MemberAccounts::getAccountById($profile->mid);
-                if (in_array('status', $rules) && $account->status !== 1) return "用户被冻结";
+                if (in_array('status', $rules)) {
+                    $account = MemberAccounts::getAccountById($profile->uid);
+                    if ((int)$account->status !== StatusEnum::NORMAL->value) return "用户被冻结";
+                }
                 return true;
             }
             if (in_array('non-exist', $rules)) {
@@ -214,7 +232,7 @@ class BaseValidate extends Validate
      * @param array $data
      * @return bool|string
      */
-    protected function numberCode($value, string $rule, array $data = []): bool|string
+    protected function verifyCode($value, string $rule, array $data = []): bool|string
     {
         try {
             //逻辑代码
@@ -274,9 +292,15 @@ class BaseValidate extends Validate
     {
         try {
             //逻辑代码
-            $profile = (new MerchantProfiles())->where($data['cate'], (string)$data['username'])->find();
-            if (empty($profile)) return '用户不存在';
-            $account = MerchantAccounts::getAccountById($profile->uid);
+            if ((empty($data['cate']) || empty($data['username'])) && empty($data['uid'])) return "验证密码请提供[代理ID:uid]或者[cate:账号类型]和[账号:username]";
+            if (!empty($data['uid'])){
+                $account = MemberAccounts::getAccountById($data['uid']);
+                if (empty($account)) return '用户不存在';
+            }else{
+                $profile = MemberProfiles::getProfileByUsername($data['cate'], (string)$data['username']);
+                if (empty($profile)) return '用户不存在';
+                $account = MemberAccounts::getAccountById($profile->uid);
+            }
             if (str_contains($name, 'old')) {
                 $old = true;
                 $name = explode('old_', $name)[1];
@@ -305,6 +329,4 @@ class BaseValidate extends Validate
         }
         return true;
     }
-
-
 }

@@ -17,8 +17,8 @@
 
 namespace resources\logic\merchant;
 
-use resources\enum\AccountCateEnum;
-use resources\enum\AccountTypeEnum;
+use resources\enum\member\AccountCateEnum;
+use resources\enum\member\AccountTypeEnum;
 use resources\model\merchant\MerchantAccounts;
 use resources\model\merchant\MerchantProfiles;
 use resources\model\merchant\MerchantWallets;

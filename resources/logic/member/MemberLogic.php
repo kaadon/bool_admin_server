@@ -17,8 +17,8 @@
 
 namespace resources\logic\member;
 
-use resources\enum\AccountCateEnum;
-use resources\enum\AccountTypeEnum;
+use resources\enum\member\AccountCateEnum;
+use resources\enum\member\AccountTypeEnum;
 use resources\model\member\MemberAccounts;
 use resources\model\member\MemberProfiles;
 use resources\model\member\MemberWallets;

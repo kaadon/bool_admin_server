@@ -19,7 +19,7 @@ namespace resources\model\merchant;
 
 use Kaadon\ThinkBase\BaseClass\BaseModel;
 use Kaadon\ThinkBase\traits\ModelTrait;
-use resources\enum\AccountCateEnum;
+use resources\enum\member\AccountCateEnum;
 use think\Model;
 use think\model\relation\HasOne;
 
@@ -78,7 +78,7 @@ class MerchantProfiles extends BaseModel
 
 
     /**
-     * @param \resources\enum\AccountCateEnum $accountCate
+     * @param \resources\enum\member\AccountCateEnum $accountCate
      * @param string $username
      * @return object|null
      * @throws \think\db\exception\DataNotFoundException
