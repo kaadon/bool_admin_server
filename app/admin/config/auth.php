@@ -29,4 +29,6 @@ return [
     'no_auth_node' => [],
     //是否是演示站点
     'is_demo' => env('is_demo', false),
+
+    "super_admin_group_id"  => 1,
 ];
