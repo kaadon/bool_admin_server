@@ -28,7 +28,7 @@ class Config extends AdminBase
         try {
             $groupList = $this->model->getGroupList();
             foreach ($groupList as $k => $v) {
-                $list = $this->model->field('name,title,value,remark,type,extend')->where('group', $v['value'])->select();
+                $list = $this->model->field('name,title,value,remark,type,extend,group,sign')->where('group', $v['value'])->select();
                 $detail = [];
                 foreach ($list as $key => $val) {
                     /**
